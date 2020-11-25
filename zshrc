@@ -295,7 +295,7 @@ alias reload='. ~/.zshrc; echo ZSH config reloaded!'
 alias d='dirs -v'
 for index ({1..9}) alias "$index"="cd +${index}"; unset index
 
-# Navigation
+# Directory navigation
 [[ -e ~/Downloads ]] && alias dl='cd ~/Downloads'
 [[ -e ~/Dropbox ]] && alias db='cd ~/Dropbox'
 [[ -e ~/projects ]] && alias pro='cd ~/projects'

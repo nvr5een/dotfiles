@@ -109,8 +109,7 @@ command! reload :write | restart
 " Filetype settings {{{
 
 " Pdf
-filetype *.pdf,*.cbr,*.cbz zathura 2> /dev/null &
-fileviewer *.pdf pdftotext -nopgbrk %c -
+filetype *.pdf,*.cbr,*.cbz xdg-open 2> /dev/null &
 
 " PostScript
 filetype *.ps,*.eps,*.ps.gz xdg-open 2> /dev/null &
@@ -135,9 +134,9 @@ fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
        \ mediainfo
 
 " Web
-" filetype *.html,*.htm
-"        \ firefox %f &,
-" filetype *.html,*.htm w3m
+filetype *.html,*.htm
+       \ xdg-open %f &,
+filetype *.html,*.htm w3m
 
 " Object
 filetype *.o nm %f | less
@@ -148,19 +147,7 @@ fileviewer *.[1-8] man ./%c | col -b
 
 " Images
 filetype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
-       \ rifle_sxiv %f,
-fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
-       \ convert -identify %f -verbose /dev/null
-
-" OpenRaster
-filextype *.ora
-       \ {Edit in MyPaint}
-       \ mypaint %f,
-
-" Mindmap
-filextype *.vym
-       \ {Open with VYM}
-       \ vym %f &,
+       \ xdg-open %f,
 
 " MD5
 filetype *.md5
@@ -186,10 +173,6 @@ filetype *.sha512
 filetype *.asc
        \ {Check signature}
        \ !!gpg --verify %c,
-
-" Torrent
-" filetype *.torrent ktorrent %f &
-fileviewer *.torrent dumptorrent -v %c
 
 " FuseZipMount
 filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
@@ -238,20 +221,7 @@ filetype *.7z
 fileviewer *.7z 7z l %c
 
 " Office files
-filetype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx libreoffice %f &
-fileviewer *.doc catdoc %c
-fileviewer *.docx, docx2txt.pl %f -
-
-" TuDu files
-filetype *.tudu tudu -f %c
-
-" Qt projects
-filetype *.pro qtcreator %f &
-
-" Directories
-filetype */
-       \ {View in thunar}
-       \ Thunar %f &,
+filetype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx xdg-open %f &
 
 " }}}
 "  Mappings {{{
@@ -266,9 +236,6 @@ nnoremap S :sort<cr>
 nnoremap w :view<cr>
 vnoremap w :view<cr>gv
 
-" Open file in the background using its default program
-nnoremap gb :file &<cr>l
-
 " Yank current directory path into the clipboard
 nnoremap yd :!echo %d | xclip %i<cr>
 
@@ -279,9 +246,6 @@ nnoremap yf :!echo %c:p | xclip %i<cr>
 nnoremap I cw<c-a>
 nnoremap cc cw<c-u>
 nnoremap A cw
-
-" Open console in current directory
-nnoremap <space>t :!st &<cr>
 
 " Open editor to edit vifmrc and apply settings after returning to vifm
 nnoremap <space>c :write | edit $MYVIFMRC | restart<cr>
