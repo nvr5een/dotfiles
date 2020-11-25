@@ -32,7 +32,7 @@ delete_all() { #{{{
   fi
   # vifm
   if [[ -e "$vifm_dst" ]]; then
-    echo "Deleting neovim backups..." >> "$log_file"
+    echo "Deleting vifm backups..." >> "$log_file"
     rm -rfv "$vifm_dst" >> "$log_file"
   fi
   # git
