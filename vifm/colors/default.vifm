@@ -1,0 +1,30 @@
+" ~/.config/vifm/colors/default.vifm
+
+highlight Win cterm=none ctermfg=default ctermbg=none
+
+highlight TopLine cterm=none ctermfg=default ctermbg=none
+highlight TopLineSel cterm=bold ctermfg=blue ctermbg=none
+highlight StatusLine cterm=none ctermfg=250 ctermbg=236
+highlight Border cterm=none ctermfg=blue ctermbg=none
+
+highlight Selected cterm=bold,reverse ctermfg=yellow
+highlight CurrLine cterm=bold,reverse
+
+highlight WildMenu cterm=underline,reverse ctermfg=172 ctermbg=234
+highlight CmdLine cterm=none ctermfg=250 ctermbg=none
+highlight ErrorMsg cterm=none ctermfg=red ctermbg=none
+
+highlight BrokenLink cterm=bold ctermfg=red ctermbg=black
+highlight Device cterm=bold ctermfg=yellow ctermbg=black
+highlight Directory cterm=bold ctermfg=blue ctermbg=default
+highlight Executable cterm=bold ctermfg=green ctermbg=default
+highlight Fifo cterm=none ctermfg=yellow ctermbg=black
+highlight Link cterm=bold ctermfg=cyan ctermbg=default
+highlight Socket cterm=bold ctermfg=magenta ctermbg=default
+
+highlight /.*\.7z$|.*\.a$|.*\.arj$|.*\.bz2$|.*\.cab$|.*\.cbr$|.*\.cbz$|.*\.deb$|.*\.dmg$|.*\.egg$|.*\.gz$|.*\.iso$|.*\.jad$|.*\.jar$|.*\.nrg$|.*\.pkg$|.*\.rar$|.*\.t$|.*\.tar$|.*\.tgz$|.*\.vcd$|.*\.xz$|.*\.z$|.*\.zip$/I cterm=none ctermfg=red ctermbg=default
+highlight /.*\.ai$|.*\.bmp$|.*\.cdr$|.*\.eps$|.*\.gif$|.*\.icns$|.*\.ico$|.*\.jpeg$|.*\.jpg$|.*\.pbm$|.*\.pgm$|.*\.png$|.*\.pnm$|.*\.ppm$|.*\.psd$|.*\.raw$|.*\.svg$|.*\.tif$|.*\.tiff$|.*\.xpm$/I cterm=none ctermfg=green ctermbg=default
+highlight /.*\.applescript$|.*\.asm$|.*\.awk$|.*\.bash$|.*\.bat$|.*\.c$|.*\.cl$|.*\.cmd$|.*\.coffee$|.*\.cpp$|.*\.cs$|.*\.diff$|.*\.el$|.*\.go$|.*\.h$|.*\.hs$|.*\.java$|.*\.js$|.*\.jsp$|.*\.lua$|.*\.m$|.*\.patch$|.*\.pl$|.*\.pm$|.*\.pod$|.*\.ps$|.*\.py$|.*\.r$|.*\.rb$|.*\.sed$|.*\.sh$|.*\.sql$|.*\.sty$|.*\.tac$|.*\.tcl$|.*\.tex$|.*\.tfm$|.*\.vb$|.*\.vim$|.*\.wsgi$|.*\.zsh$/I cterm=none ctermfg=yellow ctermbg=default
+highlight /.*\.ascx$|.*\.ashx$|.*\.aspx$|.*\.css$|.*\.django$|.*\.erb$|.*\.genshi$|.*\.haml$|.*\.htm$|.*\.html$|.*\.jinja$|.*\.less$|.*\.mako$|.*\.markdown$|.*\.md$|.*\.mkd$|.*\.php$|.*\.rst$|.*\.sass$|.*\.scss$|.*\.textile$/I cterm=none ctermfg=blue ctermbg=default
+highlight /.*\.cfg$|.*\.chm$|.*\.conf$|.*\.csv$|.*\.doc$|.*\.docx$|.*\.dvi$|.*\.epub$|.*\.ini$|.*\.json$|.*\.key$|.*\.log$|.*\.mobi$|.*\.msg$|.*\.nfo$|.*\.odf$|.*\.pages$|.*\.pdf$|.*\.pps$|.*\.ppt$|.*\.pptx$|.*\.rtf$|.*\.txt$|.*\.vcf$|.*\.wpd$|.*\.wps$|.*\.xls$|.*\.xlsx$|.*\.xml$|.*\.yml$/I cterm=none ctermfg=magenta ctermbg=default
+highlight /.*\.3g2$|.*\.3gp$|.*\.aac$|.*\.aif$|.*\.asf$|.*\.asx$|.*\.avi$|.*\.cue$|.*\.dat$|.*\.fcm$|.*\.flac$|.*\.flv$|.*\.iff$|.*\.m3u$|.*\.m4a$|.*\.mkv$|.*\.mod$|.*\.mov$|.*\.mp3$|.*\.mp4$|.*\.mpa$|.*\.mpeg$|.*\.mpg$|.*\.ogv$|.*\.ra$|.*\.rm$|.*\.s3m$|.*\.sid$|.*\.spl$|.*\.spx$|.*\.swf$|.*\.ts$|.*\.vob$|.*\.wav$|.*\.wma$|.*\.wmv$/I cterm=none ctermfg=cyan ctermbg=default

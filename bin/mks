@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Create a bash script using a template.
+# Edit of: https://github.com/dylanaraps/bin/blob/master/mks
+
+[[ $1 ]] || exit 1
+
+printf '%s' "\
+#!/usr/bin/env bash
+
+main() {
+}
+
+main \"\$@\"
+" > "$1" && chmod +x "$1" && "$EDITOR" "$1"

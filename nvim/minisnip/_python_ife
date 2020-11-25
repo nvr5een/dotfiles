@@ -1,0 +1,4 @@
+if {{+condition+}}:
+    {{+statement+}}
+else:
+    {{+statement+}}

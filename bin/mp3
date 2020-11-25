@@ -1,0 +1,11 @@
+#!/bin/sh
+
+dst=~/Dropbox/Music/YouTube
+
+[ ! -d "$dst" ] && exit
+
+youtube-dl \
+    -o "$dst/%(title)s.%(ext)s" \
+    -x \
+    --audio-format "mp3" \
+    "$@"

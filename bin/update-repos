@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Update git repos in pwd
+ 
+for i in *; do
+  if [ -d $i ] ; then
+    if [ -d $i/.git ] ; then
+      echo Updating $i ....
+      (cd $i ; git pull)
+      echo
+    fi
+  fi
+done

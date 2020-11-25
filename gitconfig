@@ -1,0 +1,24 @@
+# ~/.gitconfig
+
+[user]
+  name = nvr5een
+  email = nvr5een@fakemail.com
+[credential]
+  helper = cache --timeout=3600
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = auto
+[color "status"]
+  added = green
+  changed = yellow
+  untracked = yellow
+[core]
+  editor = $EDITOR
+[github]
+  user = nvr5een
+[push]
+  default = simple
+[pull]
+  rebase = false

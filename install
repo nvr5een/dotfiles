@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+
+# Installs dotfiles and creates associated directories.
+# WARNING: This script overwrites things!
+
+src=~/projects/dotfiles
+timestamp=$(date +%Y-%m-%d_%H:%M:%S)
+log_file=/tmp/dotfiles.log
+bin_dst=~/.local/bin
+mpv_dst=~/.config/mpv
+nvim_dst=~/.config/nvim
+nvim_backup=~/.local/share/nvim
+vifm_dst=~/.config/vifm
+
+log_header() { #{{{
+  echo "-------------------" >> "$log_file"
+  echo "$timestamp" >> "$log_file"
+  echo "-------------------" >> "$log_file"
+} #}}}
+
+help_menu() { #{{{
+  echo "Syntax: install [-d|h]"
+  echo "Options:"
+  echo "d   Delete all dotfiles."
+  echo "h   Print this Help."
+} # }}}
+
+delete_all() { #{{{
+  log_header
+  # mpv
+  if [[ -e "$mpv_dst" ]]; then
+    echo "Deleting mpv configs..." >> "$log_file"
+    rm -rfv "$mpv_dst" >> "$log_file"
+  fi
+  # neovim
+  if [[ -e "$nvim_dst" ]]; then
+    echo "Deleting neovim configs..." >> "$log_file"
+    rm -rfv "$nvim_dst" >> "$log_file"
+  fi
+  # vifm
+  if [[ -e "$vifm_dst" ]]; then
+    echo "Deleting neovim backups..." >> "$log_file"
+    rm -rfv "$vifm_dst" >> "$log_file"
+  fi
+  # user scripts
+  if [[ -e "$bin_dst" ]]; then
+    echo "Deleting user scripts..." >> "$log_file"
+    rm -rfv "$bin_dst" >> "$log_file"
+  fi
+  # git
+  if [[ -e ~/.gitconfig ]]; then
+    echo "Deleting git configs..." >> "$log_file"
+    rm -fv ~/.gitconfig >> "$log_file"
+  fi
+  # tmux
+  if [[ -e ~/.tmux.conf ]]; then
+    echo "Deleting tmux configs..." >> "$log_file"
+    rm -fv ~/.tmux.conf >> "$log_file"
+  fi
+  # zsh
+  if [[ -e ~/.zshrc ]]; then
+    echo "Deleting zsh configs..." >> "$log_file"
+    rm -fv ~/.zshrc >> "$log_file"
+  fi
+  echo "Deleted dotfiles and associated directories. See $log_file for details."
+} # }}}
+
+install_mpv_configs() { #{{{
+  if type -p mpv &>/dev/null; then
+    echo "Installing mpv configs..." >> "$log_file"
+    mkdir -p "$mpv_dst"
+    for file in "$src"/mpv/*; do
+      cp -fv "$file" "$mpv_dst" >> "$log_file"
+    done
+  fi
+} # }}}
+
+install_neovim_configs() { #{{{
+  if type -p nvim &>/dev/null; then
+    echo "Installing neovim configs..." >> "$log_file"
+    mkdir -p "$nvim_dst"/{colors,minisnip,syntax}
+    mkdir -p "$nvim_backup"/{backup,swap,undo}
+    ln -sfv "$src"/nvim/init.vim "$nvim_dst" >> "$log_file" 2>&1
+    # colors
+    for file in "$src"/nvim/colors/*; do
+      cp -fv "$file" "$nvim_dst"/colors >> "$log_file"
+    done
+    # minisnip
+    for file in "$src"/nvim/minisnip/*; do
+      cp -fv "$file" "$nvim_dst"/minisnip >> "$log_file"
+    done
+    # syntax
+    for file in "$src"/nvim/syntax/*; do
+      cp -fv "$file" "$nvim_dst"/syntax >> "$log_file"
+    done
+  fi
+} # }}}
+
+install_vifm_configs() { #{{{
+  if type -p vifm &>/dev/null; then
+    echo "Installing vifm configs..." >> "$log_file"
+    mkdir -p "$vifm_dst"/colors
+    # colors
+    cp -fv "$src"/vifm/colors/* "$vifm_dst"/colors >> "$log_file"
+    # vifmrc
+    if [[ "$OSTYPE" = "linux-gnu"* ]]; then
+      ln -sfv "$src"/vifm/linux.vifmrc "$vifm_dst"/vifmrc >> "$log_file" 2>&1
+    elif [[ "$OSTYPE" = "darwin"* ]]; then
+      ln -sfv "$src"/vifm/macos.vifmrc "$vifm_dst"/vifmrc >> "$log_file" 2>&1
+    fi
+  fi
+} # }}}
+
+install_user_scripts() { #{{{
+  echo "Installing user scripts..." >> "$log_file"
+  mkdir -p "$bin_dst"
+  for file in "$src"/bin/*; do
+    cp -fv "$file" "$bin_dst" >> "$log_file"
+  done
+  chmod 700 "$bin_dst"/*
+} # }}}
+
+install_git_configs() { #{{{
+  echo "Installing git configs..." >> "$log_file"
+  cp -fv "$src"/gitconfig ~/.gitconfig >> "$log_file"
+} #}}}
+
+install_tmux_configs() { #{{{
+  if type -p tmux &>/dev/null; then
+    echo "Installing tmux configs..." >> "$log_file"
+    ln -sfv "$src"/tmux.conf ~/.tmux.conf >> "$log_file" 2>&1
+  fi
+} #}}}
+
+install_zsh_configs() { #{{{
+  if type -p zsh &>/dev/null; then
+    echo "Installing zsh configs..." >> "$log_file" 2>&1
+    ln -sfv "$src"/zshrc ~/.zshrc >> "$log_file"
+  fi
+} #}}}
+
+main() { #{{{
+  log_header
+  install_mpv_configs
+  install_neovim_configs
+  install_vifm_configs
+  install_user_scripts
+  install_git_configs
+  install_tmux_configs
+  install_zsh_configs
+  echo "Installed dotfiles and associated directories. See $log_file for details."
+} # }}}
+
+while [ ! $# -eq 0 ]; do
+  case "$1" in
+    --help | -h)
+      help_menu
+      exit
+      ;;
+    --delete | -d)
+      delete_all
+      exit
+      ;;
+  esac
+  shift
+done
+
+main "$@"
