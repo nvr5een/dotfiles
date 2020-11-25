@@ -35,11 +35,6 @@ delete_all() { #{{{
     echo "Deleting neovim backups..." >> "$log_file"
     rm -rfv "$vifm_dst" >> "$log_file"
   fi
-  # user scripts
-  if [[ -e "$bin_dst" ]]; then
-    echo "Deleting user scripts..." >> "$log_file"
-    rm -rfv "$bin_dst" >> "$log_file"
-  fi
   # git
   if [[ -e ~/.gitconfig ]]; then
     echo "Deleting git configs..." >> "$log_file"
@@ -56,7 +51,7 @@ delete_all() { #{{{
     rm -fv ~/.zshrc >> "$log_file"
   fi
   echo "Deleted dotfiles and associated directories. See '$log_file' for details."
-  echo "Neovim backup files in '$nvim_backup' have been retained."
+  echo "Files in '$bin_dst' and '$nvim_backup' have been retained."
 } # }}}
 
 install_mpv_configs() { #{{{
