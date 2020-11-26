@@ -150,8 +150,8 @@ if maparg('<C-L>', 'n') ==# ''
 endif
 
 " Edit my notes
-if !empty(glob('~/projects/notes'))
-  nnoremap <leader>n :e ~/projects/notes/
+if !empty(glob('~/projects/private/notes'))
+  nnoremap <leader>n :e ~/projects/private/notes/
 endif
 
 " Edit and source vimrc
