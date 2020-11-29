@@ -11,6 +11,7 @@ mpv_dst=~/.config/mpv
 nvim_dst=~/.config/nvim
 nvim_backup=~/.local/share/nvim
 vifm_dst=~/.config/vifm
+zsh_dst=~/.zsh
 
 log_header() { #{{{
   echo "-------------------" >> "$log_file"
@@ -32,7 +33,7 @@ delete_all() { #{{{
   fi
   # vifm
   if [[ -e "$vifm_dst" ]]; then
-    echo "Deleting vifm backups..." >> "$log_file"
+    echo "Deleting vifm configs..." >> "$log_file"
     rm -rfv "$vifm_dst" >> "$log_file"
   fi
   # git
@@ -47,8 +48,12 @@ delete_all() { #{{{
   fi
   # zsh
   if [[ -e ~/.zshrc ]]; then
-    echo "Deleting zsh configs..." >> "$log_file"
+    echo "Deleting zshrc..." >> "$log_file"
     rm -fv ~/.zshrc >> "$log_file"
+  fi
+  if [[ -d "$zsh_dst" ]]; then
+    echo "Deleting zsh configs..." >> "$log_file"
+    rm -rfv "$zsh_dst" >> "$log_file"
   fi
   echo "Deleted dotfiles and associated directories. See '$log_file' for details."
   echo "Files in '$bin_dst' and '$nvim_backup' have been retained."
@@ -125,6 +130,13 @@ install_zsh_configs() { #{{{
   if type -p zsh &>/dev/null; then
     echo "Installing zsh configs..." >> "$log_file"
     ln -sfv "$src"/zshrc ~/.zshrc >> "$log_file" 2>&1
+    mkdir -p "$zsh_dst"/completion
+    if [[ -z "$(ls -A $zsh_dst/completion)" ]]; then
+      curl -o "$zsh_dst"/completion/_docker https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker/_docker >> "$log_file" 2>&1
+      curl -o "$zsh_dst"/completion/_docker-compose https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker-compose/_docker-compose >> "$log_file" 2>&1
+      curl -o "$zsh_dst"/completion/_lxc https://raw.githubusercontent.com/endaaman/lxd-completion-zsh/master/_lxc >> "$log_file" 2>&1
+      curl -o "$zsh_dst"/completion/_lxd https://raw.githubusercontent.com/endaaman/lxd-completion-zsh/master/_lxd >> "$log_file" 2>&1
+    fi
   fi
 } #}}}
 

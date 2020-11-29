@@ -91,8 +91,9 @@ setopt PROMPT_SUBST # perform arithmetic expansion in prompts (required)
 # }}}
 # Completion {{{
 
-autoload -Uz compinit
-compinit
+fpath=(~/.zsh/completion $fpath)
+
+autoload -Uz compinit && compinit -i
 
 # Cherry-picked from:
 # https://github.com/sorin-ionescu/prezto/blob/master/modules/completion/init.zsh
@@ -172,8 +173,7 @@ bindkey -M vicmd v edit-command-line
 # }}}
 # Prompt {{{
 
-autoload -Uz colors
-colors
+autoload -Uz colors && colors
 
 # Modified 'common' prompt
 # https://github.com/jackharrisonsherlock/common
