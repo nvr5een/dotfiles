@@ -1,8 +1,8 @@
 #!/bin/sh
 
-dst=~/Dropbox/Music/YouTube
+dst=~/Downloads/Music/YouTube
 
-[ ! -d "$dst" ] && exit
+mkdir -p "$dst"
 
 youtube-dl \
     -o "$dst/%(title)s.%(ext)s" \
