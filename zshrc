@@ -1,5 +1,7 @@
 # ~/.zshrc
 
+zmodload zsh/zprof
+
 # Exports {{{
 
 export EDITOR=nvim
@@ -65,7 +67,7 @@ setopt COMPLETE_IN_WORD # perform completion from both ends of words
 setopt NO_MENU_COMPLETE # do not insert first match on ambiguous completion
 
 # Expansion and Globbing
-setopt EXTENDED_GLOB # use extended globbing syntax
+setopt EXTENDED_GLOB # needed for file modification glob modifiers with compinit
 
 # History
 setopt EXTENDED_HISTORY # save each command's timestamp
@@ -93,11 +95,24 @@ setopt PROMPT_SUBST # perform arithmetic expansion in prompts (required)
 
 fpath=(~/.zsh/completion $fpath)
 
-autoload -Uz compinit && compinit -i
-
 # Cherry-picked from:
 # https://github.com/sorin-ionescu/prezto/blob/master/modules/completion/init.zsh
 # https://grml.org/zsh/zsh-lovers.html
+
+# Load and initialize the completion system ignoring insecure directories with a
+# cache time of 20 hours, so it should almost always regenerate the first time a
+# shell is opened each day.
+autoload -Uz compinit
+_comp_path="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+# #q expands globs in conditional expressions
+if [[ $_comp_path(#qNmh-20) ]]; then
+  # -C (skip function check) implies -i (skip security check).
+  compinit -C -d "$_comp_path"
+else
+  mkdir -p "$_comp_path:h"
+  compinit -i -d "$_comp_path"
+fi
+unset _comp_path
 
 # Enable caching for command completion
 zstyle ':completion::complete:*' use-cache on
