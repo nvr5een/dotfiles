@@ -116,7 +116,7 @@ unset _comp_path
 
 # Enable caching for command completion
 zstyle ':completion::complete:*' use-cache on
-zstyle ':completion::complete:*' cache-path "${ZDOTDIR:-$HOME}/.zcompcache"
+zstyle ':completion::complete:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompcache"
 
 # Case-insensitive (all), partial-word, and then substring completion.
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' \
@@ -303,17 +303,12 @@ alias :q='exit'
 alias df='df -h'
 alias du='du -ch'
 alias e='$EDITOR'
+alias grep='grep --color=auto'
+alias ls='ls --color=auto --group-directories-first'
+alias la='ls -A'
+alias ll='ls -alF'
 alias mkdir='nocorrect mkdir -pv'
 alias reload='. ~/.zshrc; echo ZSH config reloaded!'
-
-# Directory stack
-alias d='dirs -v'
-for index ({1..9}) alias "$index"="cd +${index}"; unset index
-
-# Directory navigation
-[[ -e ~/Downloads ]] && alias dl='cd ~/Downloads'
-[[ -e ~/Dropbox ]] && alias db='cd ~/Dropbox'
-[[ -e ~/projects ]] && alias pro='cd ~/projects'
 
 # Safety features
 alias chgrp='chgrp --preserve-root'
@@ -324,15 +319,14 @@ alias ln='ln -iv'
 alias mv='nocorrect mv -iv'
 alias rm='rm -Iv'
 
-# Colorize grep
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+# Directory stack
+alias d='dirs -v'
+for index ({1..9}) alias "$index"="cd +${index}"; unset index
 
-# ls
-alias ls='ls --color=auto --group-directories-first'
-alias la='ls -A'
-alias ll='ls -alF'
+# Directory navigation
+[[ -e ~/Downloads ]] && alias dl='cd ~/Downloads'
+[[ -e ~/Dropbox ]] && alias db='cd ~/Dropbox'
+[[ -e ~/projects ]] && alias pro='cd ~/projects'
 
 # git
 alias ga='git add'
@@ -348,7 +342,7 @@ alias grm='git rm'
 alias gs='git status'
 
 # apt
-if type apt-get &>/dev/null; then
+if (( $+commands[apt-get] )); then
   alias apti='sudo apt install --no-install-recommends'
   alias aptu='sudo apt update'
   alias aptf='sudo apt full-upgrade'
@@ -362,27 +356,27 @@ if type apt-get &>/dev/null; then
 fi
 
 # pacman
-if type pacman &>/dev/null; then
-  if type yay &>/dev/null; then
-    alias paci='yay -S'
-    alias pacu='yay -Syu'
-    alias pacs='yay -Ss'
-    alias pacq='yay -Si'
+if (( $+commands[pacman] )); then
+  if (( $+commands[yay] )); then
+    alias paci='yay -S' # install package(s) (incl AUR)
+    alias pacu='yay -Syu' # sync, then upgrade all packages (incl AUR)
+    alias pacs='yay -Ss' # search for package(s) (incl AUR)
+    alias pacq='yay -Si' # show package info (incl AUR)
   else
-    alias paci='sudo pacman -S'
-    alias pacu='sudo pacman -Syu'
-    alias pacs='pacman -Ss'
-    alias pacq='pacman -Si'
+    alias paci='sudo pacman -S' # install package(s)
+    alias pacu='sudo pacman -Syu' # sync, then upgrade all packages
+    alias pacs='pacman -Ss' # search for package(s)
+    alias pacq='pacman -Si' # show package info
   fi
-  alias pacr='sudo pacman -R'
-  alias pacrr='sudo pacman -Rns'
-  alias pacli='pacman -Q | less'
-  alias pacll='pacman -Qqm'
-  alias paco='pacman -Qo'
-  alias pacf='pacman -Ql'
-  alias pacc='sudo pacman -Sc'
-  alias pacm='makepkg -fsic'
-  alias pacstat='pacman -Q | wc -l'
+  alias pacr='sudo pacman -R' # remove package(s) but retain configs and depends
+  alias pacrr='sudo pacman -Rns' # remove package(s), configs and depends
+  alias pacli='pacman -Q | less' # list all packages currently installed
+  alias pacll='pacman -Qqm | less' # list all packages locally installed
+  alias paco='pacman -Qo' # determine which package owns a given file
+  alias pacf='pacman -Ql' # list all files installed by a given package
+  alias pacc='sudo pacman -Sc' # delete all packages not currently installed
+  alias pacm='makepkg -fsic' # make package from PKGBUILD, install deps, clean
+  alias pacstat='pacman -Q | wc -l' # print number of installed packages
 fi
 
 # Print tidy, colorized $PATH
