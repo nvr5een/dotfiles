@@ -66,7 +66,7 @@ focal() { #{{{
 
 full() { #{{{
   if [[ "$OSTYPE" = "linux-gnu"* ]]; then
-    if cat /etc/os-release | grep -q 'Focal'; then
+    if grep -q 'Focal' /etc/os-release; then
       focal
     else
       read -p "OS not supported. Continue installing dotfiles? (y/n)" -n 1 -r
@@ -131,6 +131,7 @@ install_user_scripts() { #{{{
 
 install_git_configs() { #{{{
   cp -fv "$src"/gitconfig ~/.gitconfig >> "$log_file"
+  chmod 600 ~/.gitconfig
 } #}}}
 
 install_tmux_configs() { #{{{
