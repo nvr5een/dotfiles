@@ -6,6 +6,7 @@
 src=~/projects/dotfiles
 timestamp=$(date +%Y-%m-%d_%H:%M:%S)
 log_file=/tmp/dotfiles.log
+
 bin_dst=~/.local/bin
 mpv_dst=~/.config/mpv
 nvim_dst=~/.config/nvim
@@ -14,64 +15,80 @@ vifm_dst=~/.config/vifm
 zsh_dst=~/.zsh
 
 log_header() { #{{{
-  echo "-------------------" >> "$log_file"
-  echo "$timestamp" >> "$log_file"
-  echo "-------------------" >> "$log_file"
-} #}}}
+echo "
+-------------------
+$timestamp
+-------------------"
+} >> "$log_file" #}}}
 
 delete_all() { #{{{
+  local files=("$mpv_dst"
+               "$nvim_dst"
+               "$vifm_dst"
+               "$zsh_dst"
+               ~/.cache/zsh
+               ~/.tmux.conf
+               ~/.gitconfig
+               ~/.zcompdump
+               ~/.zshrc)
   log_header
-  # mpv
-  if [[ -e "$mpv_dst" ]]; then
-    echo "Deleting mpv configs..." >> "$log_file"
-    rm -rfv "$mpv_dst" >> "$log_file"
+  [[ -d $nvim_dst/pack ]] || rm -rf "$nvim_dst"/pack
+  for i in "${files[@]}"; do
+    [[ -e "$i" ]] || continue
+    rm -rfv "$i" >> "$log_file"
+  done
+  # User scripts
+  read -p "Delete '$bin_dst'? (y/n)" -n 1 -r
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    rm -rfv "$bin_dst" >> "$log_file"
   fi
-  # neovim
-  if [[ -e "$nvim_dst" ]]; then
-    echo "Deleting neovim configs..." >> "$log_file"
-    rm -rfv "$nvim_dst" >> "$log_file"
+  # Neovim backups
+  echo ""
+  read -p "Delete '$nvim_backup'? (y/n)" -n 1 -r
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    rm -rfv "$nvim_backup" >> "$log_file"
   fi
-  # vifm
-  if [[ -e "$vifm_dst" ]]; then
-    echo "Deleting vifm configs..." >> "$log_file"
-    rm -rfv "$vifm_dst" >> "$log_file"
-  fi
-  # git
-  if [[ -e ~/.gitconfig ]]; then
-    echo "Deleting git configs..." >> "$log_file"
-    rm -fv ~/.gitconfig >> "$log_file"
-  fi
-  # tmux
-  if [[ -e ~/.tmux.conf ]]; then
-    echo "Deleting tmux configs..." >> "$log_file"
-    rm -fv ~/.tmux.conf >> "$log_file"
-  fi
-  # zsh
-  if [[ -e ~/.zshrc ]]; then
-    echo "Deleting zshrc..." >> "$log_file"
-    rm -fv ~/.zshrc >> "$log_file"
-  fi
-  if [[ -d "$zsh_dst" ]]; then
-    echo "Deleting zsh configs..." >> "$log_file"
-    rm -rfv "$zsh_dst" >> "$log_file"
-  fi
+  echo ""
   echo "Deleted dotfiles and associated directories. See '$log_file' for details."
-  echo "Files in '$bin_dst' and '$nvim_backup' have been retained."
-} # }}}
+} #}}}
+
+focal() { #{{{
+  sudo apt install -y neovim tmux vifm zsh
+  echo ""
+  read -p "Install desktop packages'? (y/n)" -n 1 -r
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo ""
+    sudo apt install -y mpv
+  fi
+  echo ""
+  main
+} #}}}
+
+full() { #{{{
+  if [[ "$OSTYPE" = "linux-gnu"* ]]; then
+    if cat /etc/os-release | grep -q 'Focal'; then
+      focal
+    else
+      read -p "OS not supported. Continue installing dotfiles? (y/n)" -n 1 -r
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        echo ""
+        main
+      fi
+    fi
+  fi
+} #}}}
 
 install_mpv_configs() { #{{{
   if type -p mpv &>/dev/null; then
-    echo "Installing mpv configs..." >> "$log_file"
     mkdir -p "$mpv_dst"
     for file in "$src"/mpv/*; do
       cp -fv "$file" "$mpv_dst" >> "$log_file"
     done
   fi
-} # }}}
+} #}}}
 
 install_neovim_configs() { #{{{
   if type -p nvim &>/dev/null; then
-    echo "Installing neovim configs..." >> "$log_file"
     mkdir -p "$nvim_dst"/{colors,minisnip,syntax}
     mkdir -p "$nvim_backup"/{backup,swap,undo}
     ln -sfv "$src"/nvim/init.vim "$nvim_dst" >> "$log_file" 2>&1
@@ -88,11 +105,10 @@ install_neovim_configs() { #{{{
       cp -fv "$file" "$nvim_dst"/syntax >> "$log_file"
     done
   fi
-} # }}}
+} #}}}
 
 install_vifm_configs() { #{{{
   if type -p vifm &>/dev/null; then
-    echo "Installing vifm configs..." >> "$log_file"
     mkdir -p "$vifm_dst"/colors
     # colors
     cp -fv "$src"/vifm/colors/* "$vifm_dst"/colors >> "$log_file"
@@ -103,32 +119,28 @@ install_vifm_configs() { #{{{
       ln -sfv "$src"/vifm/macos.vifmrc "$vifm_dst"/vifmrc >> "$log_file" 2>&1
     fi
   fi
-} # }}}
+} #}}}
 
 install_user_scripts() { #{{{
-  echo "Installing user scripts..." >> "$log_file"
   mkdir -p "$bin_dst"
   for file in "$src"/bin/*; do
     cp -fv "$file" "$bin_dst" >> "$log_file"
   done
   chmod 700 "$bin_dst"/*
-} # }}}
+} #}}}
 
 install_git_configs() { #{{{
-  echo "Installing git configs..." >> "$log_file"
   cp -fv "$src"/gitconfig ~/.gitconfig >> "$log_file"
 } #}}}
 
 install_tmux_configs() { #{{{
   if type -p tmux &>/dev/null; then
-    echo "Installing tmux configs..." >> "$log_file"
     ln -sfv "$src"/tmux.conf ~/.tmux.conf >> "$log_file" 2>&1
   fi
 } #}}}
 
 install_zsh_configs() { #{{{
   if type -p zsh &>/dev/null; then
-    echo "Installing zsh configs..." >> "$log_file"
     ln -sfv "$src"/zshrc ~/.zshrc >> "$log_file" 2>&1
     mkdir -p "$zsh_dst"/completion
     if [[ -z "$(ls -A $zsh_dst/completion)" ]]; then
@@ -150,12 +162,16 @@ main() { #{{{
   install_tmux_configs
   install_zsh_configs
   echo "Installed dotfiles and associated directories. See '$log_file' for details."
-} # }}}
+} #}}}
 
-while [ ! $# -eq 0 ]; do
+while [[ ! $# -eq 0 ]]; do
   case "$1" in
     --delete | -d)
       delete_all
+      exit
+      ;;
+    --full | -f)
+      full
       exit
       ;;
   esac
