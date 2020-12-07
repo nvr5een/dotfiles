@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-session=conf
+session=main
 
 set -e
 
