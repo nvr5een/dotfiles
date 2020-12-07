@@ -52,32 +52,6 @@ delete_all() { #{{{
   echo "Deleted dotfiles and associated directories. See '$log_file' for details."
 } #}}}
 
-focal() { #{{{
-  sudo apt install -y neovim tmux vifm zsh
-  echo ""
-  read -p "Install desktop packages'? (y/n)" -n 1 -r
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo ""
-    sudo apt install -y mpv
-  fi
-  echo ""
-  main
-} #}}}
-
-full() { #{{{
-  if [[ "$OSTYPE" = "linux-gnu"* ]]; then
-    if grep -q 'Focal' /etc/os-release; then
-      focal
-    else
-      read -p "OS not supported. Continue installing dotfiles? (y/n)" -n 1 -r
-      if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo ""
-        main
-      fi
-    fi
-  fi
-} #}}}
-
 install_mpv_configs() { #{{{
   if type -p mpv &>/dev/null; then
     mkdir -p "$mpv_dst"
@@ -169,10 +143,6 @@ while [[ ! $# -eq 0 ]]; do
   case "$1" in
     --delete | -d)
       delete_all
-      exit
-      ;;
-    --full | -f)
-      full
       exit
       ;;
   esac
