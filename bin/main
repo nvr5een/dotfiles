@@ -4,7 +4,7 @@ session=main
 
 set -e
 
-cd ~/projects/dotfiles
+cd ~/.config/dotfiles
 
 if tmux has-session -t "$session" 2> /dev/null; then
   tmux attach -t "$session"

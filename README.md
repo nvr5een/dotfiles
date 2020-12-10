@@ -11,7 +11,7 @@ Configuration files used on Linux/macOS to customize my CLI environment.
 ## Installation
 
 ```
-$ mkdir -pv ~/projects
-$ git clone https://github.com/nvr5een/dotfiles.git ~/projects/dotfiles
-$ ~/projects/dotfiles/install
+$ mkdir -p ~/.config
+$ git clone https://github.com/nvr5een/dotfiles.git ~/.config/dotfiles
+$ ~/.config/dotfiles/install
 ```

@@ -3,7 +3,7 @@
 # Installs dotfiles and creates associated directories.
 # WARNING: This script overwrites things!
 
-src=~/projects/dotfiles
+src=~/.config/dotfiles
 timestamp=$(date +%Y-%m-%d_%H:%M:%S)
 log_file=/tmp/dotfiles.log
 
