@@ -141,9 +141,6 @@ noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 " Replace all occurrences of word under cursor
 nnoremap <leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 
-" Strip trailing whitespace from current file
-nnoremap <leader>sw :call StripWhitespace()<CR>
-
 " Clear search highlighting with 'ctrl-l'
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
@@ -179,7 +176,6 @@ function! PasteForStatusline() abort
   endif
 endfunction
 
-" Strip trailing whitespace from current file
 function! StripWhitespace() abort
   let save_cursor = getpos(".")
   let old_query = getreg('/')
@@ -187,6 +183,20 @@ function! StripWhitespace() abort
   call setpos('.', save_cursor)
   call setreg('/', old_query)
 endfunction
+nnoremap <leader>sw :call StripWhitespace()<CR>
+
+" https://github.com/vim/vim/issues/4738#issuecomment-714609892
+if has('linux')
+  function! OpenURLUnderCursor()
+    let s:uri = matchstr(getline('.'), '[a-z]*:\/\/[^ >,;()]*')
+    let s:uri = shellescape(s:uri, 1)
+    if s:uri != ''
+      silent exec "!xdg-open '".s:uri."'"
+      :redraw!
+    endif
+  endfunction
+  nnoremap gx :call OpenURLUnderCursor()<CR>
+endif
 
 " }}}
 " Autocommands {{{
