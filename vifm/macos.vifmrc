@@ -78,7 +78,7 @@ set grepprg=ag\ --line-numbers\ %i\ %a\ %s
 
 mark h ~/
 mark c ~/.config
-mark d ~/projects/dotfiles
+mark d ~/.config/dotfiles
 mark j ~/projects
 mark x ~/Dropbox
 mark w ~/Downloads
