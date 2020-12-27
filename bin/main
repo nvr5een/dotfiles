@@ -1,10 +1,16 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 session=main
+dotfiles=~/.config/dotfiles
 
 set -e
 
-cd ~/.config/dotfiles
+if [[ -d $dotfiles ]]; then
+  cd "$dotfiles"
+else
+  echo "Directory '$dotfiles' not found! Exiting."
+  exit 1
+fi
 
 if tmux has-session -t "$session" 2> /dev/null; then
   tmux attach -t "$session"

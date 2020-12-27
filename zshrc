@@ -371,7 +371,7 @@ if (( $+commands[pacman] )); then
   alias pacr='sudo pacman -R' # remove package(s) but retain configs and depends
   alias pacrr='sudo pacman -Rns' # remove package(s), configs and depends
   alias pacli='pacman -Q | less' # list all packages currently installed
-  alias pacll='pacman -Qqm | less' # list all packages locally installed
+  alias pacll='pacman -Qqm' # list all packages locally installed
   alias paco='pacman -Qo' # determine which package owns a given file
   alias pacf='pacman -Ql' # list all files installed by a given package
   alias pacc='sudo pacman -Sc' # delete all packages not currently installed
