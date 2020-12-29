@@ -8,9 +8,11 @@ timestamp=$(date +%Y-%m-%d_%H:%M:%S)
 log_file=/tmp/dotfiles.log
 
 bin_dst=~/.local/bin
+cmus_dst=~/.config/cmus
 mpv_dst=~/.config/mpv
-nvim_dst=~/.config/nvim
-nvim_backup=~/.local/share/nvim
+newsboat_dst=~/.config/newsboat
+neovim_dst=~/.config/nvim
+neovim_backup=~/.local/share/nvim
 vifm_dst=~/.config/vifm
 zsh_dst=~/.zsh
 
@@ -23,7 +25,8 @@ $timestamp
 
 delete_all() { #{{{
   local files=("$mpv_dst"
-               "$nvim_dst"
+               "$newsboat_dst"
+               "$neovim_dst"
                "$vifm_dst"
                "$zsh_dst"
                ~/.cache/zsh
@@ -32,7 +35,7 @@ delete_all() { #{{{
                ~/.zcompdump
                ~/.zshrc)
   log_header
-  [[ -d $nvim_dst/pack ]] || rm -rf "$nvim_dst"/pack
+  [[ -d $neovim_dst/pack ]] || rm -rf "$neovim_dst"/pack
   for i in "${files[@]}"; do
     [[ -e "$i" ]] || continue
     rm -rfv "$i" >> "$log_file"
@@ -44,12 +47,23 @@ delete_all() { #{{{
   fi
   # Neovim backups
   echo ""
-  read -p "Delete '$nvim_backup'? (y/n)" -n 1 -r
+  read -p "Delete '$neovim_backup'? (y/n)" -n 1 -r
   if [[ $REPLY =~ ^[Yy]$ ]]; then
-    rm -rfv "$nvim_backup" >> "$log_file"
+    rm -rfv "$neovim_backup" >> "$log_file"
   fi
   echo ""
   echo "Deleted dotfiles and associated directories. See '$log_file' for details."
+} #}}}
+
+install_cmus_configs() { #{{{
+  if type -p cmus &>/dev/null; then
+    mkdir -p "$cmus_dst"
+    if [[ "$OSTYPE" = "linux-gnu"* ]]; then
+      cp -fv "$src"/cmus/linux.rc "$cmus_dst"/rc >> "$log_file" 2>&1
+    elif [[ "$OSTYPE" = "darwin"* ]]; then
+      cp -fv "$src"/cmus/macos.rc "$cmus_dst"/rc >> "$log_file" 2>&1
+    fi
+  fi
 } #}}}
 
 install_mpv_configs() { #{{{
@@ -63,20 +77,29 @@ install_mpv_configs() { #{{{
 
 install_neovim_configs() { #{{{
   if type -p nvim &>/dev/null; then
-    mkdir -p "$nvim_dst"/{colors,minisnip,syntax}
-    mkdir -p "$nvim_backup"/{backup,swap,undo}
-    ln -sfv "$src"/nvim/init.vim "$nvim_dst" >> "$log_file" 2>&1
+    mkdir -p "$neovim_dst"/{colors,minisnip,syntax}
+    mkdir -p "$neovim_backup"/{backup,swap,undo}
+    ln -sfv "$src"/nvim/init.vim "$neovim_dst" >> "$log_file" 2>&1
     # colors
     for file in "$src"/nvim/colors/*; do
-      cp -fv "$file" "$nvim_dst"/colors >> "$log_file"
+      cp -fv "$file" "$neovim_dst"/colors >> "$log_file"
     done
     # minisnip
     for file in "$src"/nvim/minisnip/*; do
-      cp -fv "$file" "$nvim_dst"/minisnip >> "$log_file"
+      cp -fv "$file" "$neovim_dst"/minisnip >> "$log_file"
     done
     # syntax
     for file in "$src"/nvim/syntax/*; do
-      cp -fv "$file" "$nvim_dst"/syntax >> "$log_file"
+      cp -fv "$file" "$neovim_dst"/syntax >> "$log_file"
+    done
+  fi
+} #}}}
+
+install_newsboat_configs() { #{{{
+  if type -p newsboat &>/dev/null; then
+    mkdir -p "$newsboat_dst"
+    for file in "$src"/newsboat/*; do
+      cp -fv "$file" "$newsboat_dst" >> "$log_file"
     done
   fi
 } #}}}
@@ -129,8 +152,10 @@ install_zsh_configs() { #{{{
 
 main() { #{{{
   log_header
+  install_cmus_configs
   install_mpv_configs
   install_neovim_configs
+  install_newsboat_configs
   install_vifm_configs
   install_user_scripts
   install_git_configs
