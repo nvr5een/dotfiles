@@ -1,0 +1,23 @@
+# ~/.config/newsboat/config
+
+auto-reload yes
+refresh-on-startup yes
+confirm-exit yes
+browser "w3m"
+player "mpv"
+download-path "~/Downloads"
+max-downloads 3
+
+color listnormal          color243 default 
+color listfocus           color250 color236 bold
+color listfocus_unread    yellow color236 bold
+color listnormal_unread   green default
+color info                color250 color236
+color article             color250 default
+
+bind-key h quit
+bind-key k up
+bind-key j down
+unbind-key l
+bind-key l open
+bind-key L toggle-show-read-feeds
