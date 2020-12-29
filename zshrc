@@ -379,6 +379,17 @@ if (( $+commands[pacman] )); then
   alias pacstat='pacman -Q | wc -l' # print number of installed packages
 fi
 
+# }}}
+# Functions {{{
+
+fname() {
+  find . -iname "*$@*"
+}
+
+mkcd() {
+  mkdir -p "$*"; cd "$*"
+}
+
 # Print tidy, colorized $PATH
 path() {
   echo $PATH | tr ":" "\n" | \
