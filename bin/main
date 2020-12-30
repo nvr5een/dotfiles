@@ -1,25 +1,43 @@
-#!/bin/bash
+#!/bin/sh
 
-session=main
-dotfiles=~/.config/dotfiles
+session=play
+dotfiles_dir=~/.config/dotfiles
+music_dir=~/Dropbox/Working/Music
 
-set -e
+tmux has-session -t "$session" 2>/dev/null
 
-if [[ -d $dotfiles ]]; then
-  cd "$dotfiles"
-else
-  echo "Directory '$dotfiles' not found! Exiting."
-  exit 1
+if [ $? != 0 ]; then
+  tmux new-session -d -n "shell" -s "$session"
+
+  if [ -d "$dotfiles_dir" ]; then
+    tmux new-window -n "conf"
+    tmux send-keys "cd $dotfiles_dir && nvim" C-m
+    tmux split-window -v -p 20
+    tmux send-keys "cd $dotfiles_dir && clear && git status" C-m
+    tmux select-pane -t 1
+  fi
+
+  if type -p newsboat &>/dev/null; then
+    tmux new-window -n "news"
+    tmux send-keys "newsboat" C-m
+    tmux split-window -v -p 20
+    tmux send-keys "podboat" C-m
+    tmux select-pane -t 1
+  fi
+
+  if type -p cmus &>/dev/null; then
+    tmux new-window -n "tunes"
+    if [ -d "$music_dir" ]; then
+      tmux send-keys "cd $music_dir && cmus" C-m
+    else
+      tmux send-keys "cmus" C-m
+    fi
+  fi
+
+  tmux new-window -n "files"
+  tmux send-keys "vifm" C-m
+
+  tmux select-window -t 1
 fi
 
-if tmux has-session -t "$session" 2> /dev/null; then
-  tmux attach -t "$session"
-  exit
-fi
-
-tmux new -d -s "$session" -n zsh "zsh"
-tmux neww -n nvim "nvim && zsh"
-tmux neww -n vifm "vifm && zsh"
-tmux selectw -t 1
-
-tmux attach -t "$session"
+tmux attach-session -t "$session"
