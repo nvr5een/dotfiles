@@ -1,6 +1,6 @@
 #!/bin/sh
 
-session=play
+session=main
 dotfiles_dir=~/.config/dotfiles
 music_dir=~/Dropbox/Working/Music
 
@@ -20,9 +20,9 @@ if [ $? != 0 ]; then
   if type -p newsboat &>/dev/null; then
     tmux new-window -n "news"
     tmux send-keys "newsboat" C-m
-    tmux split-window -v -p 20
-    tmux send-keys "podboat" C-m
-    tmux select-pane -t 1
+    # tmux split-window -v -p 20
+    # tmux send-keys "podboat" C-m
+    # tmux select-pane -t 1
   fi
 
   if type -p cmus &>/dev/null; then
