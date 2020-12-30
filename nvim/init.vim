@@ -187,7 +187,7 @@ nnoremap <leader>sw :call StripWhitespace()<CR>
 
 " https://github.com/vim/vim/issues/4738#issuecomment-714609892
 if has('linux')
-  function! OpenURLUnderCursor()
+  function! OpenURLUnderCursor() abort
     let s:uri = matchstr(getline('.'), '[a-z]*:\/\/[^ >,;()]*')
     let s:uri = shellescape(s:uri, 1)
     if s:uri != ''
