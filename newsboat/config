@@ -1,13 +1,34 @@
 # ~/.config/newsboat/config
 
 auto-reload yes
-refresh-on-startup yes
+reload-threads 100
+show-read-feeds no
+text-width 80
 confirm-exit yes
-browser "w3m"
+browser "brave %u"
+
+# Podboat
 player "mpv"
 download-path "~/Downloads"
 max-downloads 3
 
+# Unbind keys
+unbind-key l
+unbind-key ,
+
+# Bind keys
+bind-key h quit
+bind-key k up
+bind-key j down
+bind-key l open
+bind-key L toggle-show-read-feeds
+bind-key ' macro-prefix
+
+# Macros
+macro w set browser "w3m %u" ; open-in-browser ; set browser "brave %u"
+macro v set browser "mpv %u" ; open-in-browser ; set browser "w3m %u"
+
+# Colors
 color listnormal          color243 default 
 color listfocus           color250 color236 bold
 color listfocus_unread    yellow color236 bold
@@ -15,9 +36,7 @@ color listnormal_unread   green default
 color info                color250 color236
 color article             color250 default
 
-bind-key h quit
-bind-key k up
-bind-key j down
-unbind-key l
-bind-key l open
-bind-key L toggle-show-read-feeds
+# Highlights
+highlight article "^(Title):.*$" yellow default
+highlight article "https?://[^ ]+" blue default
+highlight article "\\[image\\ [0-9]+\\]" green default
