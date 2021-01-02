@@ -30,6 +30,7 @@ typeset -U PATH
 
 # User scripts
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
+[[ -d "$HOME/projects/private/bin" ]] && export PATH="$HOME/projects/private/bin:$PATH"
 
 # Surfraw
 if type surfraw &>/dev/null; then
