@@ -1,16 +1,11 @@
 https://archlinux.org/feeds/news/ news tech
 https://news.ycombinator.com/rss news tech
 https://www.wired.com/feed/rss news tech
-https://rss.msn.com/
-
-http://rss.cnn.com/rss/cnn_topstories.rss news world
-
-http://feeds.bbci.co.uk/news/world/rss.xml news world
-https://www.theguardian.com/world/rss news world
-https://www.theguardian.com/football/rss news footy
-
-
-
 https://www.linux.com/feed/
 https://feeds.feedburner.com/SpellburnPodcast nerd
 https://www.youtube.com/feeds/videos.xml?channel_id=UCvA_wgsX6eFAOXI8Rbg_WiQ
+#https://rss.msn.com/
+#http://rss.cnn.com/rss/cnn_topstories.rss news world
+#http://feeds.bbci.co.uk/news/world/rss.xml news world
+#https://www.theguardian.com/world/rss news world
+#https://www.theguardian.com/football/rss news footy
