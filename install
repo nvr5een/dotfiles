@@ -32,7 +32,8 @@ delete_all() { #{{{
                ~/.zcompdump
                ~/.zshrc)
   log_header
-  [[ -d $neovim_dst/pack ]] || rm -rf "$neovim_dst"/pack
+  # Get rid of this first so deletion doesn't spam the log file
+  [[ -d $neovim_dst/pack ]] && rm -rf "$neovim_dst"/pack
   for i in "${files[@]}"; do
     [[ -e "$i" ]] || continue
     rm -rfv "$i" >> "$log_file"

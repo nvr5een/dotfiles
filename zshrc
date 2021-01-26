@@ -325,9 +325,9 @@ alias d='dirs -v'
 for index ({1..9}) alias "$index"="cd +${index}"; unset index
 
 # Directory navigation
-[[ -e ~/Downloads ]] && alias dl='cd ~/Downloads'
-[[ -e ~/.zshrc.local ]] && alias db='cd ~/.zshrc.local'
-[[ -e ~/projects ]] && alias pro='cd ~/projects'
+[[ -d ~/Downloads ]] && alias dl='cd ~/Downloads'
+[[ -d ~/Dropbox ]] && alias db='cd ~/Dropbox'
+[[ -d ~/projects ]] && alias pro='cd ~/projects'
 
 # git
 alias ga='git add'
