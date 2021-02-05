@@ -54,7 +54,7 @@ set cpoptions+=$ " put a '$' at end of text being changed in current line
 set cursorline " highlight cursorline
 set scrolloff=5 " minimum number of lines kept above and below cursor
 set showmatch " highlight matching brackets
-set virtualedit=all " allow cursor to go anywhere in normal mode
+set virtualedit=all " allow cursor to go anywhere in all modes
 
 " Line numbers
 set number " show line numbers
