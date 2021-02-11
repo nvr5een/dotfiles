@@ -172,9 +172,4 @@ while [[ ! $# -eq 0 ]]; do
   shift
 done
 
-if [[ -d $src ]]; then
-  main "$@"
-else
-  echo "'$src' does not exist!"
-  exit 1
-fi
+main "$@"
