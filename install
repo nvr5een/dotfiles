@@ -7,7 +7,6 @@ log_file=/tmp/dotfiles.log
 bin_dst=~/.local/bin
 cmus_dst=~/.config/cmus
 mpv_dst=~/.config/mpv
-newsboat_dst=~/.config/newsboat
 neovim_dst=~/.config/nvim
 neovim_backup=~/.local/share/nvim
 vifm_dst=~/.config/vifm
@@ -22,7 +21,6 @@ $timestamp
 
 delete_all() { #{{{
   local files=("$mpv_dst"
-               "$newsboat_dst"
                "$neovim_dst"
                "$vifm_dst"
                "$zsh_dst"
@@ -89,15 +87,6 @@ install_neovim_configs() { #{{{
     # syntax
     for file in "$src"/nvim/syntax/*; do
       cp -fv "$file" "$neovim_dst"/syntax >> "$log_file"
-    done
-  fi
-} #}}}
-
-install_newsboat_configs() { #{{{
-  if type -p newsboat &>/dev/null; then
-    mkdir -p "$newsboat_dst"
-    for file in "$src"/newsboat/*; do
-      cp -fv "$file" "$newsboat_dst" >> "$log_file"
     done
   fi
 } #}}}
