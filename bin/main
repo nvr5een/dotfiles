@@ -12,9 +12,9 @@ if [ $? != 0 ]; then
   if [ -d "$dotfiles_dir" ]; then
     tmux new-window -n "conf"
     tmux send-keys "cd $dotfiles_dir && nvim" C-m
-    tmux split-window -v -p 20
-    tmux send-keys "cd $dotfiles_dir && clear && git status" C-m
-    tmux select-pane -t 1
+    # tmux split-window -v -p 20
+    # tmux send-keys "cd $dotfiles_dir && clear && git status" C-m
+    # tmux select-pane -t 1
   fi
 
   if type -p newsboat &>/dev/null; then
@@ -25,14 +25,14 @@ if [ $? != 0 ]; then
     # tmux select-pane -t 1
   fi
 
-  if type -p cmus &>/dev/null; then
-    tmux new-window -n "tunes"
-    if [ -d "$music_dir" ]; then
-      tmux send-keys "cd $music_dir && cmus" C-m
-    else
-      tmux send-keys "cmus" C-m
-    fi
-  fi
+  # if type -p cmus &>/dev/null; then
+  #   tmux new-window -n "tunes"
+  #   if [ -d "$music_dir" ]; then
+  #     tmux send-keys "cd $music_dir && cmus" C-m
+  #   else
+  #     tmux send-keys "cmus" C-m
+  #   fi
+  # fi
 
   tmux new-window -n "files"
   tmux send-keys "vifm" C-m
