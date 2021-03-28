@@ -142,7 +142,6 @@ main() { #{{{
   install_cmus_configs
   install_mpv_configs
   install_neovim_configs
-  install_newsboat_configs
   install_vifm_configs
   install_user_scripts
   install_git_configs

@@ -100,14 +100,10 @@ fpath=(~/.zsh/completion $fpath)
 # https://github.com/sorin-ionescu/prezto/blob/master/modules/completion/init.zsh
 # https://grml.org/zsh/zsh-lovers.html
 
-# Load and initialize the completion system ignoring insecure directories with a
-# cache time of 20 hours, so it should almost always regenerate the first time a
-# shell is opened each day.
+# Load and initialize completion system with a cache time of 20 hours.
 autoload -Uz compinit
 _comp_path="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
-# #q expands globs in conditional expressions
 if [[ $_comp_path(#qNmh-20) ]]; then
-  # -C (skip function check) implies -i (skip security check).
   compinit -C -d "$_comp_path"
 else
   mkdir -p "$_comp_path:h"
@@ -354,6 +350,7 @@ if (( $+commands[apt-get] )); then
   alias aptq='apt show'
   alias aptli='apt list --installed | less'
   alias aptlu='apt list --upgradeable'
+  alias aptstat='dpkg -l | wc -l'
 fi
 
 # pacman
