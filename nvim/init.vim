@@ -32,6 +32,7 @@ call minpac#add('tpope/vim-unimpaired')
 call minpac#add('justinmk/vim-dirvish')
 call minpac#add('airblade/vim-gitgutter')
 call minpac#add('joereynolds/vim-minisnip')
+call minpac#add('voldikss/vim-floaterm')
 call minpac#add('chase/vim-ansible-yaml')
 call minpac#add('ekalinin/Dockerfile.vim')
 
@@ -163,6 +164,10 @@ endif
 " Edit and source vimrc
 nnoremap <silent> <leader>v :e $MYVIMRC<CR>
 nnoremap <silent> <leader>sv :so $MYVIMRC<CR>
+
+" vim-floaterm
+nnoremap <silent> <leader>t :FloatermToggle<CR>
+tnoremap <silent> <leader>t <C-\><C-n>:FloatermToggle<CR>
 
 " }}}
 " Functions {{{
