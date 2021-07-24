@@ -11,30 +11,33 @@ if has('vim_starting')
   endif
 endif
 
-packadd minpac
+" Load minpac on demand
+function! PackInit() abort
+  packadd minpac
+  
+  call minpac#init()
+  call minpac#add('k-takata/minpac', {'type': 'opt'})
 
-call minpac#init()
-
-call minpac#add('k-takata/minpac', {'type': 'opt'})
-call minpac#add('tpope/vim-commentary')
-call minpac#add('tpope/vim-surround')
-call minpac#add('tpope/vim-repeat')
-call minpac#add('tpope/vim-unimpaired')
-call minpac#add('justinmk/vim-dirvish')
-call minpac#add('airblade/vim-gitgutter')
-call minpac#add('joereynolds/vim-minisnip')
-call minpac#add('voldikss/vim-floaterm')
-call minpac#add('chase/vim-ansible-yaml')
-call minpac#add('ekalinin/Dockerfile.vim')
+  " Additional plugins
+  call minpac#add('tpope/vim-commentary')
+  call minpac#add('tpope/vim-surround')
+  call minpac#add('tpope/vim-repeat')
+  call minpac#add('tpope/vim-unimpaired')
+  call minpac#add('justinmk/vim-dirvish')
+  call minpac#add('airblade/vim-gitgutter')
+  call minpac#add('joereynolds/vim-minisnip')
+  call minpac#add('chase/vim-ansible-yaml')
+  call minpac#add('ekalinin/Dockerfile.vim')
+endfunction
 
 " Plugin settings
 let g:minisnip_dir = '~/.config/nvim/minisnip'
 let g:markdown_folding = 1
 
-" Plugin management commands
-command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update('', {'do': 'call minpac#status()'})
-command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
-command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
+" Define user commands for updating/cleaning plugins
+command! PackUpdate source $MYVIMRC | call PackInit() | call minpac#update()
+command! PackClean  source $MYVIMRC | call PackInit() | call minpac#clean()
+command! PackStatus packadd minpac | call minpac#status()
 
 " }}}
 " Options {{{
@@ -155,10 +158,6 @@ endif
 " Edit and source vimrc
 nnoremap <silent> <leader>v :e $MYVIMRC<CR>
 nnoremap <silent> <leader>sv :so $MYVIMRC<CR>
-
-" vim-floaterm
-nnoremap <silent> <leader>t :FloatermToggle<CR>
-tnoremap <silent> <leader>t <C-\><C-n>:FloatermToggle<CR>
 
 " }}}
 " Functions {{{
