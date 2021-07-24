@@ -197,7 +197,6 @@ augroup general
   autocmd BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
   autocmd VimResized * :wincmd =
   autocmd BufNewFile,BufReadPost *.md set ft=markdown
-  autocmd BufNewFile,BufReadPost *hosts*,*.yml set ft=ansible
   autocmd BufNewFile,BufReadPost Vagrantfile set ft=ruby
   autocmd BufNewFile,BufReadPost *vifmrc*,*.vifm set ft=vim
   autocmd FileType css,less,scss,javascript,java
