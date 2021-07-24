@@ -110,7 +110,7 @@ command! reload :write | restart
 
 " Pdf
 " filetype *.pdf,*.cbr,*.cbz xdg-open 2> /dev/null &
-filetype *.pdf,*.cbr,*.cbz zathura
+filetype *.pdf,*.cbr,*.cbz zathura &
 
 " PostScript
 filetype *.ps,*.eps,*.ps.gz xdg-open 2> /dev/null &
