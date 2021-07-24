@@ -33,6 +33,7 @@ endfunction
 " Plugin settings
 let g:minisnip_dir = '~/.config/nvim/minisnip'
 let g:markdown_folding = 1
+let g:python_highlight_all = 1
 
 " Define user commands for updating/cleaning plugins
 command! PackUpdate source $MYVIMRC | call PackInit() | call minpac#update()

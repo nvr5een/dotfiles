@@ -7,7 +7,6 @@ Configuration files used on Linux/macOS/WSL to customize my CLI environment.
 + Terminal Multiplexer: [tmux](https://github.com/tmux/tmux/wiki/)
 + File Manager: [vifm](https://vifm.info/)
 + Media Player: [mpv](https://mpv.io/)
-+ Music Player: [cmus](https://cmus.github.io/)
 
 ## Installation
 
