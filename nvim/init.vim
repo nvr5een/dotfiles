@@ -128,7 +128,6 @@ noremap Y y$
 nnoremap <leader><Space> :e#<CR>
 nnoremap <leader>b :buffer <C-z><S-Tab>
 nnoremap <leader>e :e <C-r>=fnameescape(expand('%:p:h'))<CR>/*<C-d>
-nnoremap <leader>f :find *
 nnoremap <leader>g :vim<Space>
 
 " Circular window navigation
