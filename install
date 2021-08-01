@@ -5,7 +5,6 @@ timestamp=$(date +%Y-%m-%d_%H:%M:%S)
 log_file=/tmp/dotfiles.log
 
 bin_dst=~/.local/bin
-cmus_dst=~/.config/cmus
 mpv_dst=~/.config/mpv
 neovim_dst=~/.config/nvim
 neovim_backup=~/.local/share/nvim
@@ -49,17 +48,6 @@ delete_all() { #{{{
   fi
   echo ""
   echo "Deleted dotfiles and associated directories. See '$log_file' for details."
-} #}}}
-
-install_cmus_configs() { #{{{
-  if type -p cmus &>/dev/null; then
-    mkdir -p "$cmus_dst"
-    if [[ "$OSTYPE" = "linux-gnu"* ]]; then
-      cp -fv "$src"/cmus/linux.rc "$cmus_dst"/rc >> "$log_file" 2>&1
-    elif [[ "$OSTYPE" = "darwin"* ]]; then
-      cp -fv "$src"/cmus/macos.rc "$cmus_dst"/rc >> "$log_file" 2>&1
-    fi
-  fi
 } #}}}
 
 install_mpv_configs() { #{{{
