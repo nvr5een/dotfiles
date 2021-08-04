@@ -64,21 +64,21 @@ install_user_scripts() {
 }
 
 install_git_configs() {
-  cp -fv "$src"/gitconfig $HOME/.gitconfig
-  chmod 600 $HOME/.gitconfig
+  cp -fv "$src"/gitconfig "$HOME"/.gitconfig
+  chmod 600 "$HOME"/.gitconfig
 }
 
 install_tmux_configs() {
   if type -p tmux &>/dev/null; then
-    ln -sfv "$src"/tmux.conf $HOME/.tmux.conf
+    ln -sfv "$src"/tmux.conf "$HOME"/.tmux.conf
   fi
 }
 
 install_zsh_configs() {
   if type -p zsh &>/dev/null; then
-    ln -sfv "$src"/zshrc $HOME/.zshrc
+    ln -sfv "$src"/zshrc "$HOME"/.zshrc
     mkdir -p "$zsh_dst"/completion
-    if [[ -z "$(ls -A $zsh_dst/completion)" ]]; then
+    if [[ -z "$(ls -A "$zsh_dst"/completion)" ]]; then
       curl -o "$zsh_dst"/completion/_docker https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker/_docker
       curl -o "$zsh_dst"/completion/_docker-compose https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker-compose/_docker-compose
       curl -o "$zsh_dst"/completion/_lxc https://raw.githubusercontent.com/endaaman/lxd-completion-zsh/master/_lxc
