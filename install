@@ -1,133 +1,93 @@
 #!/usr/bin/env bash
 
-src=~/.config/dotfiles
-timestamp=$(date +%Y-%m-%d_%H:%M:%S)
-log_file=/tmp/dotfiles.log
+src=${PWD}
+bin_dst=$HOME/.local/bin
+mpv_dst=$HOME/.config/mpv
+neovim_dst=$HOME/.config/nvim
+neovim_backup=$HOME/.local/share/nvim
+vifm_dst=$HOME/.config/vifm
+zsh_dst=$HOME/.zsh
 
-bin_dst=~/.local/bin
-mpv_dst=~/.config/mpv
-neovim_dst=~/.config/nvim
-neovim_backup=~/.local/share/nvim
-vifm_dst=~/.config/vifm
-zsh_dst=~/.zsh
-
-log_header() { #{{{
-echo "
--------------------
-$timestamp
--------------------"
-} >> "$log_file" #}}}
-
-delete_all() { #{{{
-  local files=("$mpv_dst"
-               "$neovim_dst"
-               "$vifm_dst"
-               "$zsh_dst"
-               ~/.cache/zsh
-               ~/.tmux.conf
-               ~/.gitconfig
-               ~/.zcompdump
-               ~/.zshrc)
-  log_header
-  # Get rid of this first so deletion doesn't spam the log file
-  [[ -d $neovim_dst/pack ]] && rm -rf "$neovim_dst"/pack
-  for i in "${files[@]}"; do
+delete_all() {
+  [[ -d $neovim_dst/pack ]] && rm -rf "$neovim_dst"/pack &>/dev/null
+  for i in "$mpv_dst" "$neovim_dst" "$vifm_dst" "$zsh_dst" \
+    $HOME/.{gitconfig,tmux.conf,zshrc}; do
     [[ -e "$i" ]] || continue
-    rm -rfv "$i" >> "$log_file"
+    rm -rfv "$i"
   done
-  # User scripts
-  read -p "Delete '$bin_dst'? (y/n)" -n 1 -r
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    rm -rfv "$bin_dst" >> "$log_file"
-  fi
-  # Neovim backups
-  echo ""
-  read -p "Delete '$neovim_backup'? (y/n)" -n 1 -r
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    rm -rfv "$neovim_backup" >> "$log_file"
-  fi
-  echo ""
-  echo "Deleted dotfiles and associated directories. See '$log_file' for details."
-} #}}}
+}
 
-install_mpv_configs() { #{{{
+install_mpv_configs() {
   if type -p mpv &>/dev/null; then
     mkdir -p "$mpv_dst"
-    for file in "$src"/mpv/*; do
-      cp -fv "$file" "$mpv_dst" >> "$log_file"
+    for f in "$src"/mpv/*; do
+      cp -fv "$f" "$mpv_dst"
     done
   fi
-} #}}}
+}
 
-install_neovim_configs() { #{{{
+install_neovim_configs() {
   if type -p nvim &>/dev/null; then
     mkdir -p "$neovim_dst"/{colors,minisnip,syntax}
     mkdir -p "$neovim_backup"/{backup,swap,undo}
-    ln -sfv "$src"/nvim/init.vim "$neovim_dst" >> "$log_file" 2>&1
-    # colors
-    for file in "$src"/nvim/colors/*; do
-      cp -fv "$file" "$neovim_dst"/colors >> "$log_file"
+    ln -sfv "$src"/nvim/init.vim "$neovim_dst"
+    for f in "$src"/nvim/colors/*; do
+      cp -fv "$f" "$neovim_dst"/colors
     done
-    # minisnip
-    for file in "$src"/nvim/minisnip/*; do
-      cp -fv "$file" "$neovim_dst"/minisnip >> "$log_file"
+    for f in "$src"/nvim/minisnip/*; do
+      cp -fv "$f" "$neovim_dst"/minisnip
     done
-    # syntax
-    for file in "$src"/nvim/syntax/*; do
-      cp -fv "$file" "$neovim_dst"/syntax >> "$log_file"
+    for f in "$src"/nvim/syntax/*; do
+      cp -fv "$f" "$neovim_dst"/syntax
     done
   fi
-} #}}}
+}
 
-install_vifm_configs() { #{{{
+install_vifm_configs() {
   if type -p vifm &>/dev/null; then
     mkdir -p "$vifm_dst"/colors
-    # colors
-    cp -fv "$src"/vifm/colors/* "$vifm_dst"/colors >> "$log_file"
-    # vifmrc
+    cp -fv "$src"/vifm/colors/* "$vifm_dst"/colors
     if [[ "$OSTYPE" = "linux-gnu"* ]]; then
-      ln -sfv "$src"/vifm/linux.vifmrc "$vifm_dst"/vifmrc >> "$log_file" 2>&1
+      ln -sfv "$src"/vifm/linux.vifmrc "$vifm_dst"/vifmrc
     elif [[ "$OSTYPE" = "darwin"* ]]; then
-      ln -sfv "$src"/vifm/macos.vifmrc "$vifm_dst"/vifmrc >> "$log_file" 2>&1
+      ln -sfv "$src"/vifm/macos.vifmrc "$vifm_dst"/vifmrc
     fi
   fi
-} #}}}
+}
 
-install_user_scripts() { #{{{
+install_user_scripts() {
   mkdir -p "$bin_dst"
-  for file in "$src"/bin/*; do
-    cp -fv "$file" "$bin_dst" >> "$log_file"
+  for f in "$src"/bin/*; do
+    cp -fv "$f" "$bin_dst"
   done
   chmod 700 "$bin_dst"/*
-} #}}}
+}
 
-install_git_configs() { #{{{
-  cp -fv "$src"/gitconfig ~/.gitconfig >> "$log_file"
-  chmod 600 ~/.gitconfig
-} #}}}
+install_git_configs() {
+  cp -fv "$src"/gitconfig $HOME/.gitconfig
+  chmod 600 $HOME/.gitconfig
+}
 
-install_tmux_configs() { #{{{
+install_tmux_configs() {
   if type -p tmux &>/dev/null; then
-    ln -sfv "$src"/tmux.conf ~/.tmux.conf >> "$log_file" 2>&1
+    ln -sfv "$src"/tmux.conf $HOME/.tmux.conf
   fi
-} #}}}
+}
 
-install_zsh_configs() { #{{{
+install_zsh_configs() {
   if type -p zsh &>/dev/null; then
-    ln -sfv "$src"/zshrc ~/.zshrc >> "$log_file" 2>&1
+    ln -sfv "$src"/zshrc $HOME/.zshrc
     mkdir -p "$zsh_dst"/completion
     if [[ -z "$(ls -A $zsh_dst/completion)" ]]; then
-      curl -o "$zsh_dst"/completion/_docker https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker/_docker >> "$log_file" 2>&1
-      curl -o "$zsh_dst"/completion/_docker-compose https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker-compose/_docker-compose >> "$log_file" 2>&1
-      curl -o "$zsh_dst"/completion/_lxc https://raw.githubusercontent.com/endaaman/lxd-completion-zsh/master/_lxc >> "$log_file" 2>&1
-      curl -o "$zsh_dst"/completion/_lxd https://raw.githubusercontent.com/endaaman/lxd-completion-zsh/master/_lxd >> "$log_file" 2>&1
+      curl -o "$zsh_dst"/completion/_docker https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker/_docker
+      curl -o "$zsh_dst"/completion/_docker-compose https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker-compose/_docker-compose
+      curl -o "$zsh_dst"/completion/_lxc https://raw.githubusercontent.com/endaaman/lxd-completion-zsh/master/_lxc
+      curl -o "$zsh_dst"/completion/_lxd https://raw.githubusercontent.com/endaaman/lxd-completion-zsh/master/_lxd
     fi
   fi
-} #}}}
+}
 
-main() { #{{{
-  log_header
-  install_cmus_configs
+main() {
   install_mpv_configs
   install_neovim_configs
   install_vifm_configs
@@ -135,8 +95,7 @@ main() { #{{{
   install_git_configs
   install_tmux_configs
   install_zsh_configs
-  echo "Installed dotfiles and associated directories. See '$log_file' for details."
-} #}}}
+}
 
 while [[ ! $# -eq 0 ]]; do
   case "$1" in
@@ -149,3 +108,4 @@ while [[ ! $# -eq 0 ]]; do
 done
 
 main "$@"
+
