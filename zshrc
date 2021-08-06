@@ -3,8 +3,7 @@
 zmodload zsh/zprof
 
 # Exports {{{
-
-export VISUAL=vim
+export VISUAL=nvim
 export EDITOR=$VISUAL
 export PAGER=less
 export LESS="-iMFXR"
@@ -27,14 +26,10 @@ export HISTFILE="${HISTFILE:-${ZDOTDIR:-$HOME}/.zhistory}"
 export HISTSIZE=10000
 export SAVEHIST="$HISTSIZE"
 
-# Remove duplicates from $PATH
 typeset -U PATH
-
-# User scripts
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
 [[ -d "$HOME/projects/private/bin" ]] && export PATH="$HOME/projects/private/bin:$PATH"
 
-# Surfraw
 if type surfraw &>/dev/null; then
   if [[ -d "/usr/local/lib/surfraw" ]]; then
     export PATH="/usr/local/lib/surfraw:$PATH"
@@ -47,7 +42,6 @@ if type surfraw &>/dev/null; then
   fi
 fi
 
-# Homebrew
 if type brew &>/dev/null; then
   export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/local/sbin:$PATH"
   export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:/usr/local/share/man:$MANPATH"
@@ -159,7 +153,6 @@ zstyle ':completion:*' squeeze-slashes true
 
 # }}}
 # Key Bindings {{{
-
 bindkey -e
 bindkey 'jk' vi-cmd-mode
 
@@ -186,16 +179,12 @@ bindkey -M vicmd v edit-command-line
 
 # }}}
 # Prompt {{{
-
+# https://github.com/jackharrisonsherlock/common
+# https://thevaluable.dev/zsh-install-configure/
 autoload -Uz colors && colors
 
-# Modified 'common' prompt
-# https://github.com/jackharrisonsherlock/common
-
-# Prompt symbol
 COMMON_PROMPT_SYMBOL=">"
 
-# Colors
 COMMON_COLORS_HOST_ME=green
 COMMON_COLORS_HOST_AWS_VAULT=yellow
 COMMON_COLORS_CURRENT_DIR=blue
@@ -207,13 +196,9 @@ COMMON_COLORS_GIT_STATUS_UNSTAGED=yellow
 COMMON_COLORS_GIT_PROMPT_SHA=green
 COMMON_COLORS_BG_JOBS=yellow
 
-# Left prompt
 PROMPT='$(common_host)$(common_current_dir)$(common_bg_jobs)$(common_return_status)'
-
-# Right prompt
 RPROMPT='$(common_git_status)'
 
-# Host
 common_host() {
   if [[ -n $SSH_CONNECTION ]]; then
     me="%n@%m"
@@ -228,17 +213,14 @@ common_host() {
   fi
 }
 
-# Current directory
 common_current_dir() {
   echo -n "%{$fg[$COMMON_COLORS_CURRENT_DIR]%}%c "
 }
 
-# Prompt symbol
 common_return_status() {
   echo -n "%(?.%F{$COMMON_COLORS_RETURN_STATUS_TRUE}.%F{$COMMON_COLORS_RETURN_STATUS_FALSE})$COMMON_PROMPT_SYMBOL%f "
 }
 
-# Git status
 common_git_status() {
   local message=""
   local message_color="%F{$COMMON_COLORS_GIT_STATUS_DEFAULT}"
@@ -260,14 +242,10 @@ common_git_status() {
   echo -n "${message}"
 }
 
-# Background jobs
 common_bg_jobs() {
   bg_status="%{$fg[$COMMON_COLORS_BG_JOBS]%}%(1j.↓%j .)"
   echo -n $bg_status
 }
-
-# Cursor change for vicmd NORMAL/INSERT modes
-# https://thevaluable.dev/zsh-install-configure/
 
 cursor_mode() {
   cursor_block='\e[2 q'
@@ -297,10 +275,10 @@ cursor_mode
 
 # }}}
 # Aliases and functions {{{
-
 alias :q='exit'
 alias diskspace='du -S | sort -n -r | less'
 alias ports='netstat -tulanp'
+alias pro='cd ~/projects'
 alias reload='. ~/.zshrc; echo ZSH config reloaded!'
 
 alias ls='ls --color=auto --group-directories-first'
@@ -323,10 +301,6 @@ alias rm='rm -Iv'
 
 alias d='dirs -v'
 for index ({1..9}) alias "$index"="cd +${index}"; unset index
-
-[[ -d ~/Downloads ]] && alias dl='cd ~/Downloads'
-[[ -d ~/Dropbox ]] && alias db='cd ~/Dropbox'
-[[ -d ~/projects ]] && alias pro='cd ~/projects'
 
 alias ga='git add'
 alias gb='git branch'
