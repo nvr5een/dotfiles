@@ -18,8 +18,6 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 
 LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=32;40:st=30;44:ex=01;32:*.7z=00;31:*.a=00;31:*.cab=00;31:*.arj=00;31:*.deb=00;31:*.egg=00;31:*.pkg=00;31:*.bz2=00;31:*.cbr=00;31:*.cbz=00;31:*.chm=00;31:*.dmg=00;31:*.gz=00;31:*.iso=00;31:*.jad=00;31:*.jar=00;31:*.nrg=00;31:*.pdf=00;31:*.rar=00;31:*.vcd=00;31:*.t=00;31:*.tar=00;31:*.tgz=00;31:*.xz=00;31:*.z=00;31:*.zip=00;31:*.ai=00;32:*.bmp=00;32:*.cdr=00;32:*.eps=00;32:*.gif=00;32:*.icns=00;32:*.ico=00;32:*.jpeg=00;32:*.jpg=00;32:*.pbm=00;32:*.pgm=00;32:*.png=00;32:*.pnm=00;32:*.ppm=00;32:*.ps=00;32:*.psd=00;32:*.raw=00;32:*.svg=00;32:*.tif=00;32:*.tiff=00;32:*.xpm=00;32:*.applescript=00;33:*.asm=00;33:*.awk=00;33:*.bash=00;33:*.bat=00;33:*.c=00;33:*.cl=00;33:*.cmd=00;33:*.coffee=00;33:*.cpp=00;33:*.cs=00;33:*.diff=00;33:*.el=00;33:*.go=00;33:*.h=00;33:*.hs=00;33:*.java=00;33:*.js=00;33:*.jsp=00;33:*.lua=00;33:*.m=00;33:*.patch=00;33:*.pl=00;33:*.pm=00;33:*.pod=00;33:*.ps=00;33:*.py=00;33:*.r=00;33:*.rb=00;33:*.sed=00;33:*.sh=00;33:*.sql=00;33:*.sty=00;33:*.tac=00;33:*.tcl=00;33:*.tex=00;33:*.tfm=00;33:*.vb=00;33:*.vim=00;33:*.wsgi=00;33:*.zsh=00;33:*.ascx=00;34:*.ashx=00;34:*.aspx=00;34:*.css=00;34:*.erb=00;34:*.htm=00;34:*.html=00;34:*.php=00;34:*.sass=00;34:*.scss=00;34:*.less=00;34:*.rst=00;34:*.textile=00;34:*.markdown=00;34:*.md=00;34:*.mkd=00;34:*.genshi=00;34:*.jinja=00;34:*.mako=00;34:*.django=00;34:*.haml=00;34:*.cfg=00;35:*.chm=00;35:*.conf=00;35:*.csv=00;35:*.doc=00;35:*.docx=00;35:*.dvi=00;35:*.epub=00;35:*.ini=00;35:*.json=00;35:*.key=00;35:*.log=00;35:*.mobi=00;35:*.msg=00;35:*.nfo=00;35:*.odf=00;35:*.pages=00;35:*.pdf=00;35:*.pps=00;35:*.ppt=00;35:*.pptx=00;35:*.rtf=00;35:*.txt=00;35:*.vcf=00;35:*.wpd=00;35:*.wps=00;35:*.xls=00;35:*.xlsx=00;35:*.xml=00;35:*.yml=00;35:*.3g2=00;36:*.3gp=00;36:*.aac=00;36:*.aif=00;36:*.asf=00;36:*.asx=00;36:*.avi=00;36:*.cue=00;36:*.dat=00;36:*.fcm=00;36:*.flac=00;36:*.flv=00;36:*.iff=00;36:*.m3u=00;36:*.m4a=00;36:*.mkv=00;36:*.mod=00;36:*.mov=00;36:*.mp3=00;36:*.mp4=00;36:*.mpa=00;36:*.mpeg=00;36:*.mpg=00;36:*.ogv=00;36:*.ra=00;36:*.rm=00;36:*.s3m=00;36:*.sid=00;36:*.spl=00;36:*.spx=00;36:*.swf=00;36:*.ts=00;36:*.vob=00;36:*.wav=00;36:*.wma=00;36:*.wmv=00;36:';
 export LS_COLORS
-
-export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='37;45'
 
 export HISTFILE="${HISTFILE:-${ZDOTDIR:-$HOME}/.zhistory}"
@@ -159,7 +157,6 @@ bindkey 'jk' vi-cmd-mode
 autoload -U history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
-
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 bindkey -M vicmd "k" history-beginning-search-backward-end
@@ -183,8 +180,6 @@ bindkey -M vicmd v edit-command-line
 # https://thevaluable.dev/zsh-install-configure/
 autoload -Uz colors && colors
 
-COMMON_PROMPT_SYMBOL=">"
-
 COMMON_COLORS_HOST_ME=green
 COMMON_COLORS_HOST_AWS_VAULT=yellow
 COMMON_COLORS_CURRENT_DIR=blue
@@ -196,6 +191,7 @@ COMMON_COLORS_GIT_STATUS_UNSTAGED=yellow
 COMMON_COLORS_GIT_PROMPT_SHA=green
 COMMON_COLORS_BG_JOBS=yellow
 
+COMMON_PROMPT_SYMBOL=">"
 PROMPT='$(common_host)$(common_current_dir)$(common_bg_jobs)$(common_return_status)'
 RPROMPT='$(common_git_status)'
 
@@ -288,6 +284,7 @@ alias l='ls -CF'
 
 alias df='df -h'
 alias du='du -ch'
+alias grep='grep --color=auto'
 alias mkdir='nocorrect mkdir -pv'
 alias mount='mount | column -t'
 
