@@ -6,16 +6,18 @@ if has('vim_starting')
   if empty(glob(s:minpac_dir))
     echo "Installing minpac ..."
     execute '!git clone --depth 1 https://github.com/k-takata/minpac ' . s:minpac_dir
-    autocmd VimEnter * source $MYVIMRC | call minpac#update('', {'do': 'call minpac#status()'})
+    autocmd VimEnter * source $MYVIMRC | call PackInit() |
+          \ call minpac#update('', {'do': 'call minpac#status()'})
   endif
 endif
 
 function! PackInit() abort
   packadd minpac
-  
+    
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
 
+  " Utilities
   call minpac#add('tpope/vim-commentary')
   call minpac#add('tpope/vim-surround')
   call minpac#add('tpope/vim-repeat')
@@ -23,14 +25,21 @@ function! PackInit() abort
   call minpac#add('justinmk/vim-dirvish')
   call minpac#add('airblade/vim-gitgutter')
   call minpac#add('joereynolds/vim-minisnip')
-  call minpac#add('chase/vim-ansible-yaml')
+  " Syntax
+  call minpac#add('pearofducks/ansible-vim')
   call minpac#add('ekalinin/Dockerfile.vim')
+  call minpac#add('gabrielelana/vim-markdown')
+  call minpac#add('vim-python/python-syntax')
 endfunction
 
 " Plugin settings
+let g:ansible_attribute_highlight = "ab"
+let g:ansible_extra_keywords_highlight = 1
+let g:markdown_enable_folding = 1 " performace hit
+let g:markdown_enable_spell_checking = 0
 let g:minisnip_dir = '~/.config/nvim/minisnip'
-let g:markdown_folding = 1
 let g:python_highlight_all = 1
+let g:python_highlight_file_headers_as_comments = 1
 
 " Define user commands for updating/cleaning plugins
 command! PackUpdate source $MYVIMRC | call PackInit() | call minpac#update()
@@ -79,7 +88,6 @@ set wildignore+=*.gz,*.rar,*.zip
 " }}}
 " Statusline {{{
 set statusline= " begin left align
-set statusline+=%{b:gitbranch}
 set statusline+=%{StatuslinePaste()}
 set statusline+=\ %F " file path
 set statusline+=%m " modified?
@@ -140,20 +148,6 @@ endif
 
 " }}}
 " Functions {{{
-function! StatuslineGitBranch() abort
-  let b:gitbranch=""
-  if &modifiable
-    try
-      let l:dir=expand('%:p:h')
-      let l:gitrevparse = system("git -C ".l:dir." rev-parse --abbrev-ref HEAD")
-      if !v:shell_error
-        let b:gitbranch="[".substitute(l:gitrevparse, '\n', '', 'g')."]"
-      endif
-    catch
-    endtry
-  endif
-endfunction
-
 function! StatuslinePaste() abort
   let l:paste_status=&paste
   if l:paste_status == 1
@@ -175,14 +169,8 @@ endfunction
 " Autocommands {{{
 augroup nvimStartup
   autocmd!
-  autocmd VimEnter,WinEnter,BufEnter * call StatuslineGitBranch()
-  autocmd BufNewFile,BufReadPost *.md set ft=markdown
   autocmd BufNewFile,BufReadPost Vagrantfile set ft=ruby
-  autocmd BufNewFile,BufReadPost *vifmrc*,*.vifm set ft=vim
-  autocmd FileType css,less,scss,javascript,java
-        \ setlocal foldmethod=marker foldmarker={,}
   autocmd Filetype sh,vim,zsh setlocal foldmethod=marker
-  autocmd Filetype python setlocal foldmethod=indent tabstop=4
   " Resize splits when the window is resized
   autocmd VimResized * :wincmd =
   " When editing a file, always jump to the last known cursor position.

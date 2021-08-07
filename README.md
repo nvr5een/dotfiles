@@ -1,6 +1,6 @@
 # dotfiles
 
-Configuration files used on Linux/macOS/WSL to customize my CLI environment.
+Configuration files that customize my CLI environment.
 
 + Shell: [zsh](https://www.zsh.org/)
 + Editor: [neovim](https://neovim.io/)
@@ -10,8 +10,10 @@ Configuration files used on Linux/macOS/WSL to customize my CLI environment.
 
 ## Installation
 
+Clone anywhere
+
 ```
-$ mkdir -p ~/.config
-$ git clone https://github.com/nvr5een/dotfiles.git ~/.config/dotfiles
-$ ~/.config/dotfiles/install
+$ cd dotfiles
+$ ./install
 ```
+

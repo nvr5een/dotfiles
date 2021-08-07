@@ -12,8 +12,7 @@ delete_all() {
   [[ -d $neovim_dst/pack ]] && rm -rf "$neovim_dst"/pack &>/dev/null
   for i in "$mpv_dst" "$neovim_dst" "$vifm_dst" "$zsh_dst" \
     $HOME/.{gitconfig,tmux.conf,zshrc}; do
-    [[ -e "$i" ]] || continue
-    rm -rfv "$i"
+    [[ -e "$i" ]] && rm -rfv "$i"
   done
 }
 
@@ -36,9 +35,6 @@ install_neovim_configs() {
     done
     for f in "$src"/nvim/minisnip/*; do
       cp -fv "$f" "$neovim_dst"/minisnip
-    done
-    for f in "$src"/nvim/syntax/*; do
-      cp -fv "$f" "$neovim_dst"/syntax
     done
   fi
 }
