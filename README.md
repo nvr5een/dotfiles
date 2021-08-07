@@ -10,9 +10,8 @@ Configuration files that customize my CLI environment.
 
 ## Installation
 
-Clone anywhere
-
 ```
+$ git clone https://github.com/nvr5een/dotfiles.git
 $ cd dotfiles
 $ ./install
 ```
