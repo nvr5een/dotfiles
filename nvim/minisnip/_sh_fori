@@ -1,3 +1,0 @@
-for {{+foo+}} in {{+bar+}} ; do
-  {{+statement+}}
-done
