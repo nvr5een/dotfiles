@@ -2,11 +2,12 @@
 
 Configuration files that customize my CLI environment.
 
-+ Shell: [zsh](https://www.zsh.org/)
 + Editor: [neovim](https://neovim.io/)
-+ Terminal Multiplexer: [tmux](https://github.com/tmux/tmux/wiki/)
 + File Manager: [vifm](https://vifm.info/)
 + Media Player: [mpv](https://mpv.io/)
++ Terminal Emulator: [alacritty](https://github.com/alacritty/alacritty)
++ Terminal Multiplexer: [tmux](https://github.com/tmux/tmux/wiki/)
++ Shell: [fish](https://www.fishshell.com/)
 
 ## Installation
 

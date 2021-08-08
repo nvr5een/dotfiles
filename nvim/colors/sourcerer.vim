@@ -6,7 +6,7 @@
 " ░░░░░░   ░░░░░░   ░░░░░░ ░░░     ░░░░░   ░░░░░░ ░░░     ░░░░░░ ░░░
 "  r  e  a  d     c  o  d  e     l  i  k  e     a     w  i  z  a  r  d
 "
-" edit of sourcerer by xero harrison (http://sourcerer.xero.nu)
+" fork of sourcerer by xero harrison (http://sourcerer.xero.nu)
 "  ├─ based on sorcerer by Jeet Sukumaran (http://jeetworks.org)
 "  └─ based on mustang by Henrique C. Alves (hcarvalhoalves@gmail.com)
 
@@ -23,7 +23,7 @@ hi Normal                 cterm=NONE             ctermbg=NONE  ctermfg=145
 hi ColorColumn            cterm=NONE             ctermbg=234   ctermfg=NONE
 hi Cursor                 cterm=NONE             ctermbg=241   ctermfg=fg
 hi CursorColumn           cterm=NONE             ctermbg=233   ctermfg=fg
-hi CursorLine             cterm=NONE             ctermbg=236   ctermfg=NONE
+hi CursorLine             cterm=NONE             ctermbg=235   ctermfg=NONE
 hi DiffAdd                cterm=NONE             ctermbg=71    ctermfg=16
 hi DiffDelete             cterm=NONE             ctermbg=124   ctermfg=16
 hi DiffChange             cterm=NONE             ctermbg=68    ctermfg=16

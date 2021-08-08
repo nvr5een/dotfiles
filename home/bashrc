@@ -1,0 +1,11 @@
+# ~/.bashrc
+
+[[ $- != *i* ]] && return
+
+if type -p fish &>/dev/null; then
+  exec fish
+else
+  set -o noclobber
+  shopt -s checkwinsize
+  PS1='\[\e[0;32m\]\u@\h\[\e[0;37m\]:\[\e[0;34m\]\W\[\e[0m\]> '
+fi
