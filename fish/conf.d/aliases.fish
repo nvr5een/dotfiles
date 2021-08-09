@@ -34,7 +34,7 @@ alias gp='git push'
 alias grm='git rm'
 alias gs='git status'
 
-if type -p apt-get
+if type -p apt-get &>/dev/null
   alias apti='sudo apt install --no-install-recommends'
   alias aptu='sudo apt update'
   alias aptf='sudo apt full-upgrade'
@@ -48,8 +48,8 @@ if type -p apt-get
   alias aptstat='dpkg -l | wc -l'
 end
 
-if type -p pacman
-  if type -p yay
+if type -p pacman &>/dev/null
+  if type -p yay &>/dev/null
     alias paci='yay -S'
     alias pacu='yay -Syu'
     alias pacs='yay -Ss'
