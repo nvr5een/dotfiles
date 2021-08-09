@@ -5,8 +5,7 @@ if has('vim_starting')
   if empty(glob(s:minpac_dir))
     echo "Installing minpac ..."
     execute '!git clone --depth 1 https://github.com/k-takata/minpac ' . s:minpac_dir
-    autocmd VimEnter * source $MYVIMRC | call PackInit() |
-          \ call minpac#update('', {'do': 'call minpac#status()'})
+    autocmd VimEnter * source $MYVIMRC | call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
   endif
 endif
 
