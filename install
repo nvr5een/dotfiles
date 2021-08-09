@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 src=${PWD}
+alacritty_dest=$HOME/.config/alacritty
 bin_dst=$HOME/.local/bin
 fish_dst=$HOME/.config/fish
 mpv_dst=$HOME/.config/mpv
@@ -10,10 +11,17 @@ vifm_dst=$HOME/.config/vifm
 
 delete_all() {
   [[ -d $neovim_dst/pack ]] && rm -rf "$neovim_dst"/pack &>/dev/null
-  for f in "$fish_dst" "$mpv_dst" "$neovim_dst" "$vifm_dst" \
+  for f in "$alacritty_dest" "$fish_dst" "$mpv_dst" "$neovim_dst" "$vifm_dst" \
     $HOME/.{bashrc,bash_profile,gitconfig,tmux.conf}; do
     [[ -e "$f" ]] && rm -rfv "$f"
   done
+}
+
+install_alacritty_configs() {
+  if type -p alacritty &>/dev/null; then
+    mkdir -p "$alacritty_dest"
+    ln -sfv "$src"/alacritty/alacritty.yml "$alacritty_dest"
+  fi
 }
 
 install_fish_configs() {
@@ -72,6 +80,7 @@ install_home_configs() {
 
 main() {
   mkdir -p "$HOME"/projects/tmp
+  install_alacritty_configs
   install_fish_configs
   install_mpv_configs
   install_neovim_configs
