@@ -26,7 +26,7 @@ install_alacritty_configs() {
 
 install_fish_configs() {
   if type -p fish &>/dev/null; then
-    mkdir -p "$fish_dst"/conf.d
+    mkdir -p "$fish_dst"/{conf.d,functions}
     ln -sfv "$src"/fish/config.fish "$fish_dst"
     for f in "$src"/fish/conf.d/*; do
       ln -sfv "$f" "$fish_dst"/conf.d
