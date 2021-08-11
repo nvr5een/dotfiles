@@ -11,9 +11,9 @@ vifm_dst=$HOME/.config/vifm
 
 delete_all() {
   [[ -d $neovim_dst/pack ]] && rm -rf "$neovim_dst"/pack &>/dev/null
-  for f in "$alacritty_dest" "$fish_dst" "$mpv_dst" "$neovim_dst" "$vifm_dst" \
-    $HOME/.{bashrc,bash_profile,gitconfig,tmux.conf}; do
-    [[ -e "$f" ]] && rm -rfv "$f"
+  for file in "$alacritty_dest" "$fish_dst" "$mpv_dst" "$neovim_dst" "$vifm_dst" \
+    "$HOME"/.{bashrc,bash_profile,gitconfig,tmux.conf}; do
+    [[ -e $file ]] && rm -rfv "$file"
   done
 }
 
@@ -37,35 +37,31 @@ install_fish_configs() {
 install_mpv_configs() {
   if type -p mpv &>/dev/null; then
     mkdir -p "$mpv_dst"
-    for f in "$src"/mpv/*; do
-      cp -fv "$f" "$mpv_dst"
+    for file in "$src"/mpv/*; do
+      cp -fv "$file" "$mpv_dst"
     done
   fi
 }
 
 install_neovim_configs() {
-  if type -p nvim &>/dev/null; then
-    mkdir -p "$neovim_dst"/colors
-    mkdir -p "$neovim_backup"/{backup,undo}
-    ln -sfv "$src"/nvim/init.vim "$neovim_dst"
-    for f in "$src"/nvim/colors/*; do
-      cp -fv "$f" "$neovim_dst"/colors
-    done
-  fi
+  mkdir -p "$neovim_dst"/colors
+  mkdir -p "$neovim_backup"/{backup,undo}
+  ln -sfv "$src"/nvim/init.vim "$neovim_dst"
+  for file in "$src"/nvim/colors/*; do
+    cp -fv "$file" "$neovim_dst"/colors
+  done
 }
 
 install_vifm_configs() {
-  if type -p vifm &>/dev/null; then
-    mkdir -p "$vifm_dst"/colors
-    cp -fv "$src"/vifm/colors/* "$vifm_dst"/colors
-    ln -sfv "$src"/vifm/vifmrc "$vifm_dst"/vifmrc
-  fi
+  mkdir -p "$vifm_dst"/colors
+  cp -fv "$src"/vifm/colors/* "$vifm_dst"/colors
+  ln -sfv "$src"/vifm/vifmrc "$vifm_dst"/vifmrc
 }
 
 install_user_scripts() {
   mkdir -p "$bin_dst"
-  for f in "$src"/bin/*; do
-    cp -fv "$f" "$bin_dst"
+  for file in "$src"/bin/*; do
+    cp -fv "$file" "$bin_dst"
   done
   chmod 700 "$bin_dst"/*
 }

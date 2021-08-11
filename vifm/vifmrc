@@ -37,20 +37,21 @@ command! mkcd :mkdir %a | cd %a
 command! vgrep vim "+grep %a"
 command! reload :write | restart full
 
-" filetype *.md $EDITOR
-
-filextype {*.pdf},<application/pdf> zathura %c %i &, open -a Preview.app
+filextype {*.pdf},<application/pdf> zathura %c %i &
 fileviewer {*.pdf},<application/pdf> pdftotext -nopgbrk %c -
 
-filetype {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus},<audio/*> mpv %f
+filetype {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus},
+        \<audio/*> mpv %f
 fileviewer {*.mp3},<audio/mpeg> mediainfo
 
-filextype {*.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,*.as[fx]},<video/*> mpv %f
+filextype {*.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+          \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+          \*.as[fx]},<video/*> mpv %f
 
-filextype {*.html,*.htm},<text/html> xdg-open %f &, open -a Preview.app
+filextype {*.html,*.htm},<text/html> xdg-open %f &
 filetype {*.html,*.htm},<text/html> w3m
 
-filextype {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*> xdg-open %f &, open -a Preview.app
+filextype {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*> xdg-open %f &
 fileviewer {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*> identify %f
 
 filetype *.md5 md5sum -c %f %S
@@ -60,30 +61,48 @@ filetype *.sha512 sha512sum -c %f %S
 
 filetype {*.asc},<application/pgp-signature> !!gpg --verify %c
 
-filetype {*.zip,*.jar,*.war,*.ear,*.oxt,*.apkg},<application/zip,application/java-archive> FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR, zip -sf %c | less, tar -xf %c
+filetype {*.zip,*.jar,*.war,*.ear,*.oxt,*.apkg},
+        \<application/zip,application/java-archive>
+       \ {Mount with fuse-zip}
+       \ FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR,
+       \ zip -sf %c | less
 fileviewer *.zip,*.jar,*.war,*.ear,*.oxt zip -sf %c
 
-filetype {*.tar,*.tar.bz2,*.tbz2,*.tgz,*.tar.gz,*.tar.xz,*.txz}, <application/x-tar> FUSE_MOUNT|archivemount %SOURCE_FILE %DESTINATION_DIR
+filetype {*.tar,*.tar.bz2,*.tbz2,*.tgz,*.tar.gz,*.tar.xz,*.txz},
+        \<application/x-tar>
+       \ FUSE_MOUNT|archivemount %SOURCE_FILE %DESTINATION_DIR,
 fileviewer *.tgz,*.tar.gz tar -tzf %c
 fileviewer *.tar.bz2,*.tbz2 tar -tjf %c
 fileviewer *.tar.txz,*.txz xz --list %c
 fileviewer {*.tar},<application/x-tar> tar -tf %c
 
-filetype {*.rar},<application/x-rar> FUSE_MOUNT|rar2fs %SOURCE_FILE %DESTINATION_DIR
+filetype {*.rar},<application/x-rar>
+        \ FUSE_MOUNT|rar2fs %SOURCE_FILE %DESTINATION_DIR
 fileviewer {*.rar},<application/x-rar> unrar v %c
 
-filetype {*.iso},<application/x-iso9660-image> FUSE_MOUNT|fuseiso %SOURCE_FILE %DESTINATION_DIR
+filetype {*.iso},<application/x-iso9660-image>
+       \ FUSE_MOUNT|fuseiso %SOURCE_FILE %DESTINATION_DIR,
+
 filetype *.ssh FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR %FOREGROUND
 filetype *.ftp FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND
 
-filetype {*.7z},<application/x-7z-compressed> FUSE_MOUNT|fuse-7z %SOURCE_FILE %DESTINATION_DIR
+filetype {*.7z},<application/x-7z-compressed>
+       \ FUSE_MOUNT|fuse-7z %SOURCE_FILE %DESTINATION_DIR,
 fileviewer {*.7z},<application/x-7z-compressed> 7z l %c
 
-filextype {*.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx,*.ppt},<application/vnd.openxmlformats-officedocument.*,application/msword,application/vnd.ms-excel> xdg-open %f &, open -a Preview.app
+filextype {*.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx,*.ppt},
+         \<application/vnd.openxmlformats-officedocument.*,
+          \application/msword,
+          \application/vnd.ms-excel> xdg-open %f &
 fileviewer {*.doc},<application/msword> catdoc %c
-fileviewer {*.docx},<application/vnd.openxmlformats-officedocument.wordprocessingml.document> docx2txt.pl %f -
+fileviewer {*.doc},<application/msword> catdoc %c
+fileviewer {*.docx},
+          \<application/
+           \vnd.openxmlformats-officedocument.wordprocessingml.document>
+         \ docx2txt.pl %f -
 
-set vifminfo=dhistory,savedirs,chistory,tui,shistory,phistory,fhistory,dirstack,registers,bookmarks,bmarks
+set vifminfo=dhistory,chistory,state,tui,shistory,phistory,fhistory,
+            \dirstack,registers,bookmarks,bmarks
 
 nnoremap s :shell<cr>
 nnoremap S :sort<cr>
@@ -91,15 +110,14 @@ nnoremap S :sort<cr>
 nnoremap w :view<cr>
 vnoremap w :view<cr>gv
 
-if has('win')
-  nnoremap yp :!echo %"d:gs!\!/! %i | clip<cr>
-  nnoremap yf :!echo %"c:gs!\!/! %i | clip<cr>
-elseif executable('xclip')
+if executable('xclip')
   nnoremap yd :!echo %d | xclip %i<cr>
   nnoremap yf :!echo %c:p | xclip %i<cr>
 elseif executable('xsel')
-  nnoremap yd :!echo -n %d | xsel --input --primary %i && echo -n %d | xsel --clipboard --input %i<cr>
-  nnoremap yf :!echo -n %c:p | xsel --input --primary %i && echo -n %c:p | xsel --clipboard --input %i<cr>
+  nnoremap yd :!echo -n %d | xsel --input --primary %i && echo -n %d
+         \ | xsel --clipboard --input %i<cr>
+  nnoremap yf :!echo -n %c:p | xsel --input --primary %i && echo -n %c:p
+         \ | xsel --clipboard --input %i<cr>
 endif
 
 nnoremap I cw<c-a>
