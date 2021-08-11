@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -d .git ]; then
+  git pull
+else
+  for i in *; do
+    if [ -d "$i" ]; then
+      if [ -d "$i"/.git ]; then
+        echo Updating $i ....
+        (cd "$i"; git pull)
+        echo
+      fi
+    fi
+  done
+fi
