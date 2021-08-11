@@ -20,6 +20,7 @@ function! PackInit() abort
   call minpac#add('tpope/vim-commentary')
   call minpac#add('tpope/vim-surround')
   call minpac#add('tpope/vim-repeat')
+  call minpac#add('tpope/vim-unimpaired')
   call minpac#add('dag/vim-fish')
 endfunction
 
