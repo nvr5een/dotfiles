@@ -1,5 +1,7 @@
 # ~/.config/fish/config.fish
 
+set -g fish_greeting
+
 set fish_color_command brgreen
 set fish_color_comment brblack
 set fish_color_end green
@@ -58,20 +60,25 @@ function fish_prompt
   if test -z (string match -ri '^no|false|0$')
     switch $fish_bind_mode
       case default
+        set_color normal
         printf '\e[2 q'
-        printf '$ '
+        printf '> '
       case insert
+        set_color normal
         printf '\e[6 q'
-        printf '$ '
+        printf '> '
       case replace_one
+        set_color normal
         printf '\e[4 q'
-        printf '$ '
+        printf '> '
       case visual
+        set_color normal
         printf '\e[2 q'
-        printf '$ '
+        printf '> '
       case '*'
+        set_color normal
         printf '\e[2 q'
-        printf '$ '
+        printf '> '
     end
   end
 
