@@ -10,11 +10,11 @@ neovim_backup=$HOME/.local/share/nvim
 vifm_dst=$HOME/.config/vifm
 
 delete_all() {
-  [[ -d $neovim_dst/pack ]] && rm -rf "$neovim_dst"/pack &>/dev/null
-  for file in "$alacritty_dest" "$fish_dst" "$mpv_dst" "$neovim_dst" "$vifm_dst" \
-    "$HOME"/.{bashrc,bash_profile,gitconfig,tmux.conf}; do
-    [[ -e $file ]] && rm -rfv "$file"
+  for file in "$alacritty_dest" "$fish_dst" "$mpv_dst" "$neovim_dst" \
+    "$vifm_dst" "$HOME"/.{bashrc,bash_profile,gitconfig,tmux.conf}; do
+    [[ -e $file ]] && rm -rf "$file"
   done
+  printf "%s\n" "dotfiles deleted."
 }
 
 install_alacritty_configs() {
@@ -28,9 +28,6 @@ install_fish_configs() {
   if type -p fish &>/dev/null; then
     mkdir -p "$fish_dst"/{conf.d,functions}
     ln -sfv "$src"/fish/config.fish "$fish_dst"
-    # for f in "$src"/fish/functions/*; do
-    #   ln -sfv "$f" "$fish_dst"/functions
-    # done
   fi
 }
 
