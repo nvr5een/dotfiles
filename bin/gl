@@ -6,8 +6,8 @@ else
   for i in *; do
     if [ -d "$i" ]; then
       if [ -d "$i"/.git ]; then
-        echo Updating $i ....
-        (cd "$i"; git pull)
+        echo Updating "$i" ...
+        (cd "$i" || exit; git pull)
         echo
       fi
     fi
