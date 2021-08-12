@@ -2,15 +2,33 @@
 
 set -g fish_greeting
 
-set fish_color_command brgreen
-set fish_color_comment brblack
-set fish_color_end green
-set fish_color_error brred
-set fish_color_escape cyan
-set fish_color_operator cyan
-set fish_color_param brblue
-set fish_color_quote yellow
-set fish_color_redirection blue
+set -g fish_color_command brgreen
+set -g fish_color_comment brblack
+set -g fish_color_error brred
+set -g fish_color_escape cyan
+set -g fish_color_normal normal
+set -g fish_color_operator normal
+set -g fish_color_param normal
+set -g fish_color_quote yellow
+set -g fish_color_search_match --background=magenta
+set -g fish_color_redirection normal
+
+set -g __fish_git_prompt_showdirtystate
+set -g __fish_git_prompt_showuntrackedfiles
+
+set -g __fish_git_prompt_char_stateseparator ''
+set -g __fish_git_prompt_color brblack
+set -g __fish_git_prompt_color_branch normal
+
+set -g __fish_git_prompt_char_dirtystate '*'
+set -g __fish_git_prompt_char_invalidstate '#'
+set -g __fish_git_prompt_char_stagedstate '+'
+set -g __fish_git_prompt_color_dirtystate yellow
+set -g __fish_git_prompt_color_invalidstate brred
+set -g __fish_git_prompt_color_stagedstate green
+
+set -g __fish_git_prompt_char_untrackedfiles '%'
+set -g __fish_git_prompt_color_untrackedfiles yellow
 
 function :q; exit; end
 function gs; git status; end
@@ -34,53 +52,33 @@ function vim_esc_remap --description "Remap 'ESC' to 'jk' for Vi-style bindings"
 end
 bind -M insert jk vim_esc_remap
 
-set -g __fish_git_prompt_showdirtystate
-set -g __fish_git_prompt_showuntrackedfiles
-
-set -g __fish_git_prompt_char_stateseparator ''
-set -g __fish_git_prompt_color blue
-set -g __fish_git_prompt_color_branch normal
-
-set -g __fish_git_prompt_char_dirtystate '*'
-set -g __fish_git_prompt_char_invalidstate '#'
-set -g __fish_git_prompt_char_stagedstate '+'
-set -g __fish_git_prompt_color_dirtystate yellow
-set -g __fish_git_prompt_color_invalidstate yellow
-set -g __fish_git_prompt_color_stagedstate green
-
-set -g __fish_git_prompt_char_untrackedfiles '%'
-set -g __fish_git_prompt_color_untrackedfiles yellow
-
 function fish_prompt
-
   set_color blue
   printf '%s' (prompt_pwd)
-  printf '%s' (__fish_git_prompt)
-
+  printf '%s ' (__fish_git_prompt)
   if test -z (string match -ri '^no|false|0$')
     switch $fish_bind_mode
       case default
         set_color normal
         printf '\e[2 q'
-        printf '> '
+        printf '❯ '
       case insert
         set_color normal
         printf '\e[6 q'
-        printf '> '
+        printf '❯ '
       case replace_one
         set_color normal
         printf '\e[4 q'
-        printf '> '
+        printf '❯ '
       case visual
         set_color normal
         printf '\e[2 q'
-        printf '> '
+        printf '❯ '
       case '*'
         set_color normal
         printf '\e[2 q'
-        printf '> '
+        printf '❯ '
     end
   end
-
 end
 
