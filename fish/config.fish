@@ -14,7 +14,8 @@ set -g fish_color_quote yellow
 set -g fish_color_redirection normal
 set -g fish_color_search_match --background=black
 
-set -g __fish_git_prompt_showdirtystate
+set -g __fish_git_prompt_showdirtystate yes
+set -g __fish_git_prompt_showupstream auto
 set -g __fish_git_prompt_showuntrackedfiles
 
 set -g __fish_git_prompt_char_stateseparator ''
@@ -24,6 +25,9 @@ set -g __fish_git_prompt_color_branch normal
 set -g __fish_git_prompt_char_dirtystate '*'
 set -g __fish_git_prompt_char_invalidstate '#'
 set -g __fish_git_prompt_char_stagedstate '+'
+set -g __fish_git_prompt_char_upstream_equal ''
+set -g __fish_git_prompt_char_upstream_ahead '↑'
+set -g __fish_git_prompt_char_upstream_behind '↓'
 set -g __fish_git_prompt_color_dirtystate yellow
 set -g __fish_git_prompt_color_invalidstate brred
 set -g __fish_git_prompt_color_stagedstate green
