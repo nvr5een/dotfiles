@@ -28,6 +28,9 @@ install_fish_configs() {
   if type -p fish &>/dev/null; then
     mkdir -p "$fish_dst"/{conf.d,functions}
     ln -sfv "$src"/fish/config.fish "$fish_dst"
+    for file in "$src"/fish/functions/*; do
+      ln -sfv "$file" "$fish_dst"/functions
+    done
   fi
 }
 
