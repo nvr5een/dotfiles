@@ -4,14 +4,15 @@ set -g fish_greeting
 
 set -g fish_color_command brgreen
 set -g fish_color_comment brblack
+set -g fish_color_end normal
 set -g fish_color_error brred
-set -g fish_color_escape cyan
+set -g fish_color_escape yellow
 set -g fish_color_normal normal
 set -g fish_color_operator normal
 set -g fish_color_param normal
 set -g fish_color_quote yellow
-set -g fish_color_search_match --background=magenta
 set -g fish_color_redirection normal
+set -g fish_color_search_match --background=black
 
 set -g __fish_git_prompt_showdirtystate
 set -g __fish_git_prompt_showuntrackedfiles
