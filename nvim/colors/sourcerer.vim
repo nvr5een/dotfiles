@@ -125,3 +125,4 @@ hi Pmenu                  cterm=NONE             ctermfg=248   ctermbg=237
 hi PmenuSel               cterm=NONE             ctermfg=16    ctermbg=66
 hi PmenuSbar              cterm=NONE             ctermfg=16    ctermbg=66
 hi PmenuThumb             cterm=NONE             ctermfg=16    ctermbg=66
+
