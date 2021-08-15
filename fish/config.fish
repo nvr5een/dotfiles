@@ -1,5 +1,9 @@
 # ~/.config/fish/config.fish
 
+# set -xU MANPAGER 'less -RFi --use-color -Dd+g -Du+c -DS+wr -DP+wk -DE+yk'
+# export MANPAGER="less -RFi --use-color -Dd+g -Du+c -DS+wr -DP+wk -DE+yk"
+# export LESS='-RFi --use-color -Dd+g -Du+c -DS+yk -DP+wr -DE+yk'
+
 set -g fish_greeting
 
 set -g fish_color_command brgreen

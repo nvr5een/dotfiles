@@ -15,19 +15,21 @@ set __fish_git_prompt_color_invalidstate brred
 set __fish_git_prompt_color_stagedstate green
 set __fish_git_prompt_color_untrackedfiles yellow
 
-set __fish_git_prompt_showupstream auto
+# set __fish_git_prompt_showupstream auto
 
-set __fish_git_prompt_char_upstream_equal ''
-set __fish_git_prompt_char_upstream_ahead '↑'
-set __fish_git_prompt_char_upstream_behind '↓'
+# set __fish_git_prompt_char_upstream_equal ''
+# set __fish_git_prompt_char_upstream_ahead '↑'
+# set __fish_git_prompt_char_upstream_behind '↓'
 
-set __fish_git_prompt_color_upstream_ahead green
-set __fish_git_prompt_color_upstream_behind yellow
+# set __fish_git_prompt_color_upstream_ahead green
+# set __fish_git_prompt_color_upstream_behind yellow
 
 function fish_prompt
+
   set_color blue
   printf '%s' (prompt_pwd)
   printf '%s ' (__fish_git_prompt)
+
   if test -z (string match -ri '^no|false|0$')
     switch $fish_bind_mode
       case default
@@ -52,5 +54,6 @@ function fish_prompt
         printf '❯ '
     end
   end
+
 end
 

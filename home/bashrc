@@ -4,6 +4,4 @@
 
 if type -p fish &>/dev/null; then
   exec fish
-else
-  shopt -s checkwinsize
 fi
