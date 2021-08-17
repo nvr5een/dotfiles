@@ -1,8 +1,0 @@
-# ~/.bashrc
-
-[[ $- != *i* ]] && return
-
-if type -p fish &>/dev/null; then
-  exec fish
-fi
-

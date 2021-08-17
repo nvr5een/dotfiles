@@ -1,0 +1,15 @@
+# ~/.zshrc
+
+zmodload zsh/zprof
+
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
+export ZSH_CONFIG=$XDG_CONFIG_HOME/zsh
+export ZSH_CACHE=$XDG_CACHE_HOME/zsh
+
+for file in "$ZSH_CONFIG"/{environment,options,completion,prompt,aliases}.zsh; do
+  . "$file"
+done
+
+[[ -e $HOME/.zshrc.local ]] && . "$HOME"/.zshrc.local
+

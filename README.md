@@ -7,7 +7,7 @@ Configuration files that customize my CLI environment.
 + Media Player: [mpv](https://mpv.io/)
 + Terminal Emulator: [alacritty](https://github.com/alacritty/alacritty)
 + Terminal Multiplexer: [tmux](https://github.com/tmux/tmux/wiki/)
-+ Shell: [fish](https://www.fishshell.com/)
++ Shell: [zsh](https://zsh.org/)
 
 ## Installation
 
