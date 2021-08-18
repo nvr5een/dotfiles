@@ -63,7 +63,7 @@ setopt extended_history # save each command's timestamp
 setopt hist_ignore_all_dups # remove duplicate command lines from history
 setopt hist_ignore_space # remove commands from history beginning with a space
 setopt inc_append_history # add commands immediately to $HISTFILE incrementally
-setopt no_share_history # import commands manually with `fc-RI'
+setopt no_share_history # import commands manually with `fc -RI'
 
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000
