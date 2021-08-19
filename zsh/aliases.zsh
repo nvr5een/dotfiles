@@ -1,6 +1,6 @@
+# $ZSH_CONFIG/aliases.zsh
+
 alias :q='exit'
-alias diskspace='du -S | sort -n -r | less'
-alias ports='netstat -tulanp'
 alias pro='cd ~/projects'
 alias reload='. ~/.zshrc; echo ZSH config reloaded!'
 
@@ -25,18 +25,6 @@ alias rm='rm -Iv'
 
 alias d='dirs -v'
 for index ({1..9}) alias "$index"="cd +${index}"; unset index
-
-alias ga='git add'
-alias gb='git branch'
-alias gcm='git commit -v -m'
-alias gco='git checkout'
-alias gcl='git clone'
-alias gd='git diff'
-# alias gl='git pull'
-alias gmv='git mv -v'
-# alias gp='git push'
-alias grm='git rm'
-alias gs='git status'
 
 if (( $+commands[apt-get] )); then
   alias apti='sudo apt install --no-install-recommends'

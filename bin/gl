@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# wtf am I doing.
+
 if [ -d .git ]; then
   git pull
 else

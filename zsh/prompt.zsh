@@ -1,22 +1,16 @@
-# https://github.com/jackharrisonsherlock/common
-# https://thevaluable.dev/zsh-install-configure/
+# $ZSH_CONFIG/prompt.zsh
+
+setopt prompt_subst # perform arithmetic expansion in prompts (required)
 
 autoload -Uz colors && colors
 
-COMMON_COLORS_HOST_ME=green
-COMMON_COLORS_HOST_AWS_VAULT=yellow
-COMMON_COLORS_CURRENT_DIR=blue
-COMMON_COLORS_RETURN_STATUS_TRUE=default
-COMMON_COLORS_RETURN_STATUS_FALSE=yellow
-COMMON_COLORS_GIT_STATUS_DEFAULT=default
-COMMON_COLORS_GIT_STATUS_STAGED=green
-COMMON_COLORS_GIT_STATUS_UNSTAGED=yellow
-COMMON_COLORS_GIT_PROMPT_SHA=green
-COMMON_COLORS_BG_JOBS=yellow
+colors_host_me=green
+colors_current_dir=blue
+colors_git_status_default=default
+colors_git_status_staged=green
+colors_git_status_unstaged=yellow
 
-COMMON_PROMPT_SYMBOL="❯"
-PROMPT='$(common_host)$(common_current_dir)$(common_bg_jobs)$(common_return_status)'
-RPROMPT='$(common_git_status)'
+PROMPT='$(common_host)$(common_current_dir)$(common_git_status)❯ '
 
 common_host() {
   if [[ -n $SSH_CONNECTION ]]; then
@@ -25,45 +19,33 @@ common_host() {
     me="%n"
   fi
   if [[ -n $me ]]; then
-    echo "%{$fg[$COMMON_COLORS_HOST_ME]%}$me%{$reset_color%}:"
-  fi
-  if [[ $AWS_VAULT ]]; then
-    echo "%{$fg[$COMMON_COLORS_HOST_AWS_VAULT]%}$AWS_VAULT%{$reset_color%} "
+    echo "%{$fg[$colors_host_me]%}$me%f:"
   fi
 }
 
 common_current_dir() {
-  echo -n "%{$fg[$COMMON_COLORS_CURRENT_DIR]%}%c "
-}
-
-common_return_status() {
-  echo -n "%(?.%F{$COMMON_COLORS_RETURN_STATUS_TRUE}.%F{$COMMON_COLORS_RETURN_STATUS_FALSE})$COMMON_PROMPT_SYMBOL%f "
+  echo -n "%{$fg[$colors_current_dir]%}%c%f "
 }
 
 common_git_status() {
   local message=""
-  local message_color="%F{$COMMON_COLORS_GIT_STATUS_DEFAULT}"
+  local message_color="%F{$colors_git_status_default}"
 
   local staged=$(git status --porcelain 2>/dev/null | grep -e "^[MADRCU]")
   local unstaged=$(git status --porcelain 2>/dev/null | grep -e "^[MADRCU? ][MADRCU?]")
 
   if [[ -n ${staged} ]]; then
-    message_color="%F{$COMMON_COLORS_GIT_STATUS_STAGED}"
+    message_color="%F{$colors_git_status_staged}"
   elif [[ -n ${unstaged} ]]; then
-    message_color="%F{$COMMON_COLORS_GIT_STATUS_UNSTAGED}"
+    message_color="%F{$colors_git_status_unstaged}"
   fi
 
   local branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
   if [[ -n ${branch} ]]; then
-    message+="${message_color}${branch}%f"
+    message+="${message_color}${branch}%f "
   fi
 
   echo -n "${message}"
-}
-
-common_bg_jobs() {
-  bg_status="%{$fg[$COMMON_COLORS_BG_JOBS]%}%(1j.↓%j .)"
-  echo -n $bg_status
 }
 
 cursor_mode() {

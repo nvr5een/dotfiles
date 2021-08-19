@@ -28,7 +28,9 @@ $ ./install
 
 **zsh**
 
+* https://thevaluable.dev/zsh-install-configure-mouseless/
 * https://thevaluable.dev/zsh-completion-guide-examples/
 * https://grml.org/zsh/zsh-lovers.html
 * https://github.com/sorin-ionescu/prezto/blob/master/modules/completion/init.zsh
+* https://github.com/jackharrisonsherlock/common
 
