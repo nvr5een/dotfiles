@@ -35,7 +35,7 @@ setopt hist_ignore_space # remove commands from history beginning with a space
 setopt inc_append_history # add commands immediately to $HISTFILE incrementally
 setopt no_share_history # import commands manually with `fc -RI'
 
-HISTFILE="$HOME/.zsh_history"
+HISTFILE="$ZSH_CACHE/zhistory"
 HISTSIZE=10000
 SAVEHIST="$HISTSIZE"
 

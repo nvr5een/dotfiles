@@ -49,17 +49,10 @@ install_vifm_configs() {
 }
 
 install_zsh_configs() {
-  mkdir -p "$zsh_dst"/completion
   mkdir -p "$HOME"/.cache/zsh
   for file in "$src"/zsh/*; do
     ln -sfv "$file" "$zsh_dst"
   done
-  if [[ -z "$(ls -A "$zsh_dst"/completion)" ]]; then
-    curl -o "$zsh_dst"/completion/_docker https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker/_docker
-    curl -o "$zsh_dst"/completion/_docker-compose https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker-compose/_docker-compose
-    curl -o "$zsh_dst"/completion/_lxc https://raw.githubusercontent.com/endaaman/lxd-completion-zsh/master/_lxc
-    curl -o "$zsh_dst"/completion/_lxd https://raw.githubusercontent.com/endaaman/lxd-completion-zsh/master/_lxd
-  fi
 }
 
 install_user_scripts() {

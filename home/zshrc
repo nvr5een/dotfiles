@@ -42,5 +42,5 @@ for file in "$ZSH_CONFIG"/{options,completion,prompt,aliases}.zsh; do
   . "$file"
 done
 
-[[ -e "$HOME/.zshrc.local" ]] && . "$HOME/.zshrc.local"
+[[ -e "$ZSH_CONFIG/local.zsh" ]] && . "$ZSH_CONFIG/local.zsh"
 
