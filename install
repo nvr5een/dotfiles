@@ -50,6 +50,7 @@ install_vifm_configs() {
 
 install_zsh_configs() {
   mkdir -p "$HOME"/.cache/zsh
+  mkdir -p "$zsh_dst"
   for file in "$src"/zsh/*; do
     ln -sfv "$file" "$zsh_dst"
   done
