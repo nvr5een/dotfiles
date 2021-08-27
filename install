@@ -65,6 +65,7 @@ install_user_scripts() {
 }
 
 install_home_configs() {
+  mkdir -p ~/projects/tmp
   for file in tmux.conf zshrc; do
     ln -sfv "$src"/home/"$file" "$HOME"/."$file"
   done
