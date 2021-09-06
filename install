@@ -19,8 +19,10 @@ delete_all() {
 
 install_alacritty_configs() {
   if type -p alacritty &>/dev/null; then
-    mkdir -p "$alacritty_dest"
-    ln -sfv "$src"/alacritty/alacritty.yml "$alacritty_dest"
+    if [[ ! -e $alacritty_dest ]]; then
+      mkdir -p "$alacritty_dest"
+      cp -v "$src"/alacritty/alacritty.yml "$alacritty_dest"
+    fi
   fi
 }
 
@@ -65,12 +67,13 @@ install_user_scripts() {
 }
 
 install_home_configs() {
-  mkdir -p ~/projects/tmp
   for file in tmux.conf zshrc; do
     ln -sfv "$src"/home/"$file" "$HOME"/."$file"
   done
-  cp -fv "$src"/home/gitconfig "$HOME"/.gitconfig
-  chmod 600 "$HOME"/.gitconfig
+  for file in ansible.cfg gitconfig; do
+    cp -fv "$src"/home/"$file" "$HOME"/."$file"
+    chmod 600 "$HOME"/."$file"
+  done
 }
 
 main() {
