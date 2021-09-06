@@ -2,6 +2,7 @@
 
 let s:minpac_dir = '~/.config/nvim/pack/minpac/opt/minpac'
 if has('vim_starting')
+  " Install minpac if necessary
   if empty(glob(s:minpac_dir))
     echo "Installing minpac ..."
     execute '!git clone --depth 1 https://github.com/k-takata/minpac ' . s:minpac_dir
@@ -9,6 +10,7 @@ if has('vim_starting')
   endif
 endif
 
+" Load minpac on demand
 function! PackInit() abort
   packadd minpac
 
@@ -21,9 +23,9 @@ function! PackInit() abort
   call minpac#add('tpope/vim-surround')
   call minpac#add('tpope/vim-repeat')
   call minpac#add('tpope/vim-unimpaired')
-  call minpac#add('dag/vim-fish')
 endfunction
 
+" Define commands for updating/cleaning plugins
 command! PackUpdate source $MYVIMRC | call PackInit() | call minpac#update()
 command! PackClean  source $MYVIMRC | call PackInit() | call minpac#clean()
 command! PackStatus packadd minpac | call minpac#status()
@@ -46,7 +48,7 @@ set backupdir=~/.local/share/nvim/backup
 set noswapfile
 set undofile
 set modelines=0
-set updatetime=100
+set updatetime=100 " gitgutter
 set path=.,**
 set wildcharm=<C-z>
 set wildignorecase
@@ -74,6 +76,7 @@ nnoremap <leader>e :e <C-r>=fnameescape(expand('%:p:h'))<CR>/*<C-d>
 nnoremap <leader>f :find *
 nnoremap <leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <leader>s :call StripWhitespace()<CR>
+
 inoremap jk <Esc>
 nnoremap Y y$
 
@@ -81,6 +84,7 @@ nnoremap <tab> <C-w>w
 nnoremap <S-tab> <C-w>W
 
 set relativenumber
+" Navigate wrapped lines with 'relativenumber' set
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
@@ -103,12 +107,15 @@ endfunction
 augroup vimStartup
   autocmd!
   autocmd Filetype python setlocal foldmethod=indent tabstop=4
-  autocmd Filetype markdown,text setlocal colorcolumn=+1 textwidth=80
+  autocmd Filetype markdown,text setlocal colorcolumn=+1 textwidth=78
+  " Resize splits when the window is resized
   autocmd VimResized * :wincmd =
+  " Restore last known cursor position when reopening files
   autocmd BufReadPost *
     \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
     \ |   exe "normal! g`\""
     \ | endif
+  " Auto location/quickfix window
   autocmd QuickFixCmdPost [^l]* cwindow
   autocmd QuickFixCmdPost l* lwindow
   autocmd VimEnter * cwindow
