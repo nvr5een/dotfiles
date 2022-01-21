@@ -24,6 +24,7 @@ common_host() {
 }
 
 common_current_dir() {
+  # echo -n "%B%{$fg[$colors_current_dir]%}%c%f%b "
   echo -n "%{$fg[$colors_current_dir]%}%c%f "
 }
 

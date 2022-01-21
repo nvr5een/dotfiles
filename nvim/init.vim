@@ -108,6 +108,7 @@ augroup vimStartup
   autocmd!
   autocmd Filetype python setlocal foldmethod=indent tabstop=4
   autocmd Filetype text setlocal colorcolumn=+1 textwidth=78
+  autocmd BufNewFile,BufReadPost *hosts* set ft=yaml
   " Resize splits when the window is resized
   autocmd VimResized * :wincmd =
   " Restore last known cursor position when reopening files
