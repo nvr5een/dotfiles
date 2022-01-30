@@ -51,7 +51,7 @@ colors:
     cyan: '0x87ceeb'
     white: '0xc1cdc1'
 
-background_opacity: 0.95
+window.opacity: 0.95
 
 mouse:
   hide_when_typing: true
