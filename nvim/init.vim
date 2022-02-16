@@ -23,6 +23,7 @@ function! PackInit() abort
   call minpac#add('tpope/vim-surround')
   call minpac#add('tpope/vim-repeat')
   call minpac#add('tpope/vim-unimpaired')
+  call minpac#add('preservim/vim-markdown')
 endfunction
 
 " Define commands for updating/cleaning plugins
