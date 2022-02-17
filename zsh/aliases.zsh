@@ -64,3 +64,8 @@ if (( $+commands[pacman] )); then
   alias pacstat='pacman -Q | wc -l' # print number of installed packages
 fi
 
+if (( $+commands[kubectl] )); then
+  source <(kubectl completion zsh)
+  alias k='kubectl'
+fi
+
