@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-src=${PWD}
+src=$HOME/.config/dotfiles
 alacritty_dest=$HOME/.config/alacritty
 bin_dst=$HOME/.local/bin
 mpv_dst=$HOME/.config/mpv
