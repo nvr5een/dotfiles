@@ -6,7 +6,13 @@ setopt complete_in_word # perform completion from both ends of words
 setopt no_menu_complete # do not insert first match on ambiguous completion
 setopt extended_glob # needed for file modification glob modifiers with compinit
 
-fpath=("${ZSH_CONFIG}/completion" $fpath)
+# unused
+# fpath=("${ZSH_CONFIG}/completion" $fpath)
+
+#-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+# Edit of basic Prezto Completion
+# https://github.com/sorin-ionescu/prezto/tree/master/modules/completion
+#-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 # Load and initialize completion system with a cache time of 20 hours.
 autoload -Uz compinit

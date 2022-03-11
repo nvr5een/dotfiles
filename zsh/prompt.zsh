@@ -4,6 +4,11 @@ setopt prompt_subst # perform arithmetic expansion in prompts (required)
 
 autoload -Uz colors && colors
 
+#-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+# Edit of 'Common' zsh theme
+# https://github.com/jackharrisonsherlock/common
+#-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 colors_host_me=green
 colors_current_dir=blue
 colors_git_status_default=default
@@ -48,6 +53,11 @@ common_git_status() {
 
   echo -n "${message}"
 }
+
+#-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+# Change cursor shape for different vi modes
+# https://gist.github.com/LukeSmithxyz/e62f26e55ea8b0ed41a65912fbebbe52
+#-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 cursor_mode() {
   cursor_block='\e[2 q'

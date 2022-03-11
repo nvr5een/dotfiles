@@ -39,7 +39,7 @@ if type brew &>/dev/null; then
   export HOMEBREW_NO_EMOJI=1
 fi
 
-for file in "$ZSH_CONFIG"/{options,completion,prompt,aliases}.zsh; do
+for file in "$ZSH_CONFIG"/{options,completion,prompt,aliases,plugins}.zsh; do
   . "$file"
 done
 
