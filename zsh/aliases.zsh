@@ -23,6 +23,16 @@ alias ln='ln -iv'
 alias mv='nocorrect mv -iv'
 alias rm='rm -Iv'
 
+alias ga='git add'
+alias gb='git branch'
+alias gcm='git commit -v -m'
+alias gco='git checkout'
+alias gcl='git clone'
+alias gd='git diff'
+alias gmv='git mv -v'
+alias grm='git rm'
+alias gs='git status'
+
 alias d='dirs -v'
 for index ({1..9}) alias "$index"="cd +${index}"; unset index
 
@@ -68,4 +78,15 @@ if (( $+commands[kubectl] )); then
   source <(kubectl completion zsh)
   alias k='kubectl'
 fi
+
+path() {
+  echo $PATH | tr ":" "\n" | \
+    awk "{ sub(\"/usr\", \"$fg[green]/usr$reset_color\"); \
+           sub(\"/bin\", \"$fg[blue]/bin$reset_color\"); \
+           sub(\"/opt\", \"$fg[cyan]/opt$reset_color\"); \
+           sub(\"/sbin\", \"$fg[magenta]/sbin$reset_color\"); \
+           sub(\"/local\", \"$fg[yellow]/local$reset_color\"); \
+           sub(\"/.rvm\", \"$fg[red]/.rvm$reset_color\"); \
+           print }"
+}
 

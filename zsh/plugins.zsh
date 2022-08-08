@@ -18,8 +18,8 @@ history_substring_search_keybinds() {
 if [[ -e /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ]]; then
   . /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
   history_substring_search_keybinds
-elif [[ -e /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh ]]; then
-  . /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+elif [[ -e /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh ]]; then
+  . /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
   history_substring_search_keybinds
 fi
 
@@ -39,9 +39,9 @@ if (( $+commands[fzf] )); then
   if [[ -d /usr/share/fzf ]]; then
     . /usr/share/fzf/completion.zsh
     . /usr/share/fzf/key-bindings.zsh
-  elif [[ -d /usr/local/opt/fzf/shell ]]; then
-    . /usr/local/opt/fzf/shell/completion.zsh
-    . /usr/local/opt/fzf/shell/key-bindings.zsh
+  elif [[ -d /opt/homebrew/opt/fzf/shell ]]; then
+    . /opt/homebrew/opt/fzf/shell/completion.zsh
+    . /opt/homebrew/opt/fzf/shell/key-bindings.zsh
   fi
 fi
 
