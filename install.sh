@@ -78,7 +78,7 @@ install_home_configs() {
 
 main() {
   mkdir -p "$HOME"/projects/tmp
-  install_alacritty_configs
+  # install_alacritty_configs
   install_mpv_configs
   install_neovim_configs
   install_vifm_configs

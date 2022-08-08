@@ -1,3 +1,0 @@
-#!/bin/sh
-
-tr -dc 'A-F0-9' < /dev/urandom | head -c32 && echo
