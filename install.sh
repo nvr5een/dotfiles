@@ -47,7 +47,11 @@ install_neovim_configs() {
 install_vifm_configs() {
   mkdir -p "$vifm_dst"/colors
   cp -fv "$src"/vifm/colors/* "$vifm_dst"/colors
-  ln -sfv "$src"/vifm/vifmrc "$vifm_dst"/vifmrc
+  if [[ "$OSTYPE" = "linux-gnu"* ]]; then
+    ln -sfv "$src"/vifm/vifmrc "$vifm_dst"/vifmrc
+  elif [[ "$OSTYPE" = "darwin"* ]]; then
+    ln -sfv "$src"/vifm/vifmrc-macos "$vifm_dst"/vifmrc
+  fi
 }
 
 install_zsh_configs() {
