@@ -31,7 +31,7 @@ command! PackClean  source $MYVIMRC | call PackInit() | call minpac#clean()
 command! PackStatus packadd minpac | call minpac#status()
 
 set hidden
-set clipboard^=unnamed,unnamedplus
+set clipboard+=unnamedplus
 set cursorline
 set scrolloff=5
 set showmatch
@@ -123,4 +123,3 @@ augroup vimStartup
 augroup END
 
 colorscheme sourcerer
-
