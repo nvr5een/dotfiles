@@ -38,6 +38,7 @@ set showmatch
 set cpoptions+=$
 set virtualedit=all
 set number
+set relativenumber
 set expandtab
 set shiftwidth=2
 set softtabstop=-1
@@ -57,6 +58,7 @@ set wildignore+=*.git,*.DS_Store
 set wildignore+=*.bmp,*.gif,*.jp*,*.png
 set wildignore+=*.gz,*.rar,*.zip
 
+" Statusline
 set statusline=
 set statusline+=\%F
 set statusline+=%m
@@ -70,6 +72,8 @@ set statusline+=\ %l:%c]
 
 let mapleader="\<Space>"
 
+" https://www.vi-improved.org/recommendations/
+" https://stackoverflow.com/questions/16082991/vim-switching-between-files-rapidly-using-vanilla-vim-no-plugins
 nnoremap <leader><Space> :e#<CR>
 nnoremap <leader>b :buffer <C-z><S-Tab>
 nnoremap <leader>e :e <C-r>=fnameescape(expand('%:p:h'))<CR>/*<C-d>
@@ -77,21 +81,18 @@ nnoremap <leader>f :find *
 nnoremap <leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <leader>s :call StripWhitespace()<CR>
 
+" Prefer <Esc> on home row
 inoremap jk <Esc>
-nnoremap Y y$
 
+" Navigate windows with <Tab>
 nnoremap <tab> <C-w>w
 nnoremap <S-tab> <C-w>W
 
-set relativenumber
 " Navigate wrapped lines with 'relativenumber' set
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
-if maparg('<C-L>', 'n') ==# ''
-  nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
-endif
-
+" Quick access to private notes
 if !empty(glob('~/projects/private/notes'))
   nnoremap <leader>n :e ~/projects/private/notes/
 endif
@@ -123,3 +124,13 @@ augroup vimStartup
 augroup END
 
 colorscheme sourcerer
+
+" Check if needed for regular vim
+" Yank to end of line
+" nnoremap Y y$
+
+" Check if needed for regular vim
+" Clear highlighting with <Ctrl-L>
+" if maparg('<C-L>', 'n') ==# ''
+"   nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+" endif
