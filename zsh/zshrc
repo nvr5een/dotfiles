@@ -44,4 +44,3 @@ done
 
 # Source local ZSH configuration if available
 [[ -e "$ZSH_CONFIG/local.zsh" ]] && . "$ZSH_CONFIG/local.zsh"
-
