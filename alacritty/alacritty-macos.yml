@@ -1,0 +1,45 @@
+# ~/.config/alacritty/alacritty.yml
+
+window:
+  dimensions:
+    columns: 95
+    lines: 30
+  padding:
+    x: 7
+    y: 7
+  opacity: 0.95
+  decorations: none
+  startup_mode: Maximized
+
+font:
+  size: 15.0
+
+colors:
+  primary:
+    background: '0x222222'
+    foreground: '0xc2c2b0'
+  cursor:
+    text: '0x222222'
+    cursor: '0xc2c2b0'
+  normal:
+    black: '0x3a3a3a'
+    red: '0xaa4450'
+    green: '0x719611'
+    yellow: '0xff9800'
+    blue: '0x6688aa'
+    magenta: '0x8f6f8f'
+    cyan: '0x528b8b'
+    white: '0xd3d3d3'
+  bright:
+    black: '0x767676'
+    red: '0xff6a6a'
+    green: '0xb1d631'
+    yellow: '0x87875f'
+    blue: '0x90b0d1'
+    magenta: '0x8181a6'
+    cyan: '0x87ceeb'
+    white: '0xc1cdc1'
+
+mouse:
+  hide_when_typing: true
+

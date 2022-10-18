@@ -1,105 +1,97 @@
 #!/usr/bin/env bash
 
-src=$HOME/.config/dotfiles
-alacritty_dest=$HOME/.config/alacritty
-bin_dst=$HOME/.local/bin
-mpv_dst=$HOME/.config/mpv
-neovim_dst=$HOME/.config/nvim
-neovim_backup=$HOME/.local/share/nvim
-vifm_dst=$HOME/.config/vifm
-zsh_dst=$HOME/.config/zsh
-
-delete_all() {
-  for file in "$alacritty_dest" "$mpv_dst" "$neovim_dst" "$vifm_dst" \
-    "$zsh_dst" "$HOME"/.{gitconfig,tmux.conf,zshrc}; do
-    [[ -e $file ]] && rm -rf "$file"
-  done
-  printf "%s\n" "dotfiles deleted."
-}
+dotfiles_dir=${PWD}
+alacritty_dir=~/.config/alacritty
+git_dir=~/.config/git
+mpv_dir=~/.config/mpv
+neovim_dir=~/.config/nvim
+neovim_backups_dir=~/.local/share/nvim
+tmux_dir=~/.config/tmux
+vifm_dir=~/.config/vifm
+zsh_dir=~/.config/zsh
+bin_dir=~/.local/bin
 
 install_alacritty_configs() {
   if type -p alacritty &>/dev/null; then
-    if [[ ! -e $alacritty_dest ]]; then
-      mkdir -p "$alacritty_dest"
-      cp -v "$src"/alacritty/alacritty.yml "$alacritty_dest"
+    mkdir -p "$alacritty_dir"
+    if [[ "$OSTYPE" = "linux-gnu"* ]]; then
+      ln -sfv "$dotfiles_dir"/alacritty/alacritty.yml "$alacritty_dir"/alacritty.yml
+    elif [[ "$OSTYPE" = "darwin"* ]]; then
+      ln -sfv "$dotfiles_dir"/alacritty/alacritty-macos.yml "$alacritty_dir"/alacritty.yml
     fi
   fi
 }
 
+install_git_configs() {
+  mkdir -p "$git_dir"
+  for file in "$dotfiles_dir"/git/*; do
+    ln -sfv "$file" "$git_dir"
+  done
+}
+
 install_mpv_configs() {
   if type -p mpv &>/dev/null; then
-    mkdir -p "$mpv_dst"
-    for file in "$src"/mpv/*; do
-      cp -fv "$file" "$mpv_dst"
+    mkdir -p "$mpv_dir"
+    for file in "$dotfiles_dir"/mpv/*; do
+      ln -sfv "$file" "$mpv_dir"
     done
   fi
 }
 
 install_neovim_configs() {
-  mkdir -p "$neovim_dst"/colors
-  mkdir -p "$neovim_backup"/{backup,undo}
-  ln -sfv "$src"/nvim/init.vim "$neovim_dst"
-  for file in "$src"/nvim/colors/*; do
-    cp -fv "$file" "$neovim_dst"/colors
+  mkdir -p "$neovim_dir"/colors
+  mkdir -p "$neovim_backups_dir"/{backup,undo}
+  ln -sfv "$dotfiles_dir"/nvim/init.vim "$neovim_dir"
+  for file in "$dotfiles_dir"/nvim/colors/*; do
+    ln -sfv "$file" "$neovim_dir"/colors
+  done
+}
+
+install_tmux_configs() {
+  mkdir -p "$tmux_dir"
+  for file in "$dotfiles_dir"/tmux/*; do
+    ln -sfv "$file" "$tmux_dir"
   done
 }
 
 install_vifm_configs() {
-  mkdir -p "$vifm_dst"/colors
-  cp -fv "$src"/vifm/colors/* "$vifm_dst"/colors
+  mkdir -p "$vifm_dir"/colors
   if [[ "$OSTYPE" = "linux-gnu"* ]]; then
-    ln -sfv "$src"/vifm/vifmrc "$vifm_dst"/vifmrc
+    ln -sfv "$dotfiles_dir"/vifm/vifmrc "$vifm_dir"/vifmrc
   elif [[ "$OSTYPE" = "darwin"* ]]; then
-    ln -sfv "$src"/vifm/vifmrc-macos "$vifm_dst"/vifmrc
+    ln -sfv "$dotfiles_dir"/vifm/vifmrc-macos "$vifm_dir"/vifmrc
   fi
+  for file in "$dotfiles_dir"/vifm/colors/*; do
+    ln -sfv "$file" "$vifm_dir"/colors
+  done
 }
 
 install_zsh_configs() {
-  mkdir -p "$HOME"/.cache/zsh
-  mkdir -p "$zsh_dst"
-  for file in "$src"/zsh/*; do
-    ln -sfv "$file" "$zsh_dst"
+  mkdir -p ~/.cache/zsh
+  mkdir -p "$zsh_dir"
+  for file in "$dotfiles_dir"/zsh/{options,completion,prompt,aliases,plugins}.zsh; do
+    ln -sfv "$file" "$zsh_dir"
   done
+  ln -sfv "$dotfiles_dir"/zsh/zshrc ~/.zshrc
 }
 
 install_user_scripts() {
-  mkdir -p "$bin_dst"
-  for file in "$src"/bin/*; do
-    cp -fv "$file" "$bin_dst"
-  done
-  chmod 700 "$bin_dst"/*
-}
-
-install_home_configs() {
-  for file in tmux.conf zshrc; do
-    ln -sfv "$src"/home/"$file" "$HOME"/."$file"
-  done
-  for file in ansible.cfg gitconfig; do
-    cp -fv "$src"/home/"$file" "$HOME"/."$file"
-    chmod 600 "$HOME"/."$file"
+  mkdir -p "$bin_dir"
+  for file in "$dotfiles_dir"/bin/*; do
+    ln -sfv "$file" "$bin_dir"
   done
 }
 
 main() {
-  mkdir -p "$HOME"/projects/tmp
-  # install_alacritty_configs
+  mkdir -p ~/projects/tmp
+  install_alacritty_configs
+  install_git_configs
   install_mpv_configs
   install_neovim_configs
   install_vifm_configs
   install_zsh_configs
+  install_tmux_configs
   install_user_scripts
-  install_home_configs
 }
 
-while [[ ! $# -eq 0 ]]; do
-  case "$1" in
-    --delete | -d)
-      delete_all
-      exit
-      ;;
-  esac
-  shift
-done
-
 main "$@"
-

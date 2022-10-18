@@ -1,4 +1,4 @@
-# ~/.gitconfig
+# ~/.config/git/config
 
 [user]
   name = nvr5een
@@ -16,10 +16,10 @@
   untracked = yellow
 [core]
   editor = $EDITOR
+  excludesFile = ~/.config/git/ignore
 [github]
   user = nvr5een
 [push]
   default = simple
 [pull]
   rebase = false
-
