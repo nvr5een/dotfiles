@@ -85,23 +85,23 @@ common_bg_jobs() {
 #-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 cursor_mode() {
-  CURSOR_BLOCK='\e[2 q'
-  CURSOR_BEAM='\e[6 q'
+  cursor_block='\e[2 q'
+  cursor_beam='\e[6 q'
 
   function zle-keymap-select {
     if [[ ${KEYMAP} == vicmd ]] ||
       [[ $1 = 'block' ]]; then
-      echo -ne $CURSOR_BLOCK
+      echo -ne $cursor_block
     elif [[ ${KEYMAP} == main ]] ||
       [[ ${KEYMAP} == viins ]] ||
       [[ ${KEYMAP} = '' ]] ||
       [[ $1 = 'beam' ]]; then
-      echo -ne $CURSOR_BEAM
+      echo -ne $cursor_beam
     fi
   }
 
   zle-line-init() {
-    echo -ne $CURSOR_BEAM
+    echo -ne $cursor_beam
   }
 
   zle -N zle-keymap-select
