@@ -12,7 +12,18 @@ window:
   startup_mode: Maximized
 
 font:
-  size: 15.0
+  normal:
+    family: JetBrains Mono
+  bold:
+    family: JetBrains Mono
+    style: Bold
+  italic:
+    family: JetBrains Mono
+    style: Italic
+  bold_italic:
+    family: JetBrains Mono
+    style: Bold Italic
+  size: 16.0
 
 colors:
   primary:
