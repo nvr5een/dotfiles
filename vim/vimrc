@@ -1,0 +1,164 @@
+" ~/.vimrc
+
+runtime macros/matchit.vim
+
+" Plugins {{{
+" Install vim-plug if not found
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+call plug#begin()
+
+Plug 'airblade/vim-gitgutter'
+Plug 'justinmk/vim-dirvish'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+call plug#end()
+
+" }}}
+" Settings {{{
+set autoindent
+set autoread
+set backspace=indent,eol,start
+set clipboard=unnamed,unnamedplus
+set cpoptions+=$
+set cursorline
+set expandtab
+set hidden
+set hlsearch
+set ignorecase " ignore case in search patterns
+set incsearch
+set modelines=0 " do not check modelines for commands (security)
+set noswapfile
+set number
+set path=.,**
+set relativenumber " enable vertical motion commands (e.g. j k + -)
+set scrolloff=5
+set shiftwidth=2 " number of spaces to use for each (auto)indent
+set smartcase " search is case-sensitive when pattern contains capital letters
+set softtabstop=-1 " use shiftwidth value for tab and backspace
+set ttimeoutlen=50
+set undodir=~/.vim/undo
+set undofile
+set updatetime=100 " gitgutter
+set virtualedit=all " allow cursor to go anywhere in all modes
+
+" wildmenu
+set wildmenu
+set wildcharm=<C-z> " used in mappings to invoke completion
+set wildoptions=pum
+set wildignorecase
+set wildignore+=*.git,*.DS_Store
+set wildignore+=*.bmp,*.gif,*.jp*,*.png
+set wildignore+=*.gz,*.rar,*.zip
+
+" statusline
+set laststatus=2
+set noshowmode
+set statusline=
+set statusline+=\[%{mode()}]
+set statusline+=\ %F
+set statusline+=%m
+set statusline+=%r
+set statusline+=%=
+set statusline+=\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\ \|\ %{&fileformat}
+set statusline+=\ [%p%%
+set statusline+=\ %l:%c]
+
+" Use a line cursor within insert mode and a block cursor everywhere else.
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
+
+colorscheme sourcerer
+
+" }}}
+" Mappings {{{
+let mapleader="\<Space>"
+
+inoremap jk <Esc>
+nnoremap Y y$
+
+" buffers and files
+nnoremap <leader><Space> :e#<CR>
+" nnoremap <leader>b :buffer <C-z><S-Tab>
+" nnoremap <leader>f :find *
+
+" fzf
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>g :Rg<CR>
+nnoremap <silent> <leader>h :History<CR>
+
+" find and replace word under cursor
+nnoremap <leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
+
+" remove trailing whitespace
+nnoremap <leader>s :call StripWhitespace()<CR>
+
+" navigate wrapped lines with 'relativenumber' set
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+
+" navigate windows with <Tab>
+nnoremap <tab> <C-w>w
+nnoremap <S-tab> <C-w>W
+
+" notes
+if !empty(glob('~/projects/private/notes'))
+  nnoremap <leader>n :e ~/projects/private/notes/
+endif
+
+" Use CTRL-L to clear the highlighting of 'hlsearch' (off by default) and call
+" :diffupdate.
+if maparg('<C-L>', 'n') ==# ''
+  nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
+
+" }}}
+" Functions {{{
+function! StripWhitespace() abort
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  %s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
+endfunction
+
+" }}}
+" Autocommands {{{
+augroup vimStartup
+  autocmd!
+  autocmd Filetype python setlocal foldmethod=indent tabstop=4
+  autocmd Filetype text setlocal colorcolumn=+1 textwidth=78
+  autocmd FileType vim setlocal foldmethod=marker
+  " Resize splits when the window is resized
+  autocmd VimResized * :wincmd =
+  " Restore last known cursor position when reopening files
+  autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    \ |   exe "normal! g`\""
+    \ | endif
+  " Auto location/quickfix window
+  autocmd QuickFixCmdPost [^l]* cwindow
+  autocmd QuickFixCmdPost l* lwindow
+  autocmd VimEnter * cwindow
+augroup END
+
+" }}}

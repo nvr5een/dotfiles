@@ -10,6 +10,7 @@ tmux_dir=~/.config/tmux
 vifm_dir=~/.config/vifm
 zsh_dir=~/.config/zsh
 bin_dir=~/.local/bin
+vim_dir=~/.vim
 
 install_alacritty_configs() {
   if type -p alacritty &>/dev/null; then
@@ -82,16 +83,25 @@ install_user_scripts() {
   done
 }
 
+install_vim_configs() {
+  mkdir -p "$vim_dir"/{colors,undo}
+  for file in "$dotfiles_dir"/vim/colors/*; do
+    ln -sfv "$file" "$vim_dir"/colors
+  done
+  ln -sfv "$dotfiles_dir"/vim/vimrc ~/.vimrc
+}
+
 main() {
   mkdir -p ~/projects/tmp
   install_alacritty_configs
   install_git_configs
   install_mpv_configs
-  install_neovim_configs
+  # install_neovim_configs
   install_vifm_configs
   install_zsh_configs
   install_tmux_configs
   install_user_scripts
+  install_vim_configs
 }
 
 main "$@"
