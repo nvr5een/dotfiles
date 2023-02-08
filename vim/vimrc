@@ -22,7 +22,6 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -109,12 +108,13 @@ nnoremap <silent> <leader>h :History<CR>
 " find and replace word under cursor
 nnoremap <leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 
-" remove trailing whitespace
-nnoremap <leader>s :call StripWhitespace()<CR>
-
 " navigate wrapped lines with 'relativenumber' set
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+
+" Go to first and last char of current line easier
+noremap H ^
+noremap L $
 
 " navigate windows with <Tab>
 nnoremap <tab> <C-w>w
@@ -132,7 +132,9 @@ if maparg('<C-L>', 'n') ==# ''
 endif
 
 " }}}
-" Functions {{{
+" Functions & Autocommands {{{
+" remove trailing whitespace
+nnoremap <leader>s :call StripWhitespace()<CR>
 function! StripWhitespace() abort
   let save_cursor = getpos(".")
   let old_query = getreg('/')
@@ -141,8 +143,10 @@ function! StripWhitespace() abort
   call setreg('/', old_query)
 endfunction
 
-" }}}
-" Autocommands {{{
+" edit and source vimrc
+nnoremap <leader>v :e ~/.vimrc<CR>
+autocmd bufwritepost .vimrc source ~/.vimrc
+
 augroup vimStartup
   autocmd!
   autocmd Filetype python setlocal foldmethod=indent tabstop=4
