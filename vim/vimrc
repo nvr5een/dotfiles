@@ -145,7 +145,7 @@ endfunction
 
 " edit and source vimrc
 nnoremap <leader>v :e ~/.vimrc<CR>
-autocmd bufwritepost .vimrc source ~/.vimrc
+autocmd bufwritepost *vimrc* source ~/.vimrc
 
 augroup vimStartup
   autocmd!
