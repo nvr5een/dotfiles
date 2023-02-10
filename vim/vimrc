@@ -1,36 +1,14 @@
 " ~/.vimrc
 
+" Settings {{{
+
+filetype plugin indent on
+syntax on
+
+" Hit `%` on `if` to jump to `else`.
 runtime macros/matchit.vim
 
-" Plugins {{{
-" Install vim-plug if not found
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-endif
-
-" Run PlugInstall if there are missing plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync | source $MYVIMRC
-\| endif
-
-call plug#begin()
-
-Plug 'airblade/vim-gitgutter'
-Plug 'justinmk/vim-dirvish'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-unimpaired'
-
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-" Plug 'junegunn/fzf.vim'
-
-call plug#end()
-
-" }}}
-" Settings {{{
+" various settings
 set autoindent
 set autoread
 set backspace=indent,eol,start
@@ -95,15 +73,13 @@ inoremap jk <Esc>
 nnoremap Y y$
 
 " buffers and files
+nnoremap <leader>v :e ~/.vimrc<CR>
 nnoremap <leader><Space> :e#<CR>
-nnoremap <leader>b :buffer <C-z><S-Tab>
-nnoremap <leader>f :find *
-
-" fzf
-" nnoremap <silent> <leader>b :Buffers<CR>
-" nnoremap <silent> <leader>f :Files<CR>
-" nnoremap <silent> <leader>g :Rg<CR>
-" nnoremap <silent> <leader>h :History<CR>
+" nnoremap <leader>b :buffer <C-z><S-Tab>
+" nnoremap <leader>f :find *
+" if !empty(glob('~/projects/private/notes'))
+"   nnoremap <leader>n :e ~/projects/private/notes/
+" endif
 
 " find and replace word under cursor
 nnoremap <leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
@@ -120,16 +96,45 @@ noremap L $
 nnoremap <tab> <C-w>w
 nnoremap <S-tab> <C-w>W
 
-" notes
-if !empty(glob('~/projects/private/notes'))
-  nnoremap <leader>n :e ~/projects/private/notes/
-endif
-
 " Use CTRL-L to clear the highlighting of 'hlsearch' (off by default) and call
 " :diffupdate.
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
+
+" }}}
+" Plugins {{{
+" Install vim-plug if not found
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+call plug#begin()
+
+Plug 'airblade/vim-gitgutter'
+Plug 'justinmk/vim-dirvish'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
+
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>g :Rg<CR>
+if !empty(glob('~/projects/private/notes'))
+  nnoremap <silent> <leader>n :Files ~/projects/private/notes<CR>
+endif
+
+call plug#end()
 
 " }}}
 " Functions & Autocommands {{{
@@ -143,15 +148,12 @@ function! StripWhitespace() abort
   call setreg('/', old_query)
 endfunction
 
-" edit and source vimrc
-nnoremap <leader>v :e ~/.vimrc<CR>
-autocmd bufwritepost *vimrc* source ~/.vimrc
-
 augroup vimStartup
   autocmd!
   autocmd Filetype python setlocal foldmethod=indent tabstop=4
   autocmd Filetype text setlocal colorcolumn=+1 textwidth=78
   autocmd FileType vim setlocal foldmethod=marker
+  autocmd bufwritepost *vimrc* source ~/.vimrc
   " Resize splits when the window is resized
   autocmd VimResized * :wincmd =
   " Restore last known cursor position when reopening files
