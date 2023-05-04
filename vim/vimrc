@@ -1,13 +1,12 @@
 " ~/.vimrc
 
-" Settings {{{
 filetype plugin indent on
 syntax on
 
 " Hit `%` on `if` to jump to `else`.
 runtime macros/matchit.vim
 
-" various settings
+" misc settings
 set autoindent
 set autoread
 set backspace=indent,eol,start
@@ -32,17 +31,16 @@ set softtabstop=-1 " use shiftwidth value for tab and backspace
 set ttimeoutlen=50
 set undodir=~/.vim/undo
 set undofile
-set updatetime=100 " gitgutter
 set virtualedit=all " allow cursor to go anywhere in all modes
+let mapleader="\<Space>"
+colorscheme sourcerer
 
 " wildmenu
 set wildmenu
 set wildcharm=<C-z> " used in mappings to invoke completion
 set wildoptions=pum
 set wildignorecase
-set wildignore+=*.git,*.DS_Store
-set wildignore+=*.bmp,*.gif,*.jp*,*.png
-set wildignore+=*.gz,*.rar,*.zip
+set wildignore+=*.git,*.gz,*.rar,*.zip
 
 " statusline
 set laststatus=2
@@ -63,20 +61,15 @@ set statusline+=\ %l:%c]
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
-colorscheme sourcerer
-
-" }}}
-" Mappings {{{
-let mapleader="\<Space>"
-
+" misc mappings
 inoremap jk <Esc>
 nnoremap Y y$
 
-" buffers and files
-nnoremap <leader>v :e ~/.vimrc<CR>
+" juggle buffers and files
 nnoremap <leader><Space> :e#<CR>
 " nnoremap <leader>b :buffer <C-z><S-Tab>
 " nnoremap <leader>f :find *
+nnoremap <leader>v :e ~/.vimrc<CR>
 " if !empty(glob('~/projects/private/notes'))
 "   nnoremap <leader>n :e ~/projects/private/notes/
 " endif
@@ -118,8 +111,35 @@ if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
 
-" }}}
-" Plugins {{{
+" remove trailing whitespace
+nnoremap <leader>s :call StripWhitespace()<CR>
+function! StripWhitespace() abort
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  %s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
+endfunction
+
+" Autocommands
+augroup vimStartup
+  autocmd!
+  autocmd Filetype python setlocal foldmethod=indent tabstop=4
+  autocmd Filetype text setlocal colorcolumn=+1 textwidth=78
+  autocmd bufwritepost *vimrc* source ~/.vimrc
+  " Resize splits when the window is resized
+  autocmd VimResized * :wincmd =
+  " Restore last known cursor position when reopening files
+  autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    \ |   exe "normal! g`\""
+    \ | endif
+  " Auto location/quickfix window
+  autocmd QuickFixCmdPost [^l]* cwindow
+  autocmd QuickFixCmdPost l* lwindow
+  autocmd VimEnter * cwindow
+augroup END
+
 " Install vim-plug if necessary
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -152,35 +172,3 @@ endif
 
 call plug#end()
 
-" }}}
-" Functions & Autocommands {{{
-" remove trailing whitespace
-nnoremap <leader>s :call StripWhitespace()<CR>
-function! StripWhitespace() abort
-  let save_cursor = getpos(".")
-  let old_query = getreg('/')
-  %s/\s\+$//e
-  call setpos('.', save_cursor)
-  call setreg('/', old_query)
-endfunction
-
-augroup vimStartup
-  autocmd!
-  autocmd Filetype python setlocal foldmethod=indent tabstop=4
-  autocmd Filetype text setlocal colorcolumn=+1 textwidth=78
-  autocmd FileType vim setlocal foldmethod=marker
-  autocmd bufwritepost *vimrc* source ~/.vimrc
-  " Resize splits when the window is resized
-  autocmd VimResized * :wincmd =
-  " Restore last known cursor position when reopening files
-  autocmd BufReadPost *
-    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-    \ |   exe "normal! g`\""
-    \ | endif
-  " Auto location/quickfix window
-  autocmd QuickFixCmdPost [^l]* cwindow
-  autocmd QuickFixCmdPost l* lwindow
-  autocmd VimEnter * cwindow
-augroup END
-
-" }}}
