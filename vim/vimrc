@@ -31,6 +31,7 @@ set softtabstop=-1 " use shiftwidth value for tab and backspace
 set ttimeoutlen=50
 set undodir=~/.vim/undo
 set undofile
+set updatetime=100 " gitgutter
 set virtualedit=all " allow cursor to go anywhere in all modes
 let mapleader="\<Space>"
 colorscheme sourcerer
