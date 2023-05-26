@@ -13,6 +13,7 @@ set backspace=indent,eol,start
 " set clipboard=unnamed,unnamedplus
 set cpoptions+=$
 set cursorline
+set display=truncate " show @@@ in last line if it is truncated
 set expandtab
 set formatoptions+=j " remove comment leader when joining lines
 set hidden
