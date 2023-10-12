@@ -1,9 +1,9 @@
 # ~/.config/alacritty/alacritty.yml
 
 window:
-  dimensions:
-    columns: 95
-    lines: 30
+  # dimensions:
+  #   columns: 95
+  #   lines: 30
   padding:
     x: 7
     y: 7
