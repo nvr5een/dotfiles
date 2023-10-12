@@ -25,6 +25,7 @@ typeset -U PATH
 # Add user scripts to $PATH
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
 [[ -d "$HOME/projects/private/bin" ]] && export PATH="$HOME/projects/private/bin:$PATH"
+[[ -d "$HOME/Library/Python/3.11/bin" ]] && export PATH="$HOME/Library/Python/3.11/bin:$PATH"
 
 # Set up Homebrew
 if [[ -x "/opt/homebrew/bin/brew" ]]; then
