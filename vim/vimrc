@@ -3,9 +3,6 @@
 filetype plugin indent on
 syntax on
 
-" Hit `%` on `if` to jump to `else`.
-runtime macros/matchit.vim
-
 " misc settings
 set autoindent
 set autoread
@@ -117,6 +114,18 @@ sunmap Q
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
+
+" toggle paste mode
+nnoremap <leader>p :call TogglePaste()<CR>
+function! TogglePaste()
+  if(&paste == 0)
+    set paste
+    echo "Paste Mode Enabled"
+  else
+    set nopaste
+    echo "Paste Mode Disabled"
+  endif
+endfunction
 
 " remove trailing whitespace
 nnoremap <leader>s :call StripWhitespace()<CR>
