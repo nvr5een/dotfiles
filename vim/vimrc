@@ -45,6 +45,7 @@ set wildignore+=*.git,*.gz,*.rar,*.zip
 set laststatus=2
 set noshowmode
 set statusline=
+set statusline+=%{PasteForStatusline()}
 set statusline+=\[%{mode()}]
 set statusline+=\ %F
 set statusline+=%m
@@ -114,6 +115,17 @@ sunmap Q
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
+
+" show paste mode in statusline
+" https://nkantar.com/blog/2017/01/my-vim-statusline/
+function! PasteForStatusline()
+  let paste_status = &paste
+  if paste_status == 1
+    return " [paste] "
+  else
+    return ""
+  endif
+endfunction
 
 " toggle paste mode
 nnoremap <leader>p :call TogglePaste()<CR>

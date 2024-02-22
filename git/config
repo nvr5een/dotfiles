@@ -2,7 +2,7 @@
 
 [user]
   name = nvr5een
-  email = nvr5een@fakemail.com
+  email = nvr5een@email.(none)
 [credential]
   helper = cache --timeout=3600
 [color]
