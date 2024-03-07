@@ -154,6 +154,7 @@ augroup vimStartup
   autocmd!
   autocmd Filetype python setlocal foldmethod=indent tabstop=4
   autocmd Filetype markdown,text setlocal colorcolumn=+1 textwidth=78
+  autocmd BufNewFile,BufReadPost *.config set ft=sshconfig
   autocmd bufwritepost *vimrc* source ~/.vimrc
   " resize splits when the window is resized
   autocmd VimResized * :wincmd =

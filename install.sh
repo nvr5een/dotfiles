@@ -76,12 +76,12 @@ install_zsh_configs() {
   ln -sfv "$dotfiles_dir"/zsh/zshrc ~/.zshrc
 }
 
-install_user_scripts() {
-  mkdir -p "$bin_dir"
-  for file in "$dotfiles_dir"/bin/*; do
-    ln -sfv "$file" "$bin_dir"
-  done
-}
+# install_user_scripts() {
+#   mkdir -p "$bin_dir"
+#   for file in "$dotfiles_dir"/bin/*; do
+#     ln -sfv "$file" "$bin_dir"
+#   done
+# }
 
 install_vim_configs() {
   mkdir -p "$vim_dir"/{colors,undo}
@@ -100,7 +100,7 @@ main() {
   install_vifm_configs
   install_zsh_configs
   install_tmux_configs
-  install_user_scripts
+  # install_user_scripts
   install_vim_configs
 }
 
