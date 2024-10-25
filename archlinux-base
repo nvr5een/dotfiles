@@ -42,7 +42,7 @@ create_partitions() {
   if [[ $uefi -eq 1 ]]; then
     parted -s -a optimal /dev/sda 'mklabel gpt mkpart ESP fat32 1MiB 513MiB set 1 boot on mkpart primary ext4 513MiB 100%'
   else
-    parted -s -a optimal /dev/sda 'mklabel msdos mkpart primary ext4 1MiB 200MiB set 1 boot on mkpart primary ext4 200MiB 100%'
+    parted -s -a optimal /dev/sda 'mklabel msdos mkpart primary ext4 1MiB 500MiB set 1 boot on mkpart primary ext4 500MiB 100%'
   fi
   echo ""
   sleep 1
