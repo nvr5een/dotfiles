@@ -103,6 +103,10 @@ filetype {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*>
 fileviewer {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*>
          \ identify %f
 
+" Comics and Manga
+filetype *.cbr open
+filetype *.cbz open
+
 " MD5
 filetype *.md5
        \ {Check MD5 hash sum}
@@ -164,11 +168,12 @@ filetype *.img open
 filetype *.pkg open
 
 " Office files
-filetype {*.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx,*.ppt},
-         \<application/vnd.openxmlformats-officedocument.*,
-          \application/msword,
-          \application/vnd.ms-excel>
-       \ open -a LibreOffice.app
+filetype {*.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx,*.ppt} open
+" filetype {*.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx,*.ppt},
+         " \<application/vnd.openxmlformats-officedocument.*,
+         "  \application/msword,
+         "  \application/vnd.ms-excel>
+       " \ open -a LibreOffice.app
 fileviewer {*.doc},<application/msword> antiword -
 fileviewer {*.docx},
           \<application/

@@ -1,0 +1,256 @@
+#!/bin/bash
+
+username=sysadmin
+userpw=password
+# rootpw=password
+hostname=archlinux
+zone=America
+subzone=Denver
+
+set -e
+
+arch_chroot() {
+  arch-chroot /mnt /bin/bash -c "${1}"
+}
+
+update_system_clock() {
+  timedatectl set-ntp true
+}
+
+check_boot_mode() {
+  modprobe -q efivarfs
+  if [[ -d "/sys/firmware/efi/" ]]; then
+    if [[ -z $(mount | grep /sys/firmware/efi/efivars) ]]; then
+      mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+    fi
+    uefi=1
+    echo "UEFI Mode detected"
+  else
+    uefi=0
+    echo "BIOS Mode detected"
+  fi
+  echo ""
+  sleep 1
+}
+
+create_partitions() {
+  echo "==> Creating partitions..."
+  if [[ $uefi -eq 1 ]]; then
+    parted -s -a optimal /dev/sda 'mklabel gpt mkpart ESP fat32 1MiB 513MiB set 1 boot on mkpart primary ext4 513MiB 100%'
+  else
+    parted -s -a optimal /dev/sda 'mklabel msdos mkpart primary ext4 1MiB 100MiB set 1 boot on mkpart primary ext4 100MiB 100%'
+  fi
+  echo ""
+  sleep 1
+}
+
+format_partitions() {
+  echo "==> Formatting partitions..."
+  if [[ $uefi -eq 1 ]]; then
+    mkfs.fat -F32 /dev/sda1
+    mkfs.ext4 /dev/sda2
+  else
+    mkfs.ext4 /dev/sda1
+    mkfs.ext4 /dev/sda2
+  fi
+  sleep 1
+}
+
+mount_partitions() {
+  echo "==> Mounting partitions..."
+  mount /dev/sda2 /mnt
+  mkdir /mnt/boot
+  mount /dev/sda1 /mnt/boot
+  echo ""
+  sleep 1
+}
+
+configure_mirrorlist() {
+  echo "==> Configuring mirrorlist..."
+  local url="https://www.archlinux.org/mirrorlist/?country=US&protocol=http&protocol=https&ip_version=4"
+  mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+  curl -so /etc/pacman.d/mirrorlist "${url}"
+  sed -i 's/^#Server/Server/g' /etc/pacman.d/mirrorlist
+  pacman -Syy --noconfirm
+  echo ""
+  sleep 1
+}
+
+install_base_system() {
+  echo "==> Installing base system..."
+  pacstrap /mnt base base-devel linux linux-firmware dhcpcd \
+    ansible \
+    arch-wiki-lite \
+    atool \
+    bandwhich \
+    bash-completion \
+    bind \
+    bmon \
+    clamav \
+    cmatrix \
+    dfc \
+    ethtool \
+    fd \
+    figlet \
+    fuseiso \
+    git \
+    hdparm \
+    htop \
+    lsof \
+    ncdu \
+    neofetch \
+    neovim \
+    net-tools \
+    nethack \
+    nmap \
+    nnn \
+    openssh \
+    p7zip \
+    ripgrep \
+    rkhunter \
+    rsync \
+    sshpass \
+    sudo \
+    surfraw \
+    tcpdump \
+    tmux \
+    traceroute \
+    tree \
+    unrar \
+    unzip \
+    vi \
+    vifm \
+    vim \
+    w3m \
+    wget \
+    whois \
+    zip \
+    zsh
+
+  wireless_device=$(ip link | grep wl | awk '{print $2}'| sed 's/://' | sed '1!d')
+  if [[ -n $wireless_device ]]; then
+    pacstrap /mnt iw wireless_tools wpa_supplicant dialog
+  else
+    wired_device=$(ip link | grep "ens\|eno\|enp" | awk '{print $2}'| sed 's/://' | sed '1!d')
+    if [[ -n $wired_device ]]; then
+      arch_chroot "systemctl enable dhcpcd@${wired_device}.service"
+    fi
+  fi
+  arch_chroot "systemctl enable sshd.service"
+  echo ""
+  sleep 1
+}
+
+configure_fstab() {
+  echo "==> Configuring /mnt/etc/fstab..."
+  genfstab -U /mnt >> /mnt/etc/fstab
+  sleep 1
+}
+
+configure_vconsole() {
+  echo "==> Configuring /mnt/etc/vconsole.conf..."
+  echo "FONT=Lat2-Terminus16" >> /mnt/etc/vconsole.conf
+  sleep 1
+}
+
+configure_hostname() {
+  echo "==> Configuring /mnt/etc/hostname..."
+  echo "${hostname}" > /mnt/etc/hostname
+  sleep 1
+}
+
+configure_hosts() {
+  echo "==> Configuring /mnt/etc/hosts..."
+  echo "" >> /mnt/etc/hosts
+  echo "127.0.0.1  localhost" >> /mnt/etc/hosts
+  echo "::1        localhost" >> /mnt/etc/hosts
+  echo "127.0.1.1  ${hostname}.localdomain  ${hostname}" >> /mnt/etc/hosts
+  sleep 1
+}
+
+configure_timezone() {
+  echo "==> Configuring timezone..."
+  arch_chroot "ln -sf /usr/share/zoneinfo/${zone}/${subzone} /etc/localtime"
+  sleep 1
+}
+
+configure_hardwareclock() {
+  echo "==> Configuring hardware clock..."
+  arch_chroot "hwclock --systohc --utc"
+  echo ""
+  sleep 1
+}
+
+configure_locale() {
+  echo 'LANG="en_US.UTF-8"' > /mnt/etc/locale.conf
+  echo "LC_COLLATE=C" >> /mnt/etc/locale.conf
+  echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
+  arch_chroot "locale-gen"
+  echo ""
+  sleep 1
+}
+
+configure_sudo() {
+  echo "==> Configuring '/etc/sudoers'..."
+  arch_chroot "sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//' /etc/sudoers"
+  sleep 1
+}
+
+configure_pacman() {
+  echo "==> Configuring '/etc/pacman.conf'..."
+  arch_chroot "sed -i '/Color/s/^#//' /etc/pacman.conf"
+  sleep 1
+}
+
+install_bootloader() {
+  echo "==> Installing bootloader..."
+  if [[ $uefi -eq 1 ]]; then
+    pacstrap /mnt grub efibootmgr
+    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=grub"
+  else
+    pacstrap /mnt grub
+    arch_chroot "grub-install --target=i386-pc --recheck --debug /dev/sda"
+  fi
+  arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
+  echo ""
+  sleep 1
+}
+
+set_root_password() {
+  echo "==> Setting root password."
+  arch_chroot "echo 'root:${rootpw}' | chpasswd"
+  echo ""
+  sleep 1
+}
+
+create_user() {
+  echo "==> Creating user ${username} and setting password."
+  arch_chroot "useradd -m -g users -G wheel -s /bin/zsh ${username}"
+  arch_chroot "echo '${username}:${userpw}' | chpasswd"
+  echo ""
+}
+
+main() {
+  update_system_clock
+  check_boot_mode
+  create_partitions
+  format_partitions
+  mount_partitions
+  configure_mirrorlist
+  install_base_system
+  configure_fstab
+  configure_vconsole
+  configure_hostname
+  configure_hosts
+  configure_timezone
+  configure_hardwareclock
+  configure_locale
+  configure_sudo
+  configure_pacman
+  install_bootloader
+  # set_root_password
+  create_user
+  echo "Installation complete!"
+}
+
+main "$@"
