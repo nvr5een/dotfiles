@@ -1,7 +1,11 @@
 #!/bin/bash
+# From installer, run:
+# pacman-key --init
+# pacman -Sy git
+# git clone https://github.com/user/repoWithThisScript
 
 username=sysadmin
-userpw=password
+userpw=password123
 # rootpw=password
 hostname=archlinux
 zone=America
@@ -38,7 +42,7 @@ create_partitions() {
   if [[ $uefi -eq 1 ]]; then
     parted -s -a optimal /dev/sda 'mklabel gpt mkpart ESP fat32 1MiB 513MiB set 1 boot on mkpart primary ext4 513MiB 100%'
   else
-    parted -s -a optimal /dev/sda 'mklabel msdos mkpart primary ext4 1MiB 100MiB set 1 boot on mkpart primary ext4 100MiB 100%'
+    parted -s -a optimal /dev/sda 'mklabel msdos mkpart primary ext4 1MiB 200MiB set 1 boot on mkpart primary ext4 200MiB 100%'
   fi
   echo ""
   sleep 1
@@ -70,7 +74,8 @@ configure_mirrorlist() {
   local url="https://archlinux.org/mirrorlist/?country=US&protocol=http&protocol=https&ip_version=4"
   mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
   curl -so /etc/pacman.d/mirrorlist "${url}"
-  sed -i 's/^#Server/Server/g' /etc/pacman.d/mirrorlist
+  # sed -i 's/^#Server/Server/g' /etc/pacman.d/mirrorlist
+  sed -i '0,/#Server/s//Server/' /etc/pacman.d/mirrorlist
   pacman -Syy --noconfirm
   echo ""
   sleep 1
