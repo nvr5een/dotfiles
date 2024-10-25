@@ -78,7 +78,7 @@ configure_mirrorlist() {
 
 install_base_system() {
   echo "==> Installing base system..."
-  pacstrap -K /mnt base base-devel linux linux-firmware dhcpcd sudo vi
+  pacstrap -K /mnt base base-devel linux linux-firmware dhcpcd openssh sudo vi
 
   wireless_device=$(ip link | grep wl | awk '{print $2}'| sed 's/://' | sed '1!d')
   if [[ -n $wireless_device ]]; then
@@ -102,7 +102,7 @@ configure_fstab() {
 
 configure_vconsole() {
   echo "==> Configuring /mnt/etc/vconsole.conf..."
-  echo "FONT=Lat2-Terminus16" >> /mnt/etc/vconsole.conf
+  echo "FONT=Lat2-Terminus16" > /mnt/etc/vconsole.conf
   sleep 1
 }
 
