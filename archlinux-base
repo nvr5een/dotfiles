@@ -67,7 +67,7 @@ mount_partitions() {
 
 configure_mirrorlist() {
   echo "==> Configuring mirrorlist..."
-  local url="https://www.archlinux.org/mirrorlist/?country=US&protocol=http&protocol=https&ip_version=4"
+  local url="https://archlinux.org/mirrorlist/?country=US&protocol=http&protocol=https&ip_version=4"
   mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
   curl -so /etc/pacman.d/mirrorlist "${url}"
   sed -i 's/^#Server/Server/g' /etc/pacman.d/mirrorlist
@@ -78,54 +78,7 @@ configure_mirrorlist() {
 
 install_base_system() {
   echo "==> Installing base system..."
-  pacstrap /mnt base base-devel linux linux-firmware dhcpcd \
-    ansible \
-    arch-wiki-lite \
-    atool \
-    bandwhich \
-    bash-completion \
-    bind \
-    bmon \
-    clamav \
-    cmatrix \
-    dfc \
-    ethtool \
-    fd \
-    figlet \
-    fuseiso \
-    git \
-    hdparm \
-    htop \
-    lsof \
-    ncdu \
-    neofetch \
-    neovim \
-    net-tools \
-    nethack \
-    nmap \
-    nnn \
-    openssh \
-    p7zip \
-    ripgrep \
-    rkhunter \
-    rsync \
-    sshpass \
-    sudo \
-    surfraw \
-    tcpdump \
-    tmux \
-    traceroute \
-    tree \
-    unrar \
-    unzip \
-    vi \
-    vifm \
-    vim \
-    w3m \
-    wget \
-    whois \
-    zip \
-    zsh
+  pacstrap -K /mnt base base-devel linux linux-firmware dhcpcd sudo vi
 
   wireless_device=$(ip link | grep wl | awk '{print $2}'| sed 's/://' | sed '1!d')
   if [[ -n $wireless_device ]]; then
@@ -206,10 +159,10 @@ install_bootloader() {
   echo "==> Installing bootloader..."
   if [[ $uefi -eq 1 ]]; then
     pacstrap /mnt grub efibootmgr
-    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=grub"
+    arch_chroot "grub-install --target=x86_64-efi --efi-directory=esp --bootloader-id=GRUB"
   else
     pacstrap /mnt grub
-    arch_chroot "grub-install --target=i386-pc --recheck --debug /dev/sda"
+    arch_chroot "grub-install --target=i386-pc /dev/sda"
   fi
   arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
   echo ""
