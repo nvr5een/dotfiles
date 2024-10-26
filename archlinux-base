@@ -150,7 +150,8 @@ configure_locale() {
 
 configure_sudo() {
   echo "==> Configuring '/etc/sudoers'..."
-  arch_chroot "sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//' /etc/sudoers"
+  # arch_chroot "sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//' /etc/sudoers"
+  echo "${username} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/"${username}"
   sleep 1
 }
 
@@ -182,8 +183,8 @@ set_root_password() {
 }
 
 create_user() {
-  echo "==> Creating user ${username} and setting password."
-  arch_chroot "useradd -m -g users -G wheel -s /bin/zsh ${username}"
+  echo "==> Creating user ${username}"
+  arch_chroot "useradd -m ${username}"
   arch_chroot "echo '${username}:${userpw}' | chpasswd"
   echo ""
 }
