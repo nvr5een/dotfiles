@@ -6,10 +6,9 @@
 
 username=sysadmin
 userpw=password123
-# rootpw=password
 hostname=archlinux
 zone=America
-subzone=Denver
+subzone=Detroit
 
 set -e
 
@@ -148,13 +147,6 @@ configure_locale() {
   sleep 1
 }
 
-configure_sudo() {
-  echo "==> Configuring '/etc/sudoers'..."
-  # arch_chroot "sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//' /etc/sudoers"
-  echo "${username} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/"${username}"
-  sleep 1
-}
-
 configure_pacman() {
   echo "==> Configuring '/etc/pacman.conf'..."
   arch_chroot "sed -i '/Color/s/^#//' /etc/pacman.conf"
@@ -175,17 +167,16 @@ install_bootloader() {
   sleep 1
 }
 
-set_root_password() {
-  echo "==> Setting root password."
-  arch_chroot "echo 'root:${rootpw}' | chpasswd"
-  echo ""
+create_user() {
+  echo "==> Creating user ${username}..."
+  arch_chroot "useradd -m ${username}"
+  arch_chroot "echo '${username}:${userpw}' | chpasswd"
   sleep 1
 }
 
-create_user() {
-  echo "==> Creating user ${username}"
-  arch_chroot "useradd -m ${username}"
-  arch_chroot "echo '${username}:${userpw}' | chpasswd"
+configure_sudo() {
+  echo "==> Configuring sudo for ${username}..."
+  echo "${username} ALL=(ALL) NOPASSWD: ALL" > /mnt/etc/sudoers.d/"${username}"
   echo ""
 }
 
@@ -204,11 +195,10 @@ main() {
   configure_timezone
   configure_hardwareclock
   configure_locale
-  configure_sudo
   configure_pacman
   install_bootloader
-  # set_root_password
   create_user
+  configure_sudo
   echo "Installation complete!"
 }
 
