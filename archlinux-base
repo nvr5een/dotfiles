@@ -81,7 +81,18 @@ configure_mirrorlist() {
 
 install_base_system() {
   echo "==> Installing base system..."
-  pacstrap -K /mnt base base-devel linux linux-firmware dhcpcd openssh sudo vi
+  pacstrap -K /mnt base base-devel linux linux-firmware dhcpcd openssh sudo vi /
+    atool /
+    lsof /
+    man-db /
+    neovim /
+    net-tools /
+    speedtest-cli /
+    tmux /
+    traceroute /
+    vifm /
+    vim /
+    zsh
 
   wireless_device=$(ip link | grep wl | awk '{print $2}'| sed 's/://' | sed '1!d')
   if [[ -n $wireless_device ]]; then
