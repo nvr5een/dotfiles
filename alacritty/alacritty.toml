@@ -1,0 +1,57 @@
+[colors.bright]
+black = "0x767676"
+blue = "0x90b0d1"
+cyan = "0x87ceeb"
+green = "0xb1d631"
+magenta = "0x8181a6"
+red = "0xff6a6a"
+white = "0xc1cdc1"
+yellow = "0x87875f"
+
+[colors.cursor]
+cursor = "0xc2c2b0"
+text = "0x222222"
+
+[colors.normal]
+black = "0x3a3a3a"
+blue = "0x6688aa"
+cyan = "0x528b8b"
+green = "0x719611"
+magenta = "0x8f6f8f"
+red = "0xaa4450"
+white = "0xd3d3d3"
+yellow = "0xff9800"
+
+[colors.primary]
+background = "0x222222"
+foreground = "0xc2c2b0"
+
+[font]
+size = 15.0
+
+[font.bold]
+family = "JetBrains Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "JetBrains Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "JetBrains Mono"
+style = "Italic"
+
+[font.normal]
+family = "JetBrains Mono"
+
+[mouse]
+hide_when_typing = true
+
+[window]
+decorations = "none"
+opacity = 0.95
+startup_mode = "Maximized"
+
+[window.padding]
+x = 7
+y = 7
