@@ -76,12 +76,12 @@ install_zsh_configs() {
   ln -sfv "$dotfiles_dir"/zsh/zshrc ~/.zshrc
 }
 
-# install_user_scripts() {
-#   mkdir -p "$bin_dir"
-#   for file in "$dotfiles_dir"/bin/*; do
-#     ln -sfv "$file" "$bin_dir"
-#   done
-# }
+install_user_scripts() {
+  mkdir -p "$bin_dir"
+  for file in "$dotfiles_dir"/bin/*; do
+    ln -sfv "$file" "$bin_dir"
+  done
+}
 
 install_vim_configs() {
   mkdir -p "$vim_dir"/{colors,undo}
@@ -93,8 +93,8 @@ install_vim_configs() {
 
 main() {
   mkdir -p ~/projects/tmp
-  install_alacritty_configs
-  # install_git_configs
+  # install_alacritty_configs
+  install_git_configs
   install_mpv_configs
   # install_neovim_configs
   install_vifm_configs
