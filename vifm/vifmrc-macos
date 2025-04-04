@@ -39,6 +39,8 @@ mark d ~/.config/dotfiles
 mark j ~/projects
 mark x ~/Dropbox
 mark w ~/Downloads
+mark m ~/Movies
+mark v /Volumes
 
 " ------------------------------------------------------------------------------
 " Commands
@@ -68,7 +70,7 @@ filetype {*.djvu},<image/vnd.djvu> open -a MacDjView.app
 
 " Audio
 filetype {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,
-         \*.aac},
+         \*.aac,*.thd},
          \<audio/*> mpv %f
 fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,
            \*.aac}
