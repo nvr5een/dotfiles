@@ -89,8 +89,8 @@ nnoremap <S-tab> <C-w>W
 nnoremap <leader>i :set invnumber invrelativenumber<CR>
 
 " move visual selection with J K
-vnoremap <silent> J :m '>+1<CR>gv=gv
-vnoremap <silent> K :m '<-2<CR>gv=gv
+" vnoremap <silent> J :m '>+1<CR>gv=gv
+" vnoremap <silent> K :m '<-2<CR>gv=gv
 
 " don't move cursor to end of line when joining lines
 nnoremap J mzJ`z
