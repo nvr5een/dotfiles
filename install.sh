@@ -15,11 +15,7 @@ vim_dir=~/.vim
 install_alacritty_configs() {
   if type -p alacritty &>/dev/null; then
     mkdir -p "$alacritty_dir"
-    if [[ "$OSTYPE" = "linux-gnu"* ]]; then
-      ln -sfv "$dotfiles_dir"/alacritty/alacritty.yml "$alacritty_dir"/alacritty.yml
-    elif [[ "$OSTYPE" = "darwin"* ]]; then
-      ln -sfv "$dotfiles_dir"/alacritty/alacritty-macos.yml "$alacritty_dir"/alacritty.yml
-    fi
+    ln -sfv "$dotfiles_dir"/alacritty/alacritty.toml "$alacritty_dir"/alacritty.toml
   fi
 }
 
@@ -93,7 +89,7 @@ install_vim_configs() {
 
 main() {
   mkdir -p ~/projects/tmp
-  # install_alacritty_configs
+  install_alacritty_configs
   install_git_configs
   install_mpv_configs
   # install_neovim_configs
