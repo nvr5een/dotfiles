@@ -61,6 +61,7 @@ install_vifm_configs() {
   for file in "$dotfiles_dir"/vifm/colors/*; do
     ln -sfv "$file" "$vifm_dir"/colors
   done
+  ln -sfv "$dotfiles_dir"/vifm/favicons.vifm "$vifm_dir"
 }
 
 install_zsh_configs() {
