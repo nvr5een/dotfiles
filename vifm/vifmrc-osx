@@ -1,55 +1,10 @@
 " ~/.config/vifm/vifmrc
 
-" vim: filetype=vifm :
-"
-" Sample configuration file for vifm on OSX (last updated: 29 August, 2024)
-"
-" You can edit this file by hand.  The " character at the beginning of a line
-" comments out the line.  Blank lines are ignored.  The basic format for each
-" item is shown with an example.
-"
-" The purpose of this file
-" ========================
-" 1. Provide a sensible default configuration out of the box.
-" 2. Demonstrate how a typical configuration file might look like.
-" 3. Familiarize a user with commonly used features.
-" 4. Provide some ideas/settings for various use cases.
-"
-" How to use this file
-" ====================
-" - Go through it top to bottom while reading comments.
-" - Adjust/remove/comment/uncomment lines as you see fit.
-" - Look up :commands or 'options' in the documentation to learn more.
-"
-" Some settings are set to provide more useful defaults without breaking
-" compatibility and others are just a great fit (e.g., some bindings) and are
-" almost universally useful, but most lines are provided simply as usage
-" examples and can be removed without hesitation.  Make configuration specific
-" to your needs using this file as a starting point.
-
 " ------------------------------------------------------------------------------
 " Main settings
 " ------------------------------------------------------------------------------
 
-" Command used to edit files in various contexts.  The default is vim.
-" If you would like to use another vi clone such as Elvis or Vile
-" you will need to change this setting.
-"
-" Mind that due to `filetype * open` below by default the editor won't be used
-" for opening files via l/Enter keys.  Comment that line out to change the
-" behaviour.
-" if executable('vim')
-"     set vicmd=vim
-" elseif executable('nvim')
-"     set vicmd=nvim
-" elseif executable('elvis')
-"     set vicmd=elvis\ -G\ termcap
-" elseif executable('vile')
-"     set vicmd=vile
-" elseif $EDITOR != ''
-"     echo 'Note: using `'.$EDITOR.'` as an editor'
-"     let &vicmd = $EDITOR
-" endif
+" Command used to edit files in various contexts.
 set vicmd=$EDITOR
 
 " This makes vifm perform file operations on its own instead of relying on
@@ -58,12 +13,8 @@ set vicmd=$EDITOR
 " doesn't support progress measuring.
 set syscalls
 
-" Trash Directory
 " The default is to move files that are deleted with dd or :d to
-" the trash directory.  If you change this you will not be able to move
-" files by deleting them and then using p to put the file in the new location.
-" I recommend not changing this until you are familiar with vifm.
-" This probably shouldn't be an option.
+" the trash directory.
 set trash
 
 " What should be saved automatically on restarting vifm.  Drop "savedirs"
@@ -145,7 +96,6 @@ colorscheme sourcerer Default-256 Default
 
 " :mark mark /full/directory/path [filename]
 
-mark b ~/bin/
 mark h ~/
 mark c ~/.config
 mark d ~/.config/dotfiles
@@ -196,34 +146,8 @@ command! reload :write | restart full
 " The %a macro is ignored.  To use a % you must put %%.
 " Spaces in an app name must be escaped, for example: QuickTime\ Player.app
 
-" For automated FUSE mounts, you must register an extension with :file[x]type
-" in one of the following formats:
-"
-" :filetype patterns FUSE_MOUNT|mount_cmd %SOURCE_FILE %DESTINATION_DIR
-"
-" %SOURCE_FILE and %DESTINATION_DIR are filled in at runtime.
-"
-" Example:
-"   :filetype *.zip,*.[jwe]ar FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR
-"
-" :filetype patterns FUSE_MOUNT2|mount_cmd %PARAM %DESTINATION_DIR
-"
-" %PARAM and %DESTINATION_DIR are filled in at runtime.
-"
-" Example:
-"   :filetype *.ssh FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR
-"
-" %PARAM value is the first line of the matched file, example: root@127.0.0.1:/
-"
-" You can also add %CLEAR if you want to clear screen before running FUSE
-" program.  There is also %FOREGROUND, which is useful for entering passwords.
-
 " Pdf
-filetype {*.pdf},<application/pdf>
-       \ {Open in Preview}
-       \ open -a Preview.app,
-       \ {Open in Skim}
-       \ open -a Skim.app,
+filetype {*.pdf},<application/pdf> open -a Preview.app
 fileviewer {*.pdf},<application/pdf> pdftotext -nopgbrk %c -
 
 " PostScript
@@ -235,46 +159,24 @@ filetype {*.djvu},<image/vnd.djvu> open -a MacDjView.app
 " Audio
 filetype {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,
          \*.aac,*.mpga,*.thd},
-        \<audio/*> mpv %f
-       \ {Open in Music}
-       \ open -a Music.app,
-       \ {Open in QuickTime Player}
-       \ open -a QuickTime\ Player.app,
-       \ {Open in IINA}
-       \ open -a IINA.app,
+         \<audio/*> mpv %f
 fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,
            \*.aac,*.mpga},
-          \<audio/*>
-         \ ffprobe -hide_banner -pretty %c 2>&1
+           \<audio/*> ffprobe -hide_banner -pretty %c 2>&1
 fileviewer {*.mp3},<audio/mpeg> mediainfo
 
 " Video
 filetype {*.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
          \*.fl[icv],*.m2v,*.mov,*.webm,*.mts,*.m4v,*.r[am],*.qt,*.divx,
          \*.as[fx],*.unknown_video},
-        \<video/*>
-       \ {Open in QuickTime Player}
-       \ open -a QuickTime\ Player.app,
-       \ {Open in IINA}
-       \ open -a IINA.app,
-       \ {Open in VLC}
-       \ open -a VLC.app,
+         \<video/*> mpv %f
 fileviewer {*.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
            \*.fl[icv],*.m2v,*.mov,*.webm,*.mts,*.m4v,*.r[am],*.qt,*.divx,
            \*.as[fx],*.unknown_video},
-          \<video/*>
-         \ ffprobe -hide_banner -pretty %c 2>&1
+           \<video/*> ffprobe -hide_banner -pretty %c 2>&1
 
 " Web
-filetype {*.xhtml,*.html,*.htm},<text/html>
-       \ {Open in Safari}
-       \ open -a Safari.app,
-       \ {Open in Firefox}
-       \ open -a Firefox.app,
-       \ {Open in Chrome}
-       \ open -a Google\ Chrome.app,
-       \ {Open in vim}
-       \ vim,
+filetype {*.xhtml,*.html,*.htm},<text/html> vim
 fileviewer {*.xhtml,*.html,*.htm},<text/html> w3m -dump -T text/html
 
 " Object
@@ -352,43 +254,12 @@ filetype *.img open
 " Open .pkg binaries
 filetype *.pkg open
 
-" Office files
-filetype {*.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx,*.ppt},
-         \<application/vnd.openxmlformats-officedocument.*,
-          \application/msword,
-          \application/vnd.ms-excel>
-       \ open -a LibreOffice.app
-fileviewer {*.doc},<application/msword> antiword -
-fileviewer {*.docx},
-          \<application/
-           \vnd.openxmlformats-officedocument.wordprocessingml.document>
-         \ docx2txt.pl %f -
-
-" Syntax highlighting in preview
-"
-" Explicitly set highlight type for some extensions
-"
-" 256-color terminal
-" fileviewer *.[ch],*.[ch]pp highlight -O xterm256 -s dante --syntax c %c
-" fileviewer Makefile,Makefile.* highlight -O xterm256 -s dante --syntax make %c
-"
-" 16-color terminal
-" fileviewer *.c,*.h highlight -O ansi -s dante %c
-"
-" Or leave it for automatic detection
-" fileviewer *[^/] pygmentize -O style=monokai -f console256 -g
-
-" Displaying pictures in terminal
-" fileviewer *.jpg,*.png shellpic %c
-
-" Open all other files with default system programs (you can also remove all
-" :file[x]type commands above to ensure they don't interfere with system-wide
-" settings).  Use of the line below results in ignoring 'vi[x]cmd' option for
-" unknown file types on l/Enter keys.
-filetype * open
+" Comics and manga
+filetype *.cbr open
+filetype *.cbz open
 
 " ------------------------------------------------------------------------------
-" Sample keyboard mappings
+" Keyboard mappings
 " ------------------------------------------------------------------------------
 
 " Start shell in current directory
@@ -400,11 +271,6 @@ nnoremap S :sort<cr>
 " Toggle visibility of preview window
 nnoremap w :view<cr>
 vnoremap w :view<cr>gv
-
-" Open file in new MacVim tab
-nnoremap o :!mvim --remote-tab-silent %f<cr>
-" Open file in new MacVim window
-nnoremap O :!mvim %f<cr>
 
 " Open file in the background using its default program
 nnoremap gb :!open -g %f<cr>
@@ -430,68 +296,12 @@ nnoremap A cw
 
 " Open editor to edit vifmrc and apply settings after returning to vifm
 nnoremap ,c :write | edit $MYVIFMRC | restart full<cr>
-" Open MacVim to edit vifmrc
-nnoremap ,C :!mvim --remote-tab-silent $MYVIFMRC &<cr>
 
 " Toggle wrap setting on ,w key
 nnoremap ,w :set wrap!<cr>
 
-" Example of standard two-panel file managers mappings
-nnoremap <f3> :!less %f<cr>
-nnoremap <f4> :edit<cr>
-nnoremap <f5> :copy<cr>
-nnoremap <f6> :move<cr>
-nnoremap <f7> :mkdir<space>
-nnoremap <f8> :delete<cr>
-
-" Midnight commander alike mappings
-" Open current directory in the other pane
-nnoremap <a-i> :sync<cr>
-" Open directory under cursor in the other pane
-nnoremap <a-o> :sync %c<cr>
-" Swap panes (uncomment if you don't need builtin behaviour of Ctrl-U)
-nnoremap <c-u> <c-w>x
-
 " ------------------------------------------------------------------------------
-" Panel configuration examples
-" ------------------------------------------------------------------------------
-
-" Customize view columns a bit (enable ellipsis for truncated file names)
-" set viewcolumns=-{name}..,6{}.
-
-" Show vertical border
-" set fillchars=vborder:│
-
-" Filter-out build artifacts and temporary files
-" filter! {*.lo,*.o,*.d,*.class,*.pyc,*.pyo,.*~}
-
-" ------------------------------------------------------------------------------
-" Various customization examples
-" ------------------------------------------------------------------------------
-
-" Use ag (the silver searcher) instead of grep
-" set grepprg='ag --line-numbers %i %a %s'
-
-" Add additional place to look for executables
-" let $PATH = $HOME.'/bin/fuse:'.$PATH
-
-" Disable particular shortcut
-" nnoremap <left> <nop>
-
-" Export IPC name of current instance as environment variable and use it to
-" communicate with the instance later.
-"
-" It can be used in some shell script that gets run from inside vifm, for
-" example, like this:
-"     vifm --server-name "$VIFM_SERVER_NAME" --remote +"cd '$PWD'"
-"
-" let $VIFM_SERVER_NAME = v:servername
-
-" Activate screen/tmux support
-" screen!
-
-" ------------------------------------------------------------------------------
-" Icon decorations example
+" Icon decorations
 " ------------------------------------------------------------------------------
 
 " https://github.com/cirala/vifm_devicons
