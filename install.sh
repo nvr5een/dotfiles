@@ -56,7 +56,7 @@ install_vifm_configs() {
   if [[ "$OSTYPE" = "linux-gnu"* ]]; then
     ln -sfv "$dotfiles_dir"/vifm/vifmrc "$vifm_dir"/vifmrc
   elif [[ "$OSTYPE" = "darwin"* ]]; then
-    ln -sfv "$dotfiles_dir"/vifm/vifmrc-macos "$vifm_dir"/vifmrc
+    ln -sfv "$dotfiles_dir"/vifm/vifmrc-osx "$vifm_dir"/vifmrc
   fi
   for file in "$dotfiles_dir"/vifm/colors/*; do
     ln -sfv "$file" "$vifm_dir"/colors
