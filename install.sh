@@ -11,11 +11,7 @@ zsh_dir=~/.config/zsh
 install_alacritty_configs() {
   if type -p alacritty &>/dev/null; then
     mkdir -p "$alacritty_dir"
-    if [[ "$OSTYPE" = "linux-gnu"* ]]; then
-      ln -sfv "$dotfiles_dir"/alacritty/alacritty.toml "$alacritty_dir"/alacritty.toml
-    elif [[ "$OSTYPE" = "darwin"* ]]; then
-      ln -sfv "$dotfiles_dir"/alacritty/alacritty-osx.toml "$alacritty_dir"/alacritty.toml
-    fi
+    ln -sfv "$dotfiles_dir"/alacritty/alacritty.toml "$alacritty_dir"/alacritty.toml
   fi
 }
 
