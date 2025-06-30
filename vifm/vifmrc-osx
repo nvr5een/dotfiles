@@ -98,7 +98,7 @@ colorscheme sourcerer Default-256 Default
 
 mark h ~/
 mark c ~/.config
-mark d ~/.config/dotfiles
+mark d ~/projects/dotfiles
 mark j ~/projects
 mark x ~/Dropbox
 mark w ~/Downloads
