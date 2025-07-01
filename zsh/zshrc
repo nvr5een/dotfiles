@@ -47,7 +47,3 @@ done
 [[ -e "$ZSH_CONFIG/local.zsh" ]] && . "$ZSH_CONFIG/local.zsh"
 # export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 # export PATH="/opt/homebrew/opt/ruby@3.2/bin:$PATH"
-
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/zak/.rd/bin:$PATH"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
