@@ -167,7 +167,7 @@ filetype {*.mid,*.kar}
 
 " Audio
 filetype {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,
-         \*.aac,*.mpga},
+         \*.aac,*.mpga,*.thd,*.dts},
          \<audio/*> mpv %f
 fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,
            \*.aac,*.mpga},
