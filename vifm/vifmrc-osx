@@ -158,7 +158,7 @@ filetype {*.djvu},<image/vnd.djvu> open -a MacDjView.app
 
 " Audio
 filetype {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,
-         \*.aac,*.mpga,*.thd},
+         \*.aac,*.mpga,*.thd,*.dts},
          \<audio/*> mpv %f
 fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,
            \*.aac,*.mpga},
