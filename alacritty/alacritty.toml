@@ -1,57 +1,130 @@
+##### ── Color Scheme ────────────────────────────────────────────────
+# Define normal, bright, cursor, and primary colors.
+
 [colors.bright]
-black = "0x767676"
-blue = "0x90b0d1"
-cyan = "0x87ceeb"
-green = "0xb1d631"
+black   = "0x767676"
+blue    = "0x90b0d1"
+cyan    = "0x87ceeb"
+green   = "0xb1d631"
 magenta = "0x8181a6"
-red = "0xff6a6a"
-white = "0xc1cdc1"
-yellow = "0x87875f"
+red     = "0xff6a6a"
+white   = "0xc1cdc1"
+yellow  = "0x87875f"
 
 [colors.cursor]
-cursor = "0xc2c2b0"
-text = "0x222222"
+cursor = "0xc2c2b0"  # Color of the block cursor
+text   = "0x222222"  # Text color when cursor is over text
 
 [colors.normal]
-black = "0x3a3a3a"
-blue = "0x6688aa"
-cyan = "0x528b8b"
-green = "0x719611"
+black   = "0x3a3a3a"
+blue    = "0x6688aa"
+cyan    = "0x528b8b"
+green   = "0x719611"
 magenta = "0x8f6f8f"
-red = "0xaa4450"
-white = "0xd3d3d3"
-yellow = "0xff9800"
+red     = "0xaa4450"
+white   = "0xd3d3d3"
+yellow  = "0xff9800"
 
 [colors.primary]
-background = "0x222222"
-foreground = "0xc2c2b0"
+background = "0x222222"  # Default background color
+foreground = "0xc2c2b0"  # Default text color
+
+##### ── Fonts ──────────────────────────────────────────────────────
+# Font configuration for normal, bold, italic, and bold italic styles.
 
 [font]
 size = 15.0
 
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+
 [font.bold]
 family = "JetBrainsMono Nerd Font"
-style = "Bold"
-
-[font.bold_italic]
-family = "JetBrainsMono Nerd Font"
-style = "Bold Italic"
+style  = "Bold"
 
 [font.italic]
 family = "JetBrainsMono Nerd Font"
-style = "Italic"
+style  = "Italic"
 
-[font.normal]
+[font.bold_italic]
 family = "JetBrainsMono Nerd Font"
+style  = "Bold Italic"
+
+##### ── Mouse ──────────────────────────────────────────────────────
+# Hide the mouse cursor while typing.
 
 [mouse]
 hide_when_typing = true
 
+##### ── Window ─────────────────────────────────────────────────────
+# Controls window appearance, opacity, padding, and startup mode.
+
 [window]
-decorations = "none"
-opacity = 0.95
-startup_mode = "Maximized"
+decorations  = "none"       # No titlebar/borders, clean look
+opacity      = 0.95         # Slight transparency
+startup_mode = "Maximized"  # Open new window maximized
 
 [window.padding]
-x = 7
-y = 7
+x = 7  # Horizontal padding around text
+y = 7  # Vertical padding around text
+
+##### ── Scrolling ──────────────────────────────────────────────────
+# Scrollback buffer and scroll speed multiplier.
+
+[scrolling]
+history    = 100000   # Lines of scrollback (very large for convenience)
+multiplier = 3        # Speed up scrolling when using mouse wheel
+
+##### ── Selection / Clipboard ──────────────────────────────────────
+# Automatically copy selected text to system clipboard.
+
+[selection]
+save_to_clipboard = true
+
+##### ── Environment ────────────────────────────────────────────────
+# TERM tells apps what terminal features are supported.
+# Use xterm-256color for compatibility and truecolor support.
+# tmux inside will use tmux-256color (configured separately in tmux.conf).
+
+[env]
+TERM = "xterm-256color"
+
+##### ── Keyboard / Shortcuts ──────────────────────────────────────
+[keyboard]
+
+# --- macOS-style clipboard + window shortcuts ---
+[[keyboard.bindings]]
+key = "C"
+mods = "Command"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Command"
+action = "Paste"
+
+[[keyboard.bindings]]
+key = "N"
+mods = "Command"
+action = "CreateNewWindow"
+
+# --- Alt (Option) hjkl → Meta hjkl (for tmux pane navigation) ---
+[[keyboard.bindings]]
+key = "H"
+mods = "Alt"
+chars = "\u001bh"   # ESC + h => M-h
+
+[[keyboard.bindings]]
+key = "J"
+mods = "Alt"
+chars = "\u001bj"   # ESC + j => M-j
+
+[[keyboard.bindings]]
+key = "K"
+mods = "Alt"
+chars = "\u001bk"   # ESC + k => M-k
+
+[[keyboard.bindings]]
+key = "L"
+mods = "Alt"
+chars = "\u001bl"   # ESC + l => M-l
