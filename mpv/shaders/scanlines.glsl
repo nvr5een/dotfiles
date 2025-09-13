@@ -1,9 +1,12 @@
 //!HOOK MAIN
 //!BIND HOOKED
-//!DESC Simple scanlines (darken every other line)
+//!DESC Scanlines locked to video resolution
 
 vec4 hook() {
+    vec2 uv = HOOKED_pos * HOOKED_size;  // video pixel coords
     vec4 c = HOOKED_tex(HOOKED_pos);
-    if (mod(gl_FragCoord.y, 2.0) < 1.0) c.rgb *= 0.50; // adjust 0.50 for strength
+    if (mod(floor(uv.y), 2.0) == 0.0) {
+        c.rgb *= 0.5;  // adjust strength
+    }
     return c;
 }

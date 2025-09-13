@@ -31,8 +31,7 @@
 
 // -------- Brightness controls --------
 // Simple overall gain, lift, and gamma-out compensate for mask/scan loss.
-// #define BRIGHTNESS_GAIN   1.10   // multiply RGB (1.00 = none)
-#define BRIGHTNESS_GAIN   1.40   // multiply RGB (1.00 = none)
+#define BRIGHTNESS_GAIN   1.40   // multiply RGB (1.00 = none)  start at 1.10
 #define BRIGHTNESS_LIFT   0.00   // add to RGB after gain (0..0.1 typical)
 #define GAMMA_OUT         0.96   // <1.0 brightens mids; 1.0 = none
 // --------------------------------------------------

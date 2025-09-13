@@ -8,7 +8,7 @@
 #define SCAN_PHASE     0.0    // 0 or 1 to flip which line darkens
 
 // --- Brightness controls ---
-#define BRIGHTNESS_GAIN 1.15   // multiply RGB (1.0 = none, >1.0 brighter)
+#define BRIGHTNESS_GAIN 1.15   // multiply RGB (1.0 = none, >1.0 brighter) start at 1.15
 #define BRIGHTNESS_LIFT 0.02   // add constant to RGB (shadows), 0.0–0.1 typical
 #define GAMMA_OUT       0.95   // <1.0 brightens mids, >1.0 darkens
 
