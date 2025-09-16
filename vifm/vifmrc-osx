@@ -61,7 +61,7 @@ fileviewer *.tar.xz,*.txz tar -tJf %c
 fileviewer {*.tar} tar -tf %c
 
 " Fallback
-filetype * $OPENER %f &
+" filetype * $OPENER %f &
 
 " ---------- Clipboard integration ----------
 nnoremap yd :!echo -n %d | pbcopy<cr>
