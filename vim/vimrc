@@ -1,146 +1,177 @@
 " ~/.vimrc
+" Minimal, fast Vim with sane defaults, clear mappings, and a few plugins.
 
+" enable filetype detection, plugins, and indent files
 filetype plugin indent on
+
+" syntax highlighting
 syntax on
 
-" misc settings
-set autoindent
-set autoread
-set backspace=indent,eol,start
-" set clipboard=unnamed,unnamedplus
-set cpoptions+=$
-set cursorline
-set display=truncate " show @@@ in last line if it is truncated
-set expandtab
-set formatoptions+=j " remove comment leader when joining lines
-set hidden
-set hlsearch
-set ignorecase " ignore case in search patterns
-set incsearch
-set modelines=0 " do not check modelines for commands (security)
-set noswapfile
-set number
-set path=.,**
-set relativenumber " enable vertical motion commands (e.g. j k + -)
-set scrolloff=5
-set shiftwidth=2 " number of spaces to use for each (auto)indent
-set smartcase " search is case-sensitive when pattern contains capital letters
-set softtabstop=-1 " use shiftwidth value for tab and backspace
-set ttimeoutlen=50
-set undodir=~/.vim/undo
-set undofile
-set updatetime=100 " gitgutter
-set virtualedit=all " allow cursor to go anywhere in all modes
-let mapleader="\<Space>"
-colorscheme sourcerer
+" Indentation & Tabs
+set autoindent                      " copy indent on newline
+set expandtab                       " insert spaces instead of <Tab>
+set shiftwidth=2                    " indentation width
+set softtabstop=-1                  " make <Tab>/<BS> align with shiftwidth
 
-" wildmenu
-set wildmenu
-set wildcharm=<C-z> " used in mappings to invoke completion
-set wildoptions=pum
-set wildignorecase
+" Formatting
+set formatoptions=croqlj            " respect indent, format comments, clean joins
+" textwidth is left at 0; filetypes override in autocmds
+
+" Search
+set hlsearch                        " highlight matches
+set ignorecase                      " case-insensitive search…
+set smartcase                       " …unless pattern has uppercase
+set incsearch                       " incremental search
+
+" Undo / Backup
+set undodir=~/.vim/undo             " persistent undo location
+set undofile                        " enable persistent undo
+set noswapfile                      " avoid .swp files
+
+" Ensure undodir exists
+if !isdirectory(expand(&undodir))
+  call mkdir(expand(&undodir), 'p', 0700)
+endif
+
+" General Editing Behavior
+set autoread                        " auto-reload changed files
+set hidden                          " allow switching away from unsaved buffers
+set backspace=indent,eol,start      " modern backspace
+set modelines=0                     " disable modelines (security)
+set cpoptions+=$                    " put cursor at end in some ops
+set ttimeoutlen=50                  " snappy key timeout
+set updatetime=100                  " faster CursorHold events (gitgutter)
+set path=.,**                       " :find searches current dir + subdirs
+
+" Movement & View
+set number                          " absolute line numbers
+set relativenumber                  " relative numbers for motions
+set cursorline                      " highlight current line
+set scrolloff=5                     " context lines around cursor
+set display=truncate                " show '@@@' if last line truncated
+set signcolumn=yes                  " keep signcolumn fixed
+set virtualedit=block,onemore       " roam in block mode, one past EOL in Normal
+" set virtualedit=all                 " allow cursor anywhere (all modes) — powerful but risky
+
+" ── Wildmenu / Completion ────────────────────────────────────
+set wildmenu                        " enhanced cmdline completion
+set wildcharm=<C-z>                 " <C-z> triggers wildmenu from mappings
+set wildoptions=pum                 " show popup menu for wildmenu
+set wildignorecase                  " case-insensitive completion
 set wildignore+=*.git,*.gz,*.rar,*.zip
+set wildignore+=node_modules/**,dist/**,build/**,.git/**,__pycache__/**,.venv/**
 
-" statusline
-set laststatus=2
-set noshowmode
-set statusline=
-set statusline+=%{PasteForStatusline()}
-set statusline+=\[%{mode()}]
-set statusline+=\ %F
-set statusline+=%m
-set statusline+=%r
+" ── Statusline ───────────────────────────────────────────────
+set laststatus=2                    " always show statusline
+set noshowmode                      " hide --INSERT-- (we show mode ourselves)
+set statusline=                     " reset statusline
+set statusline+=%{PasteForStatusline()} " show [paste] when paste mode is on
+set statusline+=\[%{mode()}]        " current mode
+set statusline+=\ %F                " full file path
+set statusline+=%m                  " [+] modified flag
+set statusline+=%r                  " [RO] read-only flag
 set statusline+=%=
-set statusline+=\ %y
-set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-set statusline+=\ \|\ %{&fileformat}
-set statusline+=\ [%p%%
-set statusline+=\ %l:%c]
+set statusline+=\ %y                " filetype
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding} " encoding
+set statusline+=\ \|\ %{&fileformat} " file format (unix/dos/mac)
+set statusline+=\ [%p%%             " percentage through file
+set statusline+=\ %l:%c]            " line:column
 
-" Use a line cursor within insert mode and a block cursor everywhere else.
-let &t_SI = "\e[6 q"
-let &t_EI = "\e[2 q"
+" ── Cursor Shape ────────────────────────────────────────────
+let &t_SI = "\e[6 q"                " Insert: beam cursor
+let &t_EI = "\e[2 q"                " Normal: block cursor
 
-" misc mappings
+" ── Mappings ────────────────────────────────────────────────
+let mapleader="\<Space>"            " <Leader> key is Space
+
+" 'jk' to exit Insert quickly
 inoremap jk <Esc>
+
+" make Y yank to end of line (consistency with C/D)
 nnoremap Y y$
 
-" juggle buffers and files
+" toggle to alternate buffer
 nnoremap <leader><Space> :e#<CR>
+
+" buffer list via wildmenu
 nnoremap <leader>b :buffer <C-z><S-Tab>
+
+" fuzzy-ish file open using :find + wildcharm
 nnoremap <leader>f :find *
+
+" edit vimrc
 nnoremap <leader>v :e ~/.vimrc<CR>
+
+" private notes
 if !empty(glob('~/projects/private/notes'))
   nnoremap <leader>n :e ~/projects/private/notes/
 endif
 
-" find and replace word under cursor
+" replace word under cursor (whole file)
 nnoremap <leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 
-" navigate wrapped lines with 'relativenumber' set
-nnoremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-nnoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
-
-" navigate windows with <Tab>
-nnoremap <tab> <C-w>w
-nnoremap <S-tab> <C-w>W
-
-" toggle line numbers
-nnoremap <leader>i :set invnumber invrelativenumber<CR>
-
-" move visual selection with J K
-" vnoremap <silent> J :m '>+1<CR>gv=gv
-" vnoremap <silent> K :m '<-2<CR>gv=gv
-
-" don't move cursor to end of line when joining lines
-nnoremap J mzJ`z
-
-" keep cursor at middle of screen when moving through files and searching
-nnoremap <C-d> <C-d>zz
-nnoremap <C-u> <C-u>zz
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-" yank to system clipboard
-nnoremap <Leader>y "*y
-vnoremap <leader>y "+y
-
-" Don't use Q for Ex mode, use it for formatting.  Except for Select mode.
-" Revert with ":unmap Q".
-map Q gq
-sunmap Q
-
-" Use CTRL-L to clear the highlighting of 'hlsearch' (off by default) and call
-" :diffupdate.
+" clear search highlight (and diffupdate)
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
 
-" show paste mode in statusline
-" https://nkantar.com/blog/2017/01/my-vim-statusline/
-function! PasteForStatusline()
-  let paste_status = &paste
-  if paste_status == 1
-    return " [paste] "
-  else
-    return ""
-  endif
-endfunction
+" wrap-aware down and up
+nnoremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+nnoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+
+" cycle windows forward and backward
+nnoremap <tab> <C-w>w
+nnoremap <S-tab> <C-w>W
+
+" toggle absolute/relative numbers
+nnoremap <leader>i :set invnumber invrelativenumber<CR>
+
+" join lines without moving the cursor
+nnoremap J mzJ`z
+
+" keep cursor centered while paging
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+" keep search hits centered and open folds
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" explicit system clipboard yanks; Vim & system stay separate
+nnoremap <Leader>y "+y
+vnoremap <leader>y "+y
+
+" use Q for formatting (gq), not Ex mode
+map Q gq
+
+" keep Select mode Q default intact
+sunmap Q
 
 " toggle paste mode
 nnoremap <leader>p :call TogglePaste()<CR>
+
+" strip trailing whitespace
+nnoremap <leader>s :call StripWhitespace()<CR>
+
+" open quickfix window
+nnoremap <leader>q :cwindow<CR>
+
+" ── Functions ───────────────────────────────────────────────
+" Show paste mode in statusline
+function! PasteForStatusline()
+  return &paste ? " [paste] " : ""
+endfunction
+
+" Toggle paste mode with a message
 function! TogglePaste()
   if(&paste == 0)
-    set paste
-    echo "Paste Mode Enabled"
+    set paste | echo "Paste Mode Enabled"
   else
-    set nopaste
-    echo "Paste Mode Disabled"
+    set nopaste | echo "Paste Mode Disabled"
   endif
 endfunction
 
-" remove trailing whitespace
-nnoremap <leader>s :call StripWhitespace()<CR>
+" Remove trailing whitespace but preserve cursor and last search
 function! StripWhitespace() abort
   let save_cursor = getpos(".")
   let old_query = getreg('/')
@@ -149,48 +180,51 @@ function! StripWhitespace() abort
   call setreg('/', old_query)
 endfunction
 
-" Autocommands
+" ── Autocommands ────────────────────────────────────────────
 augroup vimStartup
   autocmd!
-  autocmd Filetype python setlocal foldmethod=indent tabstop=4
-  autocmd Filetype markdown,text setlocal colorcolumn=+1 textwidth=78
+  " filetype-specific tweaks
+  autocmd Filetype python   setlocal foldmethod=indent tabstop=4 shiftwidth=4 softtabstop=4
+  autocmd Filetype markdown,text setlocal textwidth=78 colorcolumn=+1
+  " filetype overrides
   autocmd BufNewFile,BufReadPost *.config set ft=sshconfig
-  autocmd BufNewFile,BufReadPost *.txt set ft=txt
-  autocmd BufNewFile,BufReadPost *hosts* set ft=config
-  autocmd bufwritepost *vimrc* source ~/.vimrc
-  " resize splits when the window is resized
+
+  " reload vimrc on save
+  autocmd BufWritePost *vimrc* source ~/.vimrc
+
+  " equalize split sizes
   autocmd VimResized * :wincmd =
-  " restore last known cursor position when reopening files
+
+  " restore cursor on reopen (except for commit messages)
   autocmd BufReadPost *
-    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-    \ |   exe "normal! g`\""
-    \ | endif
-  " auto location/quickfix window
-  autocmd QuickFixCmdPost [^l]* cwindow
-  autocmd QuickFixCmdPost l* lwindow
-  autocmd VimEnter * cwindow
+        \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+        \ |   exe "normal! g`\""
+        \ | endif
+
+  " Quickfix windows: auto-open after :make/grep/etc.
+  autocmd QuickFixCmdPost [^l]* cwindow               " for quickfix
+  autocmd QuickFixCmdPost l* lwindow                  " for location list
 augroup END
 
+" ── Plugins (vim-plug) ──────────────────────────────────────
 " Install vim-plug if necessary
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
 
-" Run PlugInstall if there are missing plugins
+" Auto-install missing plugins on first start
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
 
+" Plugins
 call plug#begin()
-
-Plug 'airblade/vim-gitgutter'
-Plug 'justinmk/vim-dirvish'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-unimpaired'
-Plug 'hashivim/vim-terraform'
-
+Plug 'airblade/vim-gitgutter'      " Git diff signs in the gutter
+Plug 'justinmk/vim-dirvish'        " minimal file explorer
+Plug 'tpope/vim-commentary'        " gcc to comment lines/blocks
+Plug 'tpope/vim-surround'          " cs"' etc. to change surroundings
+Plug 'tpope/vim-repeat'            " make plugin mappings repeatable with dot
+Plug 'tpope/vim-unimpaired'        " [q ]q etc. handy bracket mappings
+Plug 'hashivim/vim-terraform'      " Terraform syntax & tools
 call plug#end()
-
