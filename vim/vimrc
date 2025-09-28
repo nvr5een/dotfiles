@@ -6,6 +6,7 @@ filetype plugin indent on
 
 " syntax highlighting
 syntax on
+colorscheme sourcerer
 
 " Indentation & Tabs
 set autoindent                      " copy indent on newline
