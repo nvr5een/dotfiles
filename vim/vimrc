@@ -1,5 +1,15 @@
 " ~/.vimrc
-" Minimal, fast Vim with sane defaults, clear mappings, and a few plugins.
+"
+" ██▒   █▓ ██▓ ███▄ ▄███▓ ██▀███   ▄████▄
+"▓██░   █▒▓██▒▓██▒▀█▀ ██▒▓██ ▒ ██▒▒██▀ ▀█
+" ▓██  █▒░▒██▒▓██    ▓██░▓██ ░▄█ ▒▒▓█    ▄
+"  ▒██ █░░░██░▒██    ▒██ ▒██▀▀█▄  ▒▓▓▄ ▄██▒
+"   ▒▀█░  ░██░▒██▒   ░██▒░██▓ ▒██▒▒ ▓███▀ ░
+"   ░ ▐░  ░▓  ░ ▒░   ░  ░░ ▒▓ ░▒▓░░ ░▒ ▒  ░
+"   ░ ░░   ▒ ░░  ░      ░  ░▒ ░ ▒░  ░  ▒
+"     ░░   ▒ ░░      ░     ░░   ░ ░
+"      ░   ░         ░      ░     ░ ░
+"     ░                           ░
 
 " enable filetype detection, plugins, and indent files
 filetype plugin indent on
@@ -8,23 +18,23 @@ filetype plugin indent on
 syntax on
 colorscheme sourcerer
 
-" Indentation & Tabs
+" ── Indentation & Tabs ───────────────────────────────────────
 set autoindent                      " copy indent on newline
 set expandtab                       " insert spaces instead of <Tab>
 set shiftwidth=2                    " indentation width
 set softtabstop=-1                  " make <Tab>/<BS> align with shiftwidth
 
-" Formatting
+" ── Formatting ───────────────────────────────────────────────
 set formatoptions=croqlj            " respect indent, format comments, clean joins
 " textwidth is left at 0; filetypes override in autocmds
 
-" Search
+" ── Search ───────────────────────────────────────────────────
 set hlsearch                        " highlight matches
 set ignorecase                      " case-insensitive search…
 set smartcase                       " …unless pattern has uppercase
 set incsearch                       " incremental search
 
-" Undo / Backup
+" ── Undo / Backup ────────────────────────────────────────────
 set undodir=~/.vim/undo             " persistent undo location
 set undofile                        " enable persistent undo
 set noswapfile                      " avoid .swp files
@@ -34,7 +44,7 @@ if !isdirectory(expand(&undodir))
   call mkdir(expand(&undodir), 'p', 0700)
 endif
 
-" General Editing Behavior
+" ── General Editing Behavior ─────────────────────────────────
 set autoread                        " auto-reload changed files
 set hidden                          " allow switching away from unsaved buffers
 set backspace=indent,eol,start      " modern backspace
@@ -44,7 +54,7 @@ set ttimeoutlen=50                  " snappy key timeout
 set updatetime=100                  " faster CursorHold events (gitgutter)
 set path=.,**                       " :find searches current dir + subdirs
 
-" Movement & View
+" ── Movement & View ──────────────────────────────────────────
 set number                          " absolute line numbers
 set relativenumber                  " relative numbers for motions
 set cursorline                      " highlight current line
@@ -78,11 +88,11 @@ set statusline+=\ \|\ %{&fileformat} " file format (unix/dos/mac)
 set statusline+=\ [%p%%             " percentage through file
 set statusline+=\ %l:%c]            " line:column
 
-" ── Cursor Shape ────────────────────────────────────────────
+" ── Cursor Shape ─────────────────────────────────────────────
 let &t_SI = "\e[6 q"                " Insert: beam cursor
 let &t_EI = "\e[2 q"                " Normal: block cursor
 
-" ── Mappings ────────────────────────────────────────────────
+" ── Mappings ─────────────────────────────────────────────────
 let mapleader="\<Space>"            " <Leader> key is Space
 
 " 'jk' to exit Insert quickly
@@ -154,10 +164,7 @@ nnoremap <leader>p :call TogglePaste()<CR>
 " strip trailing whitespace
 nnoremap <leader>s :call StripWhitespace()<CR>
 
-" open quickfix window
-nnoremap <leader>q :cwindow<CR>
-
-" ── Functions ───────────────────────────────────────────────
+" ── Functions ────────────────────────────────────────────────
 " Show paste mode in statusline
 function! PasteForStatusline()
   return &paste ? " [paste] " : ""
@@ -181,7 +188,7 @@ function! StripWhitespace() abort
   call setreg('/', old_query)
 endfunction
 
-" ── Autocommands ────────────────────────────────────────────
+" ── Autocommands ─────────────────────────────────────────────
 augroup vimStartup
   autocmd!
   " filetype-specific tweaks
@@ -203,11 +210,11 @@ augroup vimStartup
         \ | endif
 
   " Quickfix windows: auto-open after :make/grep/etc.
-  autocmd QuickFixCmdPost [^l]* cwindow               " for quickfix
-  autocmd QuickFixCmdPost l* lwindow                  " for location list
+  " autocmd QuickFixCmdPost [^l]* cwindow               " for quickfix
+  " autocmd QuickFixCmdPost l* lwindow                  " for location list
 augroup END
 
-" ── Plugins (vim-plug) ──────────────────────────────────────
+" ── Plugins (vim-plug) ───────────────────────────────────────
 " Install vim-plug if necessary
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
