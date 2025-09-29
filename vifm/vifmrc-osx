@@ -1,4 +1,15 @@
 " ~/.config/vifm/vifmrc
+"
+"  ██▒   █▓ ██▓  █████▒███▄ ▄███▓ ██▀███   ▄████▄
+" ▓██░   █▒▓██▒▓██   ▒▓██▒▀█▀ ██▒▓██ ▒ ██▒▒██▀ ▀█
+"  ▓██  █▒░▒██▒▒████ ░▓██    ▓██░▓██ ░▄█ ▒▒▓█    ▄
+"   ▒██ █░░░██░░▓█▒  ░▒██    ▒██ ▒██▀▀█▄  ▒▓▓▄ ▄██▒
+"    ▒▀█░  ░██░░▒█░   ▒██▒   ░██▒░██▓ ▒██▒▒ ▓███▀ ░
+"    ░ ▐░  ░▓   ▒ ░   ░ ▒░   ░  ░░ ▒▓ ░▒▓░░ ░▒ ▒  ░
+"    ░ ░░   ▒ ░ ░     ░  ░      ░  ░▒ ░ ▒░  ░  ▒
+"      ░░   ▒ ░ ░ ░   ░      ░     ░░   ░ ░ macos
+"       ░   ░                ░      ░     ░ ░
+"      ░                                  ░
 
 " ---------- Core behavior ----------
 set vicmd=$EDITOR
@@ -39,6 +50,10 @@ command! reload :write | restart full
 " ---------- Minimal open/preview ecosystem ----------
 let $OPENER='open'
 
+" Text-like → edit in $EDITOR
+filetype <text/*> $EDITOR %f
+filetype {*.vifm,*.vim,*.sh,*.zsh,*.bash,*.py,*.rb,*.go,*.rs,*.c,*.cc,*.cpp,*.h,*.hpp,*.json,*.toml,*.yaml,*.yml,*.md,*.txt} $EDITOR %f
+
 " PDFs
 filextype {*.pdf},<application/pdf> $OPENER %f &
 fileviewer {*.pdf},<application/pdf> pdftotext -nopgbrk %c -
@@ -48,20 +63,38 @@ filextype {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.webp,*.svg},<image/*> $OPENER %f &
 fileviewer {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.webp,*.svg},<image/*> identify %f
 
 " Audio/Video
-filetype {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm},\
-        \<audio/*,video/*> mpv %f
-fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm},\
-          \<audio/*,video/*> ffprobe -hide_banner -pretty %c 2>&1
+filetype {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm},<audio/*,video/*> mpv %f
+fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm},<audio/*,video/*> ffprobe -hide_banner -pretty %c 2>&1
 
-" Archives
+" Comic archives
+filetype {*.cbz,*.cbr},<application/zip,application/x-rar> open -a Simple\ Comic %f &
+
+" Zip
+filetype {*.zip},<application/zip> mkdir %f:r && tar -vxf %f --directory %f:r
+
+" Tarballs
+filetype {*.tar.gz,*.tgz},<application/x-tar> tar -xzf %c
+filetype {*.tar.bz2,*.tbz2},<application/x-tar> tar -xjf %c
+filetype {*.tar.xz,*.txz},<application/x-tar> tar -xJf %c
+filetype {*.tar},<application/x-tar> tar -xf %c
+
+" 7z (via p7zip)
+filetype {*.7z},<application/x-7z-compressed> 7z x -y %c
+
+" RAR (via unar)
+filetype {*.rar},<application/x-rar> unar %c
+
+" Preview archives
 fileviewer *.zip unzip -l %c
 fileviewer *.tar.gz,*.tgz tar -tzf %c
 fileviewer *.tar.bz2,*.tbz2 tar -tjf %c
 fileviewer *.tar.xz,*.txz tar -tJf %c
 fileviewer {*.tar} tar -tf %c
+fileviewer {*.7z} 7z l %c
+fileviewer {*.rar} lsar %c
 
-" Fallback
-" filetype * $OPENER %f &
+" Everything else → default app
+filetype * $OPENER %f &
 
 " ---------- Clipboard integration ----------
 nnoremap yd :!echo -n %d | pbcopy<cr>

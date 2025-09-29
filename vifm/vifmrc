@@ -1,4 +1,15 @@
 " ~/.config/vifm/vifmrc
+"
+"  ██▒   █▓ ██▓  █████▒███▄ ▄███▓ ██▀███   ▄████▄
+" ▓██░   █▒▓██▒▓██   ▒▓██▒▀█▀ ██▒▓██ ▒ ██▒▒██▀ ▀█
+"  ▓██  █▒░▒██▒▒████ ░▓██    ▓██░▓██ ░▄█ ▒▒▓█    ▄
+"   ▒██ █░░░██░░▓█▒  ░▒██    ▒██ ▒██▀▀█▄  ▒▓▓▄ ▄██▒
+"    ▒▀█░  ░██░░▒█░   ▒██▒   ░██▒░██▓ ▒██▒▒ ▓███▀ ░
+"    ░ ▐░  ░▓   ▒ ░   ░ ▒░   ░  ░░ ▒▓ ░▒▓░░ ░▒ ▒  ░
+"    ░ ░░   ▒ ░ ░     ░  ░      ░  ░▒ ░ ▒░  ░  ▒
+"      ░░   ▒ ░ ░ ░   ░      ░     ░░   ░ ░ linux
+"       ░   ░                ░      ░     ░ ░
+"      ░                                  ░
 
 " ---------- Core behavior ----------
 set vicmd=$EDITOR
@@ -67,7 +78,7 @@ fileviewer *.tar.bz2,*.tbz2 tar -tjf %c
 fileviewer *.tar.xz,*.txz tar -tJf %c
 fileviewer {*.tar} tar -tf %c
 
-" Fallback
+" Everything else → default app
 filetype * $OPENER %f &
 
 " ---------- Mappings ----------

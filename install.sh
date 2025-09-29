@@ -52,9 +52,14 @@ install_vifm_configs() {
 
 install_vim_configs() {
   if type -p vim &>/dev/null; then
-    mkdir -p "$vim_dir"/{colors,undo}
+    mkdir -p "$vim_dir"/{colors,ftdetect,syntax,undo}
+    # colors
     for file in "$dotfiles_dir"/vim/colors/*; do
       ln -sfv "$file" "$vim_dir"/colors
+    done
+    # syntax
+    for file in "$dotfiles_dir"/vim/syntax/*; do
+      ln -sfv "$file" "$vim_dir"/syntax
     done
     ln -sfv "$dotfiles_dir"/vim/vimrc ~/.vimrc
   fi

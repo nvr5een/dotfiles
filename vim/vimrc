@@ -196,6 +196,7 @@ augroup vimStartup
   autocmd Filetype markdown,text setlocal textwidth=78 colorcolumn=+1
   " filetype overrides
   autocmd BufNewFile,BufReadPost *.config set ft=sshconfig
+  autocmd BufNewFile,BufRead vifmrc*,*.vifm set filetype=vifm
 
   " reload vimrc on save
   autocmd BufWritePost *vimrc* source ~/.vimrc
