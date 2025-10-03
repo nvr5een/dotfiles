@@ -52,7 +52,7 @@ let $OPENER='open'
 
 " Text-like → edit in $EDITOR
 filetype <text/*> $EDITOR %f
-filetype {*.vifm,*.vim,*.sh,*.zsh,*.bash,*.py,*.rb,*.go,*.rs,*.c,*.cc,*.cpp,*.h,*.hpp,*.json,*.toml,*.yaml,*.yml,*.md,*.txt} $EDITOR %f
+filetype {*.vifm,*.vim,*.sh,*.zsh,*.bash,*.py,*.rb,*.go,*.rs,*.c,*.cc,*.cpp,*.h,*.hpp,*.json,*.toml,*.yaml,*.yml,*.md,*.txt,*.service} $EDITOR %f
 
 " PDFs
 filextype {*.pdf},<application/pdf> $OPENER %f &
