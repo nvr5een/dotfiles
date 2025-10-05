@@ -52,7 +52,7 @@ let $OPENER='open'
 
 " Text-like → edit in $EDITOR
 filetype <text/*> $EDITOR %f
-filetype {*.vifm,*.vim,*.sh,*.zsh,*.bash,*.py,*.rb,*.go,*.rs,*.c,*.cc,*.cpp,*.h,*.hpp,*.json,*.toml,*.yaml,*.yml,*.md,*.txt} $EDITOR %f
+filetype {*.vifm,*.vim,*.sh,*.zsh,*.bash,*.py,*.rb,*.go,*.rs,*.c,*.cc,*.cpp,*.h,*.hpp,*.json,*.toml,*.yaml,*.yml,*.md,*.txt,*.service} $EDITOR %f
 
 " PDFs
 filextype {*.pdf},<application/pdf> $OPENER %f &
@@ -63,8 +63,8 @@ filextype {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.webp,*.svg},<image/*> $OPENER %f &
 fileviewer {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.webp,*.svg},<image/*> identify %f
 
 " Audio/Video
-filetype {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm},<audio/*,video/*> mpv %f
-fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm},<audio/*,video/*> ffprobe -hide_banner -pretty %c 2>&1
+filetype {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm,*.thd,*.dts},<audio/*,video/*> mpv %f
+fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm,*.thd,*.dts},<audio/*,video/*> ffprobe -hide_banner -pretty %c 2>&1
 
 " Comic archives
 filetype {*.cbz,*.cbr},<application/zip,application/x-rar> open -a Simple\ Comic %f &
