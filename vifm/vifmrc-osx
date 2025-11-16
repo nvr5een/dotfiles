@@ -67,7 +67,7 @@ filetype {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm,*.thd,*
 fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm,*.thd,*.dts},<audio/*,video/*> ffprobe -hide_banner -pretty %c 2>&1
 
 " Comic archives
-filetype {*.cbz,*.cbr},<application/zip,application/x-rar> open -a Simple\ Comic %f &
+filetype {*.cbz,*.cbr} open -a Simple\ Comic %f &
 
 " Zip
 filetype {*.zip},<application/zip> mkdir %f:r && tar -vxf %f --directory %f:r
