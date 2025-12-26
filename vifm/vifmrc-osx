@@ -34,11 +34,13 @@ set statusline=" %A %10u:%-7g %15s %20d "
 colorscheme sourcerer Default-256 Default
 
 " ---------- Bookmarks ----------
+mark v /Volumes
 mark h ~/
 mark c ~/.config
 mark j ~/projects
 mark d ~/projects/dotfiles
 mark w ~/Downloads
+mark m ~/Movies
 
 " ---------- Commands ----------
 command! df df -h %m 2> /dev/null
