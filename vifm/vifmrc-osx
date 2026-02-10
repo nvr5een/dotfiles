@@ -40,6 +40,7 @@ mark c ~/.config
 mark j ~/projects
 mark d ~/projects/dotfiles
 mark w ~/Downloads
+mark x ~/Dropbox
 mark m ~/Movies
 
 " ---------- Commands ----------
