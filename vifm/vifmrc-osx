@@ -69,6 +69,10 @@ fileviewer {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.webp,*.svg},<image/*> identify %f
 filetype {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm,*.thd,*.dts},<audio/*,video/*> mpv %f
 fileviewer {*.wav,*.mp3,*.flac,*.m4a,*.aac,*.ogg,*.opus,*.mp4,*.mkv,*.webm,*.thd,*.dts},<audio/*,video/*> ffprobe -hide_banner -pretty %c 2>&1
 
+" Play playlists with mpv
+filetype {*.m3u,*.m3u8},<audio/x-mpegurl> mpv %f
+"filetype {*.m3u,*.m3u8},<audio/x-mpegurl> mpv --shuffle %f & */
+
 " Comic archives
 filetype {*.cbz,*.cbr} open -a Simple\ Comic %f &
 
