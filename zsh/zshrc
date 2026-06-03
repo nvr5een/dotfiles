@@ -52,7 +52,8 @@ if [[ -x "/opt/homebrew/bin/brew" ]]; then
     /opt/homebrew/opt/findutils/libexec/gnubin \
     /opt/homebrew/opt/gnu-sed/libexec/gnubin \
     /opt/homebrew/opt/grep/libexec/gnubin \
-    /opt/homebrew/opt/curl/bin
+    /opt/homebrew/opt/curl/bin \
+    /opt/homebrew/opt/libpq/bin
   do
     [[ -d "$d" ]] && path=("$d" $path)
   done
