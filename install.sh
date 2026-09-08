@@ -110,16 +110,28 @@ install_vim_configs() {
 }
 
 install_zsh_configs() {
-  if command -v zsh &>/dev/null; then
-    mkdir -p "$HOME/.cache/zsh" "$zsh_dir"
-    if [[ -d "$dotfiles_dir/zsh" ]]; then
-      for file in "$dotfiles_dir"/zsh/{options,completion,prompt,aliases,plugins}.zsh; do
-        [[ -e "$file" ]] || continue
-        link "$file" "$zsh_dir/$(basename "$file")"
-      done
+  command -v zsh &>/dev/null || return
+
+  mkdir -p "$HOME/.cache/zsh" "$zsh_dir"
+
+  [[ -d "$dotfiles_dir/zsh" ]] || return
+
+  # Modular configuration files:
+  # aliases.zsh, completion.zsh, history.zsh, keybindings.zsh, etc.
+  for file in "$dotfiles_dir"/zsh/*.zsh; do
+    [[ -f "$file" ]] || continue
+    link "$file" "$zsh_dir/$(basename "$file")"
+  done
+
+  # Standard Zsh startup files stored without a leading dot in the repository.
+  local startup_file
+  for startup_file in zshenv zprofile zshrc zlogin zlogout; do
+    if [[ -f "$dotfiles_dir/zsh/$startup_file" ]]; then
+      link \
+        "$dotfiles_dir/zsh/$startup_file" \
+        "$HOME/.$startup_file"
     fi
-    [[ -e "$dotfiles_dir/zsh/zshrc" ]] && link "$dotfiles_dir/zsh/zshrc" "$HOME/.zshrc"
-  fi
+  done
 }
 
 main() {

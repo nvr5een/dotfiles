@@ -1,68 +1,121 @@
 # ~/.zshrc
 
-# Enable profiling only when requested
-if [[ -n "$ZSH_PROFILE" ]]; then
+# Load the profiler only when explicitly requested. The report is printed after
+# the rest of the configuration has loaded.
+if [[ -n $ZSH_PROFILE ]]; then
   zmodload zsh/zprof
 fi
 
-# XDG
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export ZSH_CONFIG="$XDG_CONFIG_HOME/zsh"
-export ZSH_CACHE="$XDG_CACHE_HOME/zsh"
+# Respect an existing XDG setup.
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export ZSH_CONFIG="${ZSH_CONFIG:-$XDG_CONFIG_HOME/zsh}"
+export ZSH_CACHE="${ZSH_CACHE:-$XDG_CACHE_HOME/zsh}"
 
-# Editor & pager
-export VISUAL=vim
-export EDITOR=$VISUAL
+mkdir -p -- "$ZSH_CACHE"
 
-# Locale (optional but handy)
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+# Programs.
+export VISUAL="${VISUAL:-vim}"
+export EDITOR="${EDITOR:-$VISUAL}"
+export PAGER="${PAGER:-less}"
+export LESS="${LESS:--FRX}"
 
-# Colors configuration
-if command -v dircolors >/dev/null 2>&1; then
-  # Use GNU dircolors + LS_COLORS
-  [[ -r "$XDG_CONFIG_HOME/dircolors" ]] && eval "$(dircolors -b "$XDG_CONFIG_HOME/dircolors")"
-else
-  # Fallback for macOS BSD ls: define LSCOLORS instead
-  # Example: ExGxFxDxCxDxDxBxBxBx
-  # Each pair = fg/bg code for file types. See "man ls" on macOS.
-  export LSCOLORS="ExGxFxDxCxDxDxBxBxBx"
+# Do not force LC_ALL: it overrides every locale category and is fragile on
+# minimal Linux hosts. Preserve inherited settings and provide a sane LANG.
+if [[ -z $LANG ]]; then
+  if [[ $OSTYPE == darwin* ]]; then
+    export LANG=en_US.UTF-8
+  else
+    export LANG=C.UTF-8
+  fi
 fi
 
-# GREP_COLORS works only with GNU grep (Homebrew)
-[[ -r "$XDG_CONFIG_HOME/grepcolors.sh" ]] && source "$XDG_CONFIG_HOME/grepcolors.sh"
+# Zsh keeps the scalar PATH and array path synchronized. Duplicate entries are
+# removed while preserving the leftmost entry.
+typeset -U path PATH
 
-# PATH: unique & ordered (Zsh auto-syncs PATH<->path)
-typeset -U path   # make entries unique; keep leftmost
-
-# User bins first (prepend)
-[[ -d "$HOME/.local/bin" ]]            && path=("$HOME/.local/bin" $path)
-[[ -d "$HOME/projects/private/bin" ]]  && path=("$HOME/projects/private/bin" $path)
-# [[ -d "$HOME/Library/Python/3.11/bin" ]] && path=("$HOME/Library/Python/3.11/bin" $path)
-
-# Homebrew & GNU tools
-if [[ -x "/opt/homebrew/bin/brew" ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-  export HOMEBREW_NO_EMOJI=1
-
-  # Insert GNU shims in a stable order (prepend)
-  for d in \
-    /opt/homebrew/opt/coreutils/libexec/gnubin \
-    /opt/homebrew/opt/findutils/libexec/gnubin \
-    /opt/homebrew/opt/gnu-sed/libexec/gnubin \
-    /opt/homebrew/opt/grep/libexec/gnubin \
-    /opt/homebrew/opt/curl/bin \
-    /opt/homebrew/opt/libpq/bin
-  do
-    [[ -d "$d" ]] && path=("$d" $path)
+# Make non-login Alacritty shells usable without running `brew shellenv` on every
+# startup. Full Homebrew initialization belongs in ~/.zprofile.
+typeset -g ZSH_HOMEBREW_PREFIX=${HOMEBREW_PREFIX:-}
+if [[ -z $ZSH_HOMEBREW_PREFIX ]]; then
+  for _zsh_prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew "$HOME/.linuxbrew"; do
+    if [[ -x $_zsh_prefix/bin/brew ]]; then
+      ZSH_HOMEBREW_PREFIX=$_zsh_prefix
+      break
+    fi
   done
+  unset _zsh_prefix
 fi
 
-# Source additional ZSH configuration (quietly)
-for file in "$ZSH_CONFIG"/{options,completion,prompt,aliases,plugins}.zsh; do
-  [[ -r "$file" ]] && source "$file"
-done
+if [[ -n $ZSH_HOMEBREW_PREFIX ]]; then
+  typeset -a _zsh_brew_paths
+  for _zsh_path in \
+    "$ZSH_HOMEBREW_PREFIX/opt/curl/bin" \
+    "$ZSH_HOMEBREW_PREFIX/opt/libpq/bin" \
+    "$ZSH_HOMEBREW_PREFIX/bin" \
+    "$ZSH_HOMEBREW_PREFIX/sbin"
+  do
+    [[ -d $_zsh_path ]] && _zsh_brew_paths+=("$_zsh_path")
+  done
+  path=($_zsh_brew_paths $path)
+  unset _zsh_brew_paths _zsh_path
+fi
 
-# Local overrides
-[[ -r "$ZSH_CONFIG/local.zsh" ]] && source "$ZSH_CONFIG/local.zsh"
+# User commands take precedence over package-manager commands.
+[[ -d $HOME/.local/bin ]] && path=("$HOME/.local/bin" $path)
+[[ -d $HOME/projects/private/bin ]] && path=("$HOME/projects/private/bin" $path)
+
+# GNU tools use LS_COLORS; BSD ls uses LSCOLORS. Some versions of GNU
+# dircolors do not recognize TERM=alacritty and return an empty palette. In
+# that case, generate the palette as xterm-256color without changing TERM in
+# the interactive shell.
+typeset _dircolors_command _dircolors_output
+if (( $+commands[dircolors] )); then
+  _dircolors_command=$commands[dircolors]
+elif (( $+commands[gdircolors] )); then
+  _dircolors_command=$commands[gdircolors]
+fi
+
+if [[ -n $_dircolors_command ]]; then
+  if [[ -r $XDG_CONFIG_HOME/dircolors ]]; then
+    _dircolors_output=$("$_dircolors_command" -b "$XDG_CONFIG_HOME/dircolors")
+  else
+    _dircolors_output=$("$_dircolors_command" -b)
+  fi
+  eval "$_dircolors_output"
+
+  if [[ -z $LS_COLORS && $TERM == alacritty* ]]; then
+    if [[ -r $XDG_CONFIG_HOME/dircolors ]]; then
+      _dircolors_output=$(TERM=xterm-256color "$_dircolors_command" -b "$XDG_CONFIG_HOME/dircolors")
+    else
+      _dircolors_output=$(TERM=xterm-256color "$_dircolors_command" -b)
+    fi
+    eval "$_dircolors_output"
+  fi
+else
+  export LSCOLORS="${LSCOLORS:-ExGxFxDxCxDxDxBxBxBx}"
+fi
+unset _dircolors_command _dircolors_output
+
+[[ -r $XDG_CONFIG_HOME/grepcolors.sh ]] && source "$XDG_CONFIG_HOME/grepcolors.sh"
+
+# Load each concern explicitly so ordering stays predictable.
+for _zsh_file in \
+  options.zsh \
+  history.zsh \
+  completion.zsh \
+  plugins.zsh \
+  keybindings.zsh \
+  aliases.zsh \
+  prompt.zsh
+do
+  [[ -r $ZSH_CONFIG/$_zsh_file ]] && source "$ZSH_CONFIG/$_zsh_file"
+done
+unset _zsh_file
+
+# Machine-specific settings and secrets belong here.
+[[ -r $ZSH_CONFIG/local.zsh ]] && source "$ZSH_CONFIG/local.zsh"
+
+if [[ -n $ZSH_PROFILE ]]; then
+  zprof
+fi

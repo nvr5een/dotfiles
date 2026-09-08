@@ -2,26 +2,38 @@
 
 alias :q='exit'
 alias pro='cd ~/projects'
-alias reload='. ~/.zshrc; echo ZSH config reloaded!'
+alias reload='exec zsh'
 
-alias ls='ls --color=auto --group-directories-first'
+# Prefer Homebrew GNU ls explicitly without replacing all core tools in PATH.
+if (( $+commands[gls] )); then
+  alias ls='gls --color=auto --group-directories-first'
+elif [[ $OSTYPE == darwin* ]]; then
+  alias ls='ls -G'
+else
+  alias ls='ls --color=auto --group-directories-first'
+fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
 alias df='df -h'
 alias du='du -ch'
-alias grep='grep --color=auto'
-alias mkdir='nocorrect mkdir -pv'
-alias mount='mount | column -t'
+if (( $+commands[ggrep] )); then
+  alias grep='ggrep --color=auto'
+elif [[ $OSTYPE != darwin* ]]; then
+  alias grep='grep --color=auto'
+fi
 
-alias chgrp='chgrp --preserve-root'
-alias chmod='chmod --preserve-root'
-alias chown='chown --preserve-root'
-alias cp='cp -iv'
-alias ln='ln -iv'
-alias mv='nocorrect mv -iv'
-alias rm='rm -Iv'
+# Explicit safe variants avoid silently changing the semantics of core commands.
+alias md='mkdir -pv'
+alias cpi='cp -iv'
+alias lni='ln -iv'
+alias mvi='mv -iv'
+alias rmi='rm -Iv'
+
+mounts() {
+  command mount "$@" | column -t
+}
 
 alias ga='git add'
 alias gb='git branch'
@@ -31,10 +43,13 @@ alias gcl='git clone'
 alias gd='git diff'
 alias gmv='git mv -v'
 alias grm='git rm'
-alias gs='git status'
+alias gs='git status --short --branch'
 
 alias d='dirs -v'
-for index ({1..9}) alias "$index"="cd +${index}"; unset index
+for _dir_index in {1..9}; do
+  alias "$_dir_index"="cd +$_dir_index"
+done
+unset _dir_index
 
 if (( $+commands[apt-get] )); then
   alias apti='sudo apt install --no-install-recommends'
@@ -52,41 +67,39 @@ fi
 
 if (( $+commands[pacman] )); then
   if (( $+commands[yay] )); then
-    alias paci='yay -S' # install package(s) (incl AUR)
-    alias pacu='yay -Syu' # sync, then upgrade all packages (incl AUR)
-    alias pacs='yay -Ss' # search for package(s) (incl AUR)
-    alias pacq='yay -Si' # show package info (incl AUR)
+    alias paci='yay -S'
+    alias pacu='yay -Syu'
+    alias pacs='yay -Ss'
+    alias pacq='yay -Si'
   else
-    alias paci='sudo pacman -S' # install package(s)
-    alias pacu='sudo pacman -Syu' # sync, then upgrade all packages
-    alias pacs='pacman -Ss' # search for package(s)
-    alias pacq='pacman -Si' # show package info
+    alias paci='sudo pacman -S'
+    alias pacu='sudo pacman -Syu'
+    alias pacs='pacman -Ss'
+    alias pacq='pacman -Si'
   fi
-  alias pacr='sudo pacman -R' # remove package(s) but retain configs and depends
-  alias pacrr='sudo pacman -Rns' # remove package(s), configs and depends
-  alias pacro='pacman -Qtdq | sudo pacman -Rns -' # remove unused packages
-  alias pacli='pacman -Q | less' # list all packages currently installed
-  alias pacll='pacman -Qqm' # list all packages locally installed
-  alias paco='pacman -Qo' # determine which package owns a given file
-  alias pacf='pacman -Ql' # list all files installed by a given package
-  alias pacc='sudo pacman -Sc' # delete all packages not currently installed
-  alias pacm='makepkg -fsic' # make package from PKGBUILD, install deps, clean
-  alias pacstat='pacman -Q | wc -l' # print number of installed packages
+  alias pacr='sudo pacman -R'
+  alias pacrr='sudo pacman -Rns'
+  alias pacli='pacman -Q | less'
+  alias pacll='pacman -Qqm'
+  alias paco='pacman -Qo'
+  alias pacf='pacman -Ql'
+  alias pacc='sudo pacman -Sc'
+  alias pacm='makepkg -fsic'
+  alias pacstat='pacman -Q | wc -l'
+
+  pacro() {
+    local orphans
+    orphans=$(pacman -Qtdq) || return 0
+    if [[ -z $orphans ]]; then
+      print -- 'No orphaned packages.'
+      return 0
+    fi
+    print -r -- "$orphans" | sudo pacman -Rns -
+  }
 fi
 
-if (( $+commands[kubectl] )); then
-  source <(kubectl completion zsh)
-  alias k='kubectl'
-fi
+(( $+commands[kubectl] )) && alias k='kubectl'
 
 path() {
-  echo $PATH | tr ":" "\n" | \
-    awk "{ sub(\"/usr\", \"$fg[green]/usr$reset_color\"); \
-           sub(\"/bin\", \"$fg[blue]/bin$reset_color\"); \
-           sub(\"/opt\", \"$fg[cyan]/opt$reset_color\"); \
-           sub(\"/sbin\", \"$fg[magenta]/sbin$reset_color\"); \
-           sub(\"/local\", \"$fg[yellow]/local$reset_color\"); \
-           sub(\"/.rvm\", \"$fg[red]/.rvm$reset_color\"); \
-           print }"
+  print -rl -- $path
 }
-
