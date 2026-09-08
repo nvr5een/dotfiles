@@ -57,7 +57,7 @@ zstyle ':completion::complete:*' cache-path "$ZSH_CACHE/zcompcache"
 # One inexpensive matching pass: case-insensitive with partial-word matching.
 zstyle ':completion:*' matcher-list \
   'm:{a-zA-Z}={A-Za-z} r:|[._-]=* r:|=*'
-zstyle ':completion:*' completer _complete
+zstyle ':completion:*' completer _expand_alias _complete
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
