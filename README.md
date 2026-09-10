@@ -1,10 +1,15 @@
 # dotfiles
 
-Configuration files that customize my CLI environment.
+Personal configuration files for my command-line and terminal environment.
 
-+ Editor: [neovim](https://neovim.io/)
-+ File Manager: [vifm](https://vifm.info/)
-+ Media Player: [mpv](https://mpv.io/)
-+ Terminal Emulator: [alacritty](https://github.com/alacritty/alacritty)
-+ Terminal Multiplexer: [tmux](https://github.com/tmux/tmux/wiki/)
-+ Shell: [zsh](https://zsh.org/)
+- ✏️ **Editor:** [Neovim](https://neovim.io/)
+- 📁 **File manager:** [Vifm](https://vifm.info/)
+- 🎬 **Media player:** [mpv](https://mpv.io/)
+- 🖥️ **Terminal emulator:** [Alacritty](https://github.com/alacritty/alacritty)
+- 🪟 **Terminal multiplexer:** [tmux](https://github.com/tmux/tmux/wiki/)
+- 🐚 **Shell:** [Zsh](https://zsh.org/)
+
+## Platforms
+
+-  macOS
+- 🐧 Linux
