@@ -1,5 +1,5 @@
 " ~/.vimrc
-" 
+"
 "  ██▒   █▓ ██▓ ███▄ ▄███▓ ██▀███   ▄████▄
 " ▓██░   █▒▓██▒▓██▒▀█▀ ██▒▓██ ▒ ██▒▒██▀ ▀█
 "  ▓██  █▒░▒██▒▓██    ▓██░▓██ ░▄█ ▒▒▓█    ▄
@@ -10,13 +10,6 @@
 "      ░░   ▒ ░░      ░     ░░   ░ ░
 "       ░   ░         ░      ░     ░ ░
 "      ░                           ░
-
-" enable filetype detection, plugins, and indent files
-filetype plugin indent on
-
-" syntax highlighting
-syntax on
-colorscheme sourcerer
 
 " ── Indentation & Tabs ───────────────────────────────────────
 set autoindent                      " copy indent on newline
@@ -49,10 +42,18 @@ set autoread                        " auto-reload changed files
 set hidden                          " allow switching away from unsaved buffers
 set backspace=indent,eol,start      " modern backspace
 set modelines=0                     " disable modelines (security)
-set cpoptions+=$                    " put cursor at end in some ops
+set ttimeout                        " separate timeout for terminal key codes
 set ttimeoutlen=50                  " snappy key timeout
 set updatetime=100                  " faster CursorHold events (gitgutter)
-set path=.,**                       " :find searches current dir + subdirs
+
+" Search current directory and subdirectories with :find
+set path=.,**
+
+" Use ripgrep for fast recursive project searches
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+  set grepformat=%f:%l:%c:%m
+endif
 
 " ── Movement & View ──────────────────────────────────────────
 set number                          " absolute line numbers
@@ -62,12 +63,14 @@ set scrolloff=5                     " context lines around cursor
 set display=truncate                " show '@@@' if last line truncated
 set signcolumn=yes                  " keep signcolumn fixed
 set virtualedit=block,onemore       " roam in block mode, one past EOL in Normal
-" set virtualedit=all                 " allow cursor anywhere (all modes) — powerful but risky
+set splitbelow                      " open horizontal splits below
+set splitright                      " open vertical splits to the right
 
 " ── Wildmenu / Completion ────────────────────────────────────
 set wildmenu                        " enhanced cmdline completion
 set wildcharm=<C-z>                 " <C-z> triggers wildmenu from mappings
 set wildoptions=pum                 " show popup menu for wildmenu
+set wildmode=longest:full,full      " complete longest match, then cycle matches
 set wildignorecase                  " case-insensitive completion
 set wildignore+=*.git,*.gz,*.rar,*.zip
 set wildignore+=node_modules/**,dist/**,build/**,.git/**,__pycache__/**,.venv/**
@@ -111,7 +114,7 @@ nnoremap <leader>b :buffer <C-z><S-Tab>
 nnoremap <leader>f :find *
 
 " edit vimrc
-nnoremap <leader>v :e ~/.vimrc<CR>
+nnoremap <leader>v :edit $MYVIMRC<CR>
 
 " private notes
 if !empty(glob('~/projects/private/notes'))
@@ -153,10 +156,7 @@ nnoremap <Leader>y "+y
 vnoremap <leader>y "+y
 
 " use Q for formatting (gq), not Ex mode
-map Q gq
-
-" keep Select mode Q default intact
-sunmap Q
+nnoremap Q gq
 
 " toggle paste mode
 nnoremap <leader>p :call TogglePaste()<CR>
@@ -164,55 +164,62 @@ nnoremap <leader>p :call TogglePaste()<CR>
 " strip trailing whitespace
 nnoremap <leader>s :call StripWhitespace()<CR>
 
+" quickfix window
+nnoremap <leader>q :copen<CR>
+nnoremap <leader>Q :cclose<CR>
+
 " ── Functions ────────────────────────────────────────────────
 " Show paste mode in statusline
-function! PasteForStatusline()
+function! PasteForStatusline() abort
   return &paste ? " [paste] " : ""
 endfunction
 
 " Toggle paste mode with a message
-function! TogglePaste()
-  if(&paste == 0)
-    set paste | echo "Paste Mode Enabled"
+function! TogglePaste() abort
+  if &paste
+    set nopaste
+    echo "Paste Mode Disabled"
   else
-    set nopaste | echo "Paste Mode Disabled"
+    set paste
+    echo "Paste Mode Enabled"
   endif
 endfunction
 
-" Remove trailing whitespace but preserve cursor and last search
+" Remove trailing whitespace but preserve view and last search
 function! StripWhitespace() abort
-  let save_cursor = getpos(".")
-  let old_query = getreg('/')
+  let l:view = winsaveview()
+  let l:old_query = getreg('/')
+
   %s/\s\+$//e
-  call setpos('.', save_cursor)
-  call setreg('/', old_query)
+
+  call winrestview(l:view)
+  call setreg('/', l:old_query)
 endfunction
 
 " ── Autocommands ─────────────────────────────────────────────
 augroup vimStartup
   autocmd!
-  " filetype-specific tweaks
-  autocmd Filetype python   setlocal foldmethod=indent tabstop=4 shiftwidth=4 softtabstop=4
-  autocmd Filetype markdown,text setlocal textwidth=78 colorcolumn=+1
-  " filetype overrides
-  autocmd BufNewFile,BufReadPost *.config set ft=sshconfig
-  autocmd BufNewFile,BufRead vifmrc*,*.vifm set filetype=vifm
 
-  " reload vimrc on save
-  autocmd BufWritePost *vimrc* source ~/.vimrc
+  " Filetype-specific tweaks
+  autocmd FileType python setlocal foldmethod=indent tabstop=4 shiftwidth=4 softtabstop=4
+  autocmd FileType markdown,text setlocal textwidth=78 colorcolumn=+1
+  autocmd FileType markdown syntax sync fromstart
 
-  " equalize split sizes
-  autocmd VimResized * :wincmd =
+  " Filetype overrides
+  autocmd BufNewFile,BufReadPost *.config setfiletype sshconfig
+  autocmd BufNewFile,BufRead vifmrc*,*.vifm setfiletype vifm
 
-  " restore cursor on reopen (except for commit messages)
+  " Check for files changed outside Vim
+  autocmd FocusGained,BufEnter * checktime
+
+  " Equalize split sizes
+  autocmd VimResized * wincmd =
+
+  " Restore cursor on reopen (except for commit messages)
   autocmd BufReadPost *
         \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-        \ |   exe "normal! g`\""
+        \ |   execute "normal! g`\""
         \ | endif
-
-  " Quickfix windows: auto-open after :make/grep/etc.
-  " autocmd QuickFixCmdPost [^l]* cwindow               " for quickfix
-  " autocmd QuickFixCmdPost l* lwindow                  " for location list
 augroup END
 
 " ── Plugins (vim-plug) ───────────────────────────────────────
@@ -233,7 +240,13 @@ Plug 'tpope/vim-unimpaired'        " [q ]q etc. handy bracket mappings
 Plug 'hashivim/vim-terraform'      " Terraform syntax & tools
 call plug#end()
 
+" ── Syntax & Colors ──────────────────────────────────────────
+colorscheme sourcerer
+
 " Auto-install missing plugins on first start
-autocmd VimEnter * if exists('g:plugs') && len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync | source $MYVIMRC
-\| endif
+augroup vimPlugBootstrap
+  autocmd!
+  autocmd VimEnter * if exists('g:plugs') && len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+        \ | PlugInstall --sync
+        \ | endif
+augroup END
