@@ -97,10 +97,8 @@ set statusline+=\ [%p%%             " percentage through file
 set statusline+=\ %l:%c]            " line:column
 
 " ── Cursor Shape ─────────────────────────────────────────────
-if &term =~ 'xterm\|kitty\|alacritty\|iterm'
-  let &t_SI = "\e[6 q"              " Insert: beam cursor
-  let &t_EI = "\e[2 q"              " Normal: block cursor
-endif
+let &t_SI = "\e[6 q"                " Insert: beam cursor
+let &t_EI = "\e[2 q"                " Normal: block cursor
 
 " ── Mappings ─────────────────────────────────────────────────
 let mapleader="\<Space>"            " <Leader> key is Space
