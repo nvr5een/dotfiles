@@ -11,15 +11,20 @@
 "       ░   ░         ░      ░     ░ ░
 "      ░                           ░
 
+" ── Filetype & Syntax ────────────────────────────────────────
+filetype plugin indent on           " Enable filetype detection + plugins + indentation
+syntax enable                       " Enable syntax highlighting
+
 " ── Indentation & Tabs ───────────────────────────────────────
 set autoindent                      " copy indent on newline
 set expandtab                       " insert spaces instead of <Tab>
-set shiftwidth=2                    " indentation width
-set softtabstop=-1                  " make <Tab>/<BS> align with shiftwidth
+set tabstop=2                       " Tab displays as 2 spaces
+set shiftwidth=2                    " Indentation is 2 spaces
+set softtabstop=2                   " Tab/BS in Insert mode = 2 spaces
 
 " ── Formatting ───────────────────────────────────────────────
 set formatoptions=croqlj            " respect indent, format comments, clean joins
-" textwidth is left at 0; filetypes override in autocmds
+set pastetoggle=<F2>                " <F2> toggles paste mode (works mid-paste)
 
 " ── Search ───────────────────────────────────────────────────
 set hlsearch                        " highlight matches
@@ -60,7 +65,7 @@ set number                          " absolute line numbers
 set relativenumber                  " relative numbers for motions
 set cursorline                      " highlight current line
 set scrolloff=5                     " context lines around cursor
-set display=truncate                " show '@@@' if last line truncated
+set display=lastline,truncate       " show last line, truncate long lines with '@@@'
 set signcolumn=yes                  " keep signcolumn fixed
 set virtualedit=block,onemore       " roam in block mode, one past EOL in Normal
 set splitbelow                      " open horizontal splits below
@@ -92,8 +97,10 @@ set statusline+=\ [%p%%             " percentage through file
 set statusline+=\ %l:%c]            " line:column
 
 " ── Cursor Shape ─────────────────────────────────────────────
-let &t_SI = "\e[6 q"                " Insert: beam cursor
-let &t_EI = "\e[2 q"                " Normal: block cursor
+if &term =~ 'xterm\|kitty\|alacritty\|iterm'
+  let &t_SI = "\e[6 q"              " Insert: beam cursor
+  let &t_EI = "\e[2 q"              " Normal: block cursor
+endif
 
 " ── Mappings ─────────────────────────────────────────────────
 let mapleader="\<Space>"            " <Leader> key is Space
@@ -137,6 +144,12 @@ nnoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <tab> <C-w>w
 nnoremap <S-tab> <C-w>W
 
+" window navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
 " toggle absolute/relative numbers
 nnoremap <leader>i :set invnumber invrelativenumber<CR>
 
@@ -158,9 +171,6 @@ vnoremap <leader>y "+y
 " use Q for formatting (gq), not Ex mode
 nnoremap Q gq
 
-" toggle paste mode
-nnoremap <leader>p :call TogglePaste()<CR>
-
 " strip trailing whitespace
 nnoremap <leader>s :call StripWhitespace()<CR>
 
@@ -172,17 +182,6 @@ nnoremap <leader>Q :cclose<CR>
 " Show paste mode in statusline
 function! PasteForStatusline() abort
   return &paste ? " [paste] " : ""
-endfunction
-
-" Toggle paste mode with a message
-function! TogglePaste() abort
-  if &paste
-    set nopaste
-    echo "Paste Mode Disabled"
-  else
-    set paste
-    echo "Paste Mode Enabled"
-  endif
 endfunction
 
 " Remove trailing whitespace but preserve view and last search
@@ -201,7 +200,7 @@ augroup vimStartup
   autocmd!
 
   " Filetype-specific tweaks
-  autocmd FileType python setlocal foldmethod=indent tabstop=4 shiftwidth=4 softtabstop=4
+  autocmd FileType python setlocal foldmethod=indent tabstop=4 shiftwidth=4 softtabstop=4 expandtab
   autocmd FileType markdown,text setlocal textwidth=78 colorcolumn=+1
   autocmd FileType markdown syntax sync fromstart
 
