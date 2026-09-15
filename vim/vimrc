@@ -85,7 +85,7 @@ set laststatus=2                    " always show statusline
 set noshowmode                      " hide --INSERT-- (we show mode ourselves)
 set statusline=                     " reset statusline
 set statusline+=%{PasteForStatusline()} " show [paste] when paste mode is on
-set statusline+=\ [%{mode()}]       " current mode
+set statusline+=[%{mode()}]         " current mode
 set statusline+=\ %F                " full file path
 set statusline+=%m                  " [+] modified flag
 set statusline+=%r                  " [RO] read-only flag
@@ -183,13 +183,29 @@ nnoremap <leader>Q :cclose<CR>
 " ── Functions ────────────────────────────────────────────────
 " Show paste mode in statusline
 function! PasteForStatusline() abort
-  return &paste ? " [paste]" : ""
+  return &paste ? " [paste] " : ""
 endfunction
 
-" Show git branch in statusline
+" Update cached Git branch for the current working directory
+function! UpdateGitBranch() abort
+  if executable('git')
+    let l:branch = system('git rev-parse --abbrev-ref HEAD 2>/dev/null')
+
+    if v:shell_error == 0
+      let g:git_branch = trim(l:branch)
+    else
+      let g:git_branch = ''
+    endif
+  else
+    let g:git_branch = ''
+  endif
+endfunction
+
+" Return cached Git branch for the statusline
 function! ShowGitBranch() abort
-  let l:branch = system('git rev-parse --abbrev-ref HEAD 2>/dev/null')
-  return empty(l:branch) ? '' : 'Git: ' . trim(l:branch) . ' '
+  return empty(get(g:, 'git_branch', ''))
+        \ ? ''
+        \ : 'Git: ' . g:git_branch . ' '
 endfunction
 
 " Remove trailing whitespace but preserve view and last search
@@ -221,6 +237,14 @@ augroup vimStartup
 
   " Equalize split sizes
   autocmd VimResized * wincmd =
+
+  " Refresh Git branch when entering Vim or another buffer
+  autocmd VimEnter,BufEnter * call UpdateGitBranch()
+
+  " Refresh Git branch when Vim's working directory changes
+  if exists('##DirChanged')
+    autocmd DirChanged * call UpdateGitBranch()
+  endif
 
   " Restore cursor on reopen (except for commit messages)
   autocmd BufReadPost *
