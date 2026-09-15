@@ -24,7 +24,6 @@ set softtabstop=2                   " Tab/BS in Insert mode = 2 spaces
 
 " ── Formatting ───────────────────────────────────────────────
 set formatoptions=croqlj            " respect indent, format comments, clean joins
-set pastetoggle=<F2>                " <F2> toggles paste mode (works mid-paste)
 
 " ── Search ───────────────────────────────────────────────────
 set hlsearch                        " highlight matches
@@ -56,7 +55,7 @@ set path=.,**
 
 " Use ripgrep for fast recursive project searches
 if executable('rg')
-  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden\ --glob\ !.git/*
   set grepformat=%f:%l:%c:%m
 endif
 
@@ -84,7 +83,6 @@ set wildignore+=node_modules/**,dist/**,build/**,.git/**,__pycache__/**,.venv/**
 set laststatus=2                    " always show statusline
 set noshowmode                      " hide --INSERT-- (we show mode ourselves)
 set statusline=                     " reset statusline
-set statusline+=%{PasteForStatusline()} " show [paste] when paste mode is on
 set statusline+=[%{mode()}]         " current mode
 set statusline+=\ %F                " full file path
 set statusline+=%m                  " [+] modified flag
@@ -95,7 +93,7 @@ set statusline+=\ %{&fileencoding?&fileencoding:&encoding} " encoding
 set statusline+=\ \|\ %{&fileformat} " file format (unix/dos/mac)
 set statusline+=\ [%p%%             " percentage through file
 set statusline+=\ %l:%c]            " line:column
-set statusline+=\ \|\ %{ShowGitBranch()}
+set statusline+=%{ShowGitBranch()}  " show Git branch in statusline
 
 " ── Syntax & Colors ──────────────────────────────────────────
 colorscheme sourcerer
@@ -146,12 +144,6 @@ nnoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <tab> <C-w>w
 nnoremap <S-tab> <C-w>W
 
-" window navigation
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
 " toggle absolute/relative numbers
 nnoremap <leader>i :set invnumber invrelativenumber<CR>
 
@@ -177,15 +169,10 @@ nnoremap Q gq
 nnoremap <leader>s :call StripWhitespace()<CR>
 
 " quickfix window
-nnoremap <leader>q :copen<CR>
+nnoremap <leader>q :cwindow<CR>
 nnoremap <leader>Q :cclose<CR>
 
 " ── Functions ────────────────────────────────────────────────
-" Show paste mode in statusline
-function! PasteForStatusline() abort
-  return &paste ? " [paste] " : ""
-endfunction
-
 " Update cached Git branch for the current working directory
 function! UpdateGitBranch() abort
   if executable('git')
@@ -205,7 +192,7 @@ endfunction
 function! ShowGitBranch() abort
   return empty(get(g:, 'git_branch', ''))
         \ ? ''
-        \ : 'Git: ' . g:git_branch . ' '
+        \ : ' | Git: ' . g:git_branch
 endfunction
 
 " Remove trailing whitespace but preserve view and last search
@@ -230,7 +217,7 @@ augroup vimStartup
 
   " Filetype overrides
   autocmd BufNewFile,BufReadPost *.config setfiletype sshconfig
-  autocmd BufNewFile,BufRead vifmrc*,*.vifm setfiletype vifm
+  autocmd BufNewFile,BufReadPost vifmrc*,*.vifm setfiletype vifm
 
   " Check for files changed outside Vim
   autocmd FocusGained,BufEnter * checktime
@@ -271,7 +258,7 @@ Plug 'tpope/vim-unimpaired'        " [q ]q etc. handy bracket mappings
 Plug 'hashivim/vim-terraform'      " Terraform syntax & tools
 call plug#end()
 
-" Auto-install missing plugins on first start
+" Auto-install any missing plugins on startup
 augroup vimPlugBootstrap
   autocmd!
   autocmd VimEnter * if exists('g:plugs') && len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
