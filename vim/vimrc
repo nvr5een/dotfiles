@@ -12,168 +12,168 @@
 "      ░                           ░
 
 " ── Filetype & Syntax ────────────────────────────────────────
-filetype plugin indent on           " Enable filetype detection + plugins + indentation
-syntax enable                       " Enable syntax highlighting
+filetype plugin indent on           " enable filetype detection, plugins, and indentation
+syntax enable                       " enable syntax highlighting
 
 " ── Indentation & Tabs ───────────────────────────────────────
-set autoindent                      " copy indent on newline
-set expandtab                       " insert spaces instead of <Tab>
-set tabstop=2                       " Tab displays as 2 spaces
-set shiftwidth=2                    " Indentation is 2 spaces
-set softtabstop=2                   " Tab/BS in Insert mode = 2 spaces
+set autoindent                      " copy current line's indent onto new lines
+set expandtab                       " insert spaces instead of literal tab characters
+set tabstop=2                       " display tab characters as 2 columns
+set shiftwidth=2                    " use 2 spaces for indentation commands
+set softtabstop=2                   " insert/delete 2 spaces when pressing Tab/Backspace
 
 " ── Formatting ───────────────────────────────────────────────
-set formatoptions=croqlj            " respect indent, format comments, clean joins
+set formatoptions=croqlj            " format comments, preserve joins, and support gq
 
 " ── Search ───────────────────────────────────────────────────
-set hlsearch                        " highlight matches
-set ignorecase                      " case-insensitive search…
-set smartcase                       " …unless pattern has uppercase
-set incsearch                       " incremental search
+set hlsearch                        " highlight all search matches
+set ignorecase                      " ignore case in searches by default
+set smartcase                       " make searches case-sensitive when pattern has uppercase
+set incsearch                       " show matches while typing a search
 
 " ── Undo / Backup ────────────────────────────────────────────
-set undodir=~/.vim/undo             " persistent undo location
-set undofile                        " enable persistent undo
-set noswapfile                      " avoid .swp files
+set undodir=~/.vim/undo             " store persistent undo files here
+set undofile                        " preserve undo history across Vim sessions
+set noswapfile                      " disable swap files
 
-" Ensure undodir exists
+" Create the persistent undo directory if it does not exist
 if !isdirectory(expand(&undodir))
   call mkdir(expand(&undodir), 'p', 0700)
 endif
 
 " ── General Editing Behavior ─────────────────────────────────
-set autoread                        " auto-reload changed files
-set hidden                          " allow switching away from unsaved buffers
-set backspace=indent,eol,start      " modern backspace
-set modelines=0                     " disable modelines (security)
-set ttimeout                        " separate timeout for terminal key codes
-set ttimeoutlen=50                  " snappy key timeout
-set updatetime=100                  " faster CursorHold events (gitgutter)
+set autoread                        " reload files changed outside Vim when safe
+set hidden                          " allow modified buffers to remain hidden
+set backspace=indent,eol,start      " allow Backspace across indents, line breaks, and insert start
+set modelines=0                     " disable modelines for security
+set ttimeout                        " use a separate timeout for terminal key codes
+set ttimeoutlen=50                  " wait 50 ms for terminal key-code sequences
+set updatetime=100                  " shorten idle update interval for plugins such as gitgutter
 
-" Search current directory and subdirectories with :find
+" Search the current directory and subdirectories with :find
 set path=.,**
 
-" Use ripgrep for fast recursive project searches
+" Use ripgrep for recursive project searches when available
 if executable('rg')
   set grepprg=rg\ --vimgrep\ --smart-case\ --hidden\ --glob\ !.git/*
   set grepformat=%f:%l:%c:%m
 endif
 
 " ── Movement & View ──────────────────────────────────────────
-set number                          " absolute line numbers
-set relativenumber                  " relative numbers for motions
-set cursorline                      " highlight current line
-set scrolloff=5                     " context lines around cursor
-set display=lastline,truncate       " show last line, truncate long lines with '@@@'
-set signcolumn=yes                  " keep signcolumn fixed
-set virtualedit=block,onemore       " roam in block mode, one past EOL in Normal
-set splitbelow                      " open horizontal splits below
+set number                          " show absolute line numbers
+set relativenumber                  " show relative line numbers for nearby lines
+set cursorline                      " highlight the current screen line
+set scrolloff=5                     " keep 5 screen lines visible above and below cursor
+set display=lastline,truncate       " show partial last lines and mark truncated text
+set signcolumn=yes                  " keep the sign column visible to avoid text shifting
+set virtualedit=block,onemore       " allow virtual columns in block mode and one past EOL
+set splitbelow                      " open horizontal splits below the current window
 set splitright                      " open vertical splits to the right
 
 " ── Wildmenu / Completion ────────────────────────────────────
-set wildmenu                        " enhanced cmdline completion
-set wildcharm=<C-z>                 " <C-z> triggers wildmenu from mappings
-set wildoptions=pum                 " show popup menu for wildmenu
-set wildmode=longest:full,full      " complete longest match, then cycle matches
-set wildignorecase                  " case-insensitive completion
+set wildmenu                        " enable enhanced command-line completion
+set wildcharm=<C-z>                 " trigger wildcard completion from mappings
+set wildoptions=pum                 " display completion matches in a popup menu
+set wildmode=longest:full,full      " complete longest match, then cycle through matches
+set wildignorecase                  " ignore case during command-line completion
 set wildignore+=*.git,*.gz,*.rar,*.zip
 set wildignore+=node_modules/**,dist/**,build/**,.git/**,__pycache__/**,.venv/**
 
 " ── Statusline ───────────────────────────────────────────────
-set laststatus=2                    " always show statusline
-set noshowmode                      " hide --INSERT-- (we show mode ourselves)
-set statusline=                     " reset statusline
+set laststatus=2                    " always display the statusline
+set noshowmode                      " hide Vim's mode message; mode is shown below
+set statusline=                     " clear the default statusline
 set statusline+=[%{mode()}]         " current mode
 set statusline+=\ %F                " full file path
-set statusline+=%m                  " [+] modified flag
-set statusline+=%r                  " [RO] read-only flag
-set statusline+=%=
+set statusline+=%m                  " modified flag
+set statusline+=%r                  " read-only flag
+set statusline+=%=                  " right-align the remaining fields
 set statusline+=\ %y                " filetype
-set statusline+=\ %{&fileencoding?&fileencoding:&encoding} " encoding
-set statusline+=\ \|\ %{&fileformat} " file format (unix/dos/mac)
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding} " file encoding
+set statusline+=\ \|\ %{&fileformat} " line-ending format
 set statusline+=\ [%p%%             " percentage through file
-set statusline+=\ %l:%c]            " line:column
-set statusline+=%{ShowGitBranch()}  " show Git branch in statusline
+set statusline+=\ %l:%c]            " line and column
+set statusline+=%{ShowGitBranch()}  " cached Git branch
 
 " ── Syntax & Colors ──────────────────────────────────────────
-colorscheme sourcerer
+colorscheme sourcerer               " use the Sourcerer colorscheme
 
 " ── Cursor Shape ─────────────────────────────────────────────
-let &t_SI = "\e[6 q"                " Insert: beam cursor
-let &t_EI = "\e[2 q"                " Normal: block cursor
+let &t_SI = "\e[6 q"                " use a steady beam cursor in Insert mode
+let &t_EI = "\e[2 q"                " use a steady block cursor in Normal mode
 
 " ── Mappings ─────────────────────────────────────────────────
-let mapleader="\<Space>"            " <Leader> key is Space
+let mapleader="\<Space>"            " use Space as the leader key
 
-" 'jk' to exit Insert quickly
+" Exit Insert mode with jk
 inoremap jk <Esc>
 
-" make Y yank to end of line (consistency with C/D)
+" Yank from cursor to end of line with Y
 nnoremap Y y$
 
-" toggle to alternate buffer
+" Toggle to the alternate buffer
 nnoremap <leader><Space> :e#<CR>
 
-" buffer list via wildmenu
+" Open buffer completion
 nnoremap <leader>b :buffer <C-z><S-Tab>
 
-" fuzzy-ish file open using :find + wildcharm
+" Find a file using 'path' and wildmenu completion
 nnoremap <leader>f :find *
 
-" edit vimrc
+" Edit this vimrc
 nnoremap <leader>v :edit $MYVIMRC<CR>
 
-" private notes
+" Open private notes when the directory exists
 if !empty(glob('~/projects/private/notes'))
   nnoremap <leader>n :e ~/projects/private/notes/
 endif
 
-" replace word under cursor (whole file)
+" Replace the word under cursor throughout the current file
 nnoremap <leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 
-" clear search highlight (and diffupdate)
+" Clear search highlighting and refresh diff state
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
 
-" wrap-aware down and up
+" Move by screen lines when no count is supplied
 nnoremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 nnoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
-" cycle windows forward and backward
+" Cycle through windows
 nnoremap <tab> <C-w>w
 nnoremap <S-tab> <C-w>W
 
-" toggle absolute/relative numbers
+" Toggle absolute and relative line numbers together
 nnoremap <leader>i :set invnumber invrelativenumber<CR>
 
-" join lines without moving the cursor
+" Join lines without moving the cursor
 nnoremap J mzJ`z
 
-" keep cursor centered while paging
+" Keep the cursor centered while paging
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
 
-" keep search hits centered and open folds
+" Keep search matches centered and reveal folded matches
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-" explicit system clipboard yanks; Vim & system stay separate
+" Yank explicitly to the system clipboard without changing Vim's default clipboard
 nnoremap <Leader>y "+y
 vnoremap <leader>y "+y
 
-" use Q for formatting (gq), not Ex mode
+" Use Q as the gq formatting operator instead of Ex mode
 nnoremap Q gq
 
-" strip trailing whitespace
+" Remove trailing whitespace from the current buffer
 nnoremap <leader>s :call StripWhitespace()<CR>
 
-" quickfix window
+" Open quickfix only when it contains entries; close it explicitly
 nnoremap <leader>q :cwindow<CR>
 nnoremap <leader>Q :cclose<CR>
 
 " ── Functions ────────────────────────────────────────────────
-" Update cached Git branch for the current working directory
+" Cache the Git branch for the current working directory
 function! UpdateGitBranch() abort
   if executable('git')
     let l:branch = system('git rev-parse --abbrev-ref HEAD 2>/dev/null')
@@ -188,14 +188,14 @@ function! UpdateGitBranch() abort
   endif
 endfunction
 
-" Return cached Git branch for the statusline
+" Return the cached Git branch for the statusline
 function! ShowGitBranch() abort
   return empty(get(g:, 'git_branch', ''))
         \ ? ''
         \ : ' | Git: ' . g:git_branch
 endfunction
 
-" Remove trailing whitespace but preserve view and last search
+" Remove trailing whitespace while preserving the window view and search register
 function! StripWhitespace() abort
   let l:view = winsaveview()
   let l:old_query = getreg('/')
@@ -210,30 +210,30 @@ endfunction
 augroup vimStartup
   autocmd!
 
-  " Filetype-specific tweaks
+  " Apply filetype-specific editing and display settings
   autocmd FileType python setlocal foldmethod=indent tabstop=4 shiftwidth=4 softtabstop=4 expandtab
   autocmd FileType markdown,text setlocal textwidth=78 colorcolumn=+1
   autocmd FileType markdown syntax sync fromstart
 
-  " Filetype overrides
+  " Override filetype detection for known configuration files
   autocmd BufNewFile,BufReadPost *.config setfiletype sshconfig
   autocmd BufNewFile,BufReadPost vifmrc*,*.vifm setfiletype vifm
 
-  " Check for files changed outside Vim
+  " Check for external file changes when returning to Vim or entering a buffer
   autocmd FocusGained,BufEnter * checktime
 
-  " Equalize split sizes
+  " Rebalance split sizes after the terminal is resized
   autocmd VimResized * wincmd =
 
-  " Refresh Git branch when entering Vim or another buffer
+  " Refresh the cached Git branch when entering Vim or another buffer
   autocmd VimEnter,BufEnter * call UpdateGitBranch()
 
-  " Refresh Git branch when Vim's working directory changes
+  " Refresh the cached Git branch when the working directory changes
   if exists('##DirChanged')
     autocmd DirChanged * call UpdateGitBranch()
   endif
 
-  " Restore cursor on reopen (except for commit messages)
+  " Restore the last cursor position when reopening files, except commit messages
   autocmd BufReadPost *
         \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
         \ |   execute "normal! g`\""
@@ -241,24 +241,24 @@ augroup vimStartup
 augroup END
 
 " ── Plugins (vim-plug) ───────────────────────────────────────
-" Install vim-plug if necessary
+" Download vim-plug automatically if it is not installed
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
 
-" Plugins
+" Declare plugins
 call plug#begin()
-Plug 'airblade/vim-gitgutter'      " Git diff signs in the gutter
-Plug 'justinmk/vim-dirvish'        " minimal file explorer
-Plug 'tpope/vim-commentary'        " gcc to comment lines/blocks
-Plug 'tpope/vim-surround'          " cs"' etc. to change surroundings
-Plug 'tpope/vim-repeat'            " make plugin mappings repeatable with dot
-Plug 'tpope/vim-unimpaired'        " [q ]q etc. handy bracket mappings
-Plug 'hashivim/vim-terraform'      " Terraform syntax & tools
+Plug 'airblade/vim-gitgutter'      " show Git changes in the sign column
+Plug 'justinmk/vim-dirvish'        " lightweight directory browser
+Plug 'tpope/vim-commentary'        " comment and uncomment text with motions
+Plug 'tpope/vim-surround'          " add, change, and remove surrounding pairs
+Plug 'tpope/vim-repeat'            " make supported plugin actions repeatable with .
+Plug 'tpope/vim-unimpaired'        " provide complementary bracket mappings
+Plug 'hashivim/vim-terraform'      " add Terraform syntax and editing support
 call plug#end()
 
-" Auto-install any missing plugins on startup
+" Install any declared plugins that are missing when Vim starts
 augroup vimPlugBootstrap
   autocmd!
   autocmd VimEnter * if exists('g:plugs') && len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
